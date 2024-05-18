@@ -1,0 +1,76 @@
+﻿<Page x:Class="sparePartsStore.View.ViewAdministrator.ViewMainPages.PageMainHead"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:local="clr-namespace:sparePartsStore.View.ViewAdministrator.ViewMainPages"
+      mc:Ignorable="d" 
+      Title="" MinHeight="700" Height="Auto" MinWidth="1200" Width="Auto">
+
+    <Grid>
+
+        <!--стили-->
+        <Grid.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="/Dictionary/Dictionary.xaml"/>
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </Grid.Resources>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!--шапка-->
+        <Grid Grid.Row="0" Background="#FFF1D7">
+            <!--логотип-->
+            <TextBlock Text="Автозапчасти" FontSize="30" Foreground="Black" FontWeight="Bold" HorizontalAlignment="Left" Margin="100,0,0,0" VerticalAlignment="Center"/>
+
+            <!--иконка + название пароля-->
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,100,0">
+                <!--название роли-->
+                <TextBlock Text="Администратор: " FontSize="24" VerticalAlignment="Center" FontWeight="UltraLight"/>
+                <!--названик компании или ИП-->
+                <TextBlock Text="ООО 'Рога и Копыта'" FontSize="24"  VerticalAlignment="Center" FontWeight="UltraLight"/>
+                <!--шестерёнка-->
+                <materialDesign:PackIcon Kind="Cog" Width="45" Height="45" Margin="30,0,0,0"/>
+            </StackPanel>
+        </Grid>
+        
+        <!--меню-->
+        <Grid Grid.Row="1" Background="AliceBlue">
+            <!--разметка для размещения кнопок-->
+            <Grid Margin="100,0,100,0">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="10*"/>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="10*"/>
+                </Grid.ColumnDefinitions>
+                
+                    <Button Content="Поиск запчастей" Grid.Column="0" Style="{StaticResource BtnMenuHead}" Click="Button_Click"/>
+                    <Button Content="Марка" Grid.Column="1" Style="{StaticResource BtnMenuHead}"/>
+                    <Button Content="Модель" Grid.Column="2" Style="{StaticResource BtnMenuHead}"/>
+                    <Button Content="Агрегат" Grid.Column="3" Style="{StaticResource BtnMenuHead}"/>
+                    <Button Content="Узел" Grid.Column="4" Style="{StaticResource BtnMenuHead}" />
+                    <Button Content="Запчасть" Grid.Column="5" Style="{StaticResource BtnMenuHead}"/>
+                    <Button Content="Страна" Grid.Column="6" Style="{StaticResource BtnMenuHead}" />
+                    <Button Content="Производитель" Grid.Column="7" Style="{StaticResource BtnMenuHead}"/>
+            </Grid>
+        </Grid>
+
+    </Grid>
+</Page>

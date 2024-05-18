@@ -19,6 +19,9 @@ namespace sparePartsStore
         public MainWindow()
         {
             InitializeComponent();
+
+            // тестовый запуск страницы администратора
+            mainFrame.Navigate(new Uri("/View/ViewAdministrator/ViewMainPages/PageMainHead.xaml", UriKind.Relative));
         }
     }
 }
