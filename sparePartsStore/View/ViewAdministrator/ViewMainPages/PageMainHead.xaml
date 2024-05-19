@@ -21,7 +21,7 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="33"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -31,24 +31,27 @@
 
         <!--шапка-->
         <Grid Grid.Row="0" Background="#FFF1D7">
-            <!--логотип-->
-            <TextBlock Text="Автозапчасти" FontSize="30" Foreground="Black" FontWeight="Bold" HorizontalAlignment="Left" Margin="100,0,0,0" VerticalAlignment="Center"/>
 
-            <!--иконка + название пароля-->
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,100,0">
-                <!--название роли-->
-                <TextBlock Text="Администратор: " FontSize="24" VerticalAlignment="Center" FontWeight="UltraLight"/>
-                <!--названик компании или ИП-->
-                <TextBlock Text="ООО 'Рога и Копыта'" FontSize="24"  VerticalAlignment="Center" FontWeight="UltraLight"/>
-                <!--шестерёнка-->
-                <materialDesign:PackIcon Kind="Cog" Width="45" Height="45" Margin="30,0,0,0"/>
-            </StackPanel>
+            <Grid MinWidth="1200">
+                <!--логотип-->
+                <TextBlock Text="Автозапчасти" FontSize="30" Foreground="Black" FontWeight="Bold" HorizontalAlignment="Left" Margin="50,0,0,0" VerticalAlignment="Center"/>
+
+                <!--иконка + название пароля-->
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,50,0">
+                    <!--название роли-->
+                    <TextBlock Text="Администратор: " FontSize="24" VerticalAlignment="Center" FontWeight="Regular"/>
+                    <!--названик компании или ИП-->
+                    <TextBlock Text="ООО 'Рога и Копыта'" FontSize="24"  VerticalAlignment="Center" FontWeight="Regular"/>
+                    <!--шестерёнка-->
+                    <materialDesign:PackIcon Kind="Cog" Width="45" Height="45" Margin="30,0,0,0"/>
+                </StackPanel>
+            </Grid>
         </Grid>
         
         <!--меню-->
         <Grid Grid.Row="1" Background="AliceBlue">
             <!--разметка для размещения кнопок-->
-            <Grid Margin="100,0,100,0">
+            <Grid Margin="0,0,0,0" Width="1100">
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="10*"/>
@@ -71,6 +74,12 @@
                     <Button Content="Производитель" Grid.Column="7" Style="{StaticResource BtnMenuHead}"/>
             </Grid>
         </Grid>
-
+        
+        <!--фрейм-->
+        <Grid Grid.Row="2">
+            <!--отображение страниц внутри header для администратора-->
+            <Frame x:Name="administratorFrame"  NavigationUIVisibility="Hidden"/>
+        </Grid>
+        
     </Grid>
 </Page>

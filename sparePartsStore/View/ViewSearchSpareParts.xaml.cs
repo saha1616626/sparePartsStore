@@ -13,22 +13,19 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace sparePartsStore.View.ViewAdministrator.ViewMainPages
+namespace sparePartsStore.View
 {
     /// <summary>
-    /// Interaction logic for PageMainHead.xaml
+    /// Interaction logic for ViewSearchSpareParts.xaml
     /// </summary>
-    public partial class PageMainHead : Page
+    public partial class ViewSearchSpareParts : Page
     {
-        public PageMainHead()
+        public ViewSearchSpareParts()
         {
             InitializeComponent();
-
-            // тестово запускаем страницу посик запчастей
-            administratorFrame.Navigate(new Uri("/View/ViewAdministrator/ViewWorkingWithData/PageListCarModels.xaml", UriKind.Relative));
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }
