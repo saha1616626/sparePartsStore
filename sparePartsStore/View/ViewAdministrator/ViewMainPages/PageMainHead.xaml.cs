@@ -25,7 +25,8 @@ namespace sparePartsStore.View.ViewAdministrator.ViewMainPages
             InitializeComponent();
 
             // тестово запускаем страницу посик запчастей
-            administratorFrame.Navigate(new Uri("/View/ViewAdministrator/ViewWorkingWithData/PageListCarModels.xaml", UriKind.Relative));
+            //administratorFrame.Navigate(new Uri("/View/ViewAdministrator/ViewWorkingWithData/PageListManufacture.xaml", UriKind.Relative));
+            administratorFrame.Navigate(new Uri("/View/ViewSearchSpareParts.xaml", UriKind.Relative));
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

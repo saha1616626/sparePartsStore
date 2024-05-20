@@ -9,9 +9,103 @@
       Title="" MinHeight="700" Height="Auto" MinWidth="1200" Width="Auto">
 
     <!--автозапчасти-->
-    <Grid Background="White">
+    <Grid Background="White" Margin="50,0,50,0">
+
+        <!--стили-->
+        <Grid.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="/Dictionary/Dictionary.xaml"/>
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </Grid.Resources>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
         
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!--название-->
+        <!--Список запчастей автомобиля-->
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Список запчастей автомобиля" FontSize="30" Foreground="Black" FontWeight="DemiBold" HorizontalAlignment="Left" Margin="0,40,0,40" VerticalAlignment="Center"/>
+
+        <!--кнопка аналогов-->
+        <Button Grid.Row="1" Grid.Column="0" Content="Подбор аналогов" MinWidth="330" Height="35" Background="Gray" BorderBrush="Black" HorizontalAlignment="Right"/>
+
+        <!--основные кнопки-->
+        <UniformGrid  Grid.Row="2" Margin="0,20,0,0">
+
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <!--все основные кнопки и поля-->
+                <Button Grid.Column="0" Content="Добавить" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black"/>
+                <Button Grid.Column="1" Content="Редктировать" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0"/>
+                <Button Grid.Column="2" Content="Удалить" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0"/>
+
+                <TextBox Grid.Column="3" x:Name="SearchParts" Height="50" Margin="10,0,0,0"
+                    VerticalAlignment="Center"  HorizontalAlignment="Center"
+                    Text="{Binding InputLogin, UpdateSourceTrigger=PropertyChanged}"   
+                    materialDesign:TextFieldAssist.HasClearButton="True"
+                    Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                    materialDesign:HintAssist.Hint="Поиск запчасти" 
+                    materialDesign:TextFieldAssist.CharacterCounterVisibility="Hidden"
+                    MaxLength="100" MinWidth="408"/>
+
+                <!--кнопка запчасти ожидающие подтверждения-->
+                <Button Grid.Column="4" Content="Запчасти ожидающие подтверждения" MinWidth="330" Height="35" Background="Gray" BorderBrush="Black" HorizontalAlignment="Right"  Margin="10,0,0,0"/>
+            </Grid>
+            
+        </UniformGrid>
+
+            <!--кнопка таблицы-->
+        <Grid Grid.Row="3" Margin="0,40,0,0">
+
+            <DataGrid
+                    Style="{StaticResource MaterialDesignDataGrid}"
+                    ColumnHeaderStyle="{StaticResource columnTable}"
+                    AutoGenerateColumns="False"
+                    ItemsSource="{Binding}" 
+                    SelectedValuePath="{Binding}">
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Номер" Binding="{Binding numberParts}" Width="80"/>
+
+                    <DataGridTextColumn Header="Название" Binding="{Binding nameParts}" MinWidth="200"/>
+
+                    <DataGridTextColumn Header="Агрегат" Binding="{Binding nameParts}" MinWidth="100"/>
+
+                    <DataGridTextColumn Header="Узел" Binding="{Binding nameParts}"  MinWidth="100"/>
+
+                    <DataGridTextColumn Header="Марка" Binding="{Binding nameParts}"  MinWidth="100"/>
+
+                    <DataGridTextColumn Header="Модель" Binding="{Binding nameParts}" MinWidth="100"/>
+
+                    <DataGridTextColumn Header="Цена" Binding="{Binding nameParts}"  MinWidth="80"/>
+
+                    <DataGridTextColumn Header="Доступно         на складе" Binding="{Binding nameParts}"  Width="70"/>
+
+                    <DataGridTextColumn Header="Статус" Binding="{Binding nameParts}" MinWidth="100"/>
+
+                    <DataGridTextColumn Header="Поставщик" Binding="{Binding nameParts}" MinWidth="100"/>
+                </DataGrid.Columns>
+
+            </DataGrid>
+
+        </Grid>
         
     </Grid>
 </Page>

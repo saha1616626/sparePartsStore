@@ -9,7 +9,7 @@
       Title="" MinHeight="700" Height="Auto" MinWidth="1200" Width="Auto">
     
     <!--страница посика запчастей-->
-    <Grid Background="White">
+    <Grid Background="White" Margin="50, 0, 50, 0" HorizontalAlignment="Center">
 
         <!--стили-->
         <Grid.Resources>
@@ -24,12 +24,16 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
         
         <!--назавние страницы-->
-        <TextBlock Grid.Row="0" Text="Поиск запчастей" FontSize="30" Foreground="Black" FontWeight="DemiBold" HorizontalAlignment="Center" Margin="100,40,100,40" VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Поиск запчастей" FontSize="30" Foreground="Black" FontWeight="DemiBold" Margin="0,40,0,40" VerticalAlignment="Center"/>
 
         <!--таблица + фильтр-->
-        <Grid Grid.Row="1" Margin="80, 0, 80, 0" HorizontalAlignment="Center">
+        <Grid Grid.Row="1" Grid.Column="0" Margin="0, 0, 0, 0" HorizontalAlignment="Center">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -40,13 +44,13 @@
             <Grid Grid.Row="0">
                 <!--размещение кнопок-->
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
                 <Button Grid.Column="0" Content="Сброс" MinWidth="100" Height="50" Background="Gray" BorderBrush="Black"/>
@@ -96,17 +100,17 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Номер" Binding="{Binding numberParts}" Width="80"/>
 
-                        <DataGridTextColumn Header="Название" Binding="{Binding nameParts}" Width="310"/>
+                        <DataGridTextColumn Header="Название" Binding="{Binding nameParts}" MinWidth="240"/>
 
-                        <DataGridTextColumn Header="Агрегат" Binding="{Binding nameParts}" Width="120"/>
+                        <DataGridTextColumn Header="Агрегат" Binding="{Binding nameParts}" MinWidth="120"/>
 
-                        <DataGridTextColumn Header="Узел" Binding="{Binding nameParts}" Width="120"/>
+                        <DataGridTextColumn Header="Узел" Binding="{Binding nameParts}" MinWidth="120"/>
 
-                        <DataGridTextColumn Header="     Марка  автомобиля" Binding="{Binding nameParts}" Width="90"/>
+                        <DataGridTextColumn Header="     Марка  автомобиля" Binding="{Binding nameParts}" MinWidth="40"/>
 
-                        <DataGridTextColumn Header="Модель автомобиля" Binding="{Binding nameParts}" Width="170"/>
+                        <DataGridTextColumn Header="Модель автомобиля" Binding="{Binding nameParts}" MinWidth="190"/>
 
-                        <DataGridTextColumn Header="Цена" Binding="{Binding nameParts}" Width="60"/>
+                        <DataGridTextColumn Header="Цена" Binding="{Binding nameParts}" MinWidth="76"/>
 
                         <DataGridTextColumn Header="Доступно  на складе" Binding="{Binding nameParts}" Width="80"/>
                     </DataGrid.Columns>

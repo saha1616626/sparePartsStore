@@ -8,7 +8,7 @@
       mc:Ignorable="d" 
       Title="" MinHeight="700" Height="Auto" MinWidth="1200" Width="Auto">
 
-    <Grid Background="White" Margin="100,0,100,0">
+    <Grid Background="White" Margin="50,0,50,0">
 
         <!--стили-->
         <Grid.Resources>
@@ -62,7 +62,7 @@
                          Text="{Binding InputLogin, UpdateSourceTrigger=PropertyChanged}"   
                          materialDesign:TextFieldAssist.HasClearButton="True"
                          Style="{StaticResource MaterialDesignOutlinedTextBox}" 
-                         materialDesign:HintAssist.Hint="Поиск марки" 
+                         materialDesign:HintAssist.Hint="Поиск модели" 
                          materialDesign:TextFieldAssist.CharacterCounterVisibility="Hidden"
                          MaxLength="100"  MinWidth="400"  MaxWidth="900"/>
             </Grid>
