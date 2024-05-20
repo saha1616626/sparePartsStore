@@ -12,6 +12,7 @@
     <Folder Include="Model\" />
     <Folder Include="Helper\" />
     <Folder Include="ViewModel\" />
+    <Folder Include="View\ViewAdministrator\ViewWorking\" />
     <Folder Include="View\ViewAuthorization\" />
   </ItemGroup>
 
