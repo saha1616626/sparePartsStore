@@ -44,7 +44,7 @@
                     <!--названик компании или ИП-->
                     <TextBlock Text="ООО 'Рога и Копыта'" FontSize="24"  VerticalAlignment="Center" FontWeight="Regular"/>
                     <!--шестерёнка-->
-                    <Grid  Margin="30,0,0,0">
+                    <Grid  Margin="30,0,0,0" Visibility="Visible" x:Name="_btnSetting">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="45"/>
                         </Grid.ColumnDefinitions>
@@ -58,6 +58,22 @@
                         <Button Grid.Column="0" Grid.Row="0" Height="45" Width="45" Style="{StaticResource TransparentButton}" Click="Btn_UserSetting"/>
                     </Grid>
                     
+                    <!--возврат в меню-->
+                    <!--меню иконка-->
+                    <Grid  Margin="30,0,0,0" Visibility="Hidden" x:Name="_btnOutMenu">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="45"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="45"/>
+                        </Grid.RowDefinitions>
+
+                        <materialDesign:PackIcon Kind="Backburger" Grid.Column="0" Grid.Row="0" Width="45" Height="45"/>
+
+                        <Button Grid.Column="0" Grid.Row="0" Height="45" Width="45" Style="{StaticResource TransparentButton}" Click="Btn_BasicMenu"/>
+                    </Grid>
+
                 </StackPanel>
             </Grid>
         </Grid>
@@ -65,7 +81,9 @@
         <!--меню-->
         <Grid Grid.Row="1" Background="AliceBlue">
             <!--разметка для размещения кнопок-->
-            <Grid Margin="0,0,0,0" Width="1100">
+            
+            <!--основное меню-->
+            <Grid Margin="0,0,0,0" Width="1100" Visibility="Visible" x:Name="_basicMenu">
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="10*"/>
@@ -87,6 +105,22 @@
                     <Button Content="Страна" Grid.Column="6" Style="{StaticResource BtnMenuHead}" Click="Btn_Country"/>
                     <Button Content="Производитель" Grid.Column="7" Style="{StaticResource BtnMenuHead}" Click="Btn_Manufacture"/>
             </Grid>
+            
+            <!--меню настроек-->
+            <Grid Visibility="Hidden" x:Name="_settingMenu">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/> <!--настройки аккаунта (выход из аккаунта)-->
+                </Grid.ColumnDefinitions>
+
+                <Button Content="Пользователм" Grid.Column="0" Style="{StaticResource BtnMenuHead}" Click="Btn_User" />
+                <Button Content="Роли" Grid.Column="1" Style="{StaticResource BtnMenuHead}" Click="Btn_Role"/>
+                <Button Content="Настройки" Grid.Column="2" Style="{StaticResource BtnMenuHead}" Click="Btn_Setting"/>
+
+            </Grid>
+            
         </Grid>
         
         <!--фрейм-->
