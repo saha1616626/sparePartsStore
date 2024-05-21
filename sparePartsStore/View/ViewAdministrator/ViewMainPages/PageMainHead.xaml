@@ -4,7 +4,8 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-      xmlns:local="clr-namespace:sparePartsStore.View.ViewAdministrator.ViewMainPages"
+      xmlns:local="clr-namespace:sparePartsStore.View.ViewAdministrator.ViewMainPages" 
+      xmlns:local1="clr-namespace:sparePartsStore.View.ViewAdministrator.ViewWorkingWithData"
       mc:Ignorable="d" 
       Title="" MinHeight="700" Height="Auto" MinWidth="1200" Width="Auto">
 
@@ -43,7 +44,20 @@
                     <!--названик компании или ИП-->
                     <TextBlock Text="ООО 'Рога и Копыта'" FontSize="24"  VerticalAlignment="Center" FontWeight="Regular"/>
                     <!--шестерёнка-->
-                    <materialDesign:PackIcon Kind="Cog" Width="45" Height="45" Margin="30,0,0,0"/>
+                    <Grid  Margin="30,0,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="45"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="45"/>
+                        </Grid.RowDefinitions>
+                        
+                        <materialDesign:PackIcon Grid.Column="0" Grid.Row="0" Kind="Cog" Width="45" Height="45"/>
+
+                        <Button Grid.Column="0" Grid.Row="0" Height="45" Width="45" Style="{StaticResource TransparentButton}" Click="Btn_UserSetting"/>
+                    </Grid>
+                    
                 </StackPanel>
             </Grid>
         </Grid>
@@ -64,14 +78,14 @@
                     <ColumnDefinition Width="10*"/>
                 </Grid.ColumnDefinitions>
                 
-                    <Button Content="Поиск запчастей" Grid.Column="0" Style="{StaticResource BtnMenuHead}" Click="Button_Click"/>
-                    <Button Content="Марка" Grid.Column="1" Style="{StaticResource BtnMenuHead}"/>
-                    <Button Content="Модель" Grid.Column="2" Style="{StaticResource BtnMenuHead}"/>
-                    <Button Content="Агрегат" Grid.Column="3" Style="{StaticResource BtnMenuHead}"/>
-                    <Button Content="Узел" Grid.Column="4" Style="{StaticResource BtnMenuHead}" />
-                    <Button Content="Запчасть" Grid.Column="5" Style="{StaticResource BtnMenuHead}"/>
-                    <Button Content="Страна" Grid.Column="6" Style="{StaticResource BtnMenuHead}" />
-                    <Button Content="Производитель" Grid.Column="7" Style="{StaticResource BtnMenuHead}"/>
+                    <Button Content="Поиск запчастей" Grid.Column="0" Style="{StaticResource BtnMenuHead}" Click="Btn_SearchParts" />
+                <Button Content="Марка" Grid.Column="1" Style="{StaticResource BtnMenuHead}" Click="Btn_carBrand"/>
+                    <Button Content="Модель" Grid.Column="2" Style="{StaticResource BtnMenuHead}" Click="Btn_carModel"/>
+                    <Button Content="Агрегат" Grid.Column="3" Style="{StaticResource BtnMenuHead}" Click="Btn_Unit"/>
+                    <Button Content="Узел" Grid.Column="4" Style="{StaticResource BtnMenuHead}" Click="Btn_Knot"/>
+                    <Button Content="Запчасть" Grid.Column="5" Style="{StaticResource BtnMenuHead}" Click="Btn_Details"/>
+                    <Button Content="Страна" Grid.Column="6" Style="{StaticResource BtnMenuHead}" Click="Btn_Country"/>
+                    <Button Content="Производитель" Grid.Column="7" Style="{StaticResource BtnMenuHead}" Click="Btn_Manufacture"/>
             </Grid>
         </Grid>
         
