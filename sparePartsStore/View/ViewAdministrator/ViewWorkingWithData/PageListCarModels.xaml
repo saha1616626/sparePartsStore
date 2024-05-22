@@ -49,9 +49,9 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Row="0" Grid.Column="0" Content="Добавить" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black"/>
-                <Button Grid.Row="0" Grid.Column="1" Content="Редктировать" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0"/>
-                <Button Grid.Row="0" Grid.Column="2" Content="Удалить" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0"/>
+                <Button Grid.Row="0" Grid.Column="0" Content="Добавить" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" Command="{Binding AddCarModel}"/>
+                <Button Grid.Row="0" Grid.Column="1" Content="Редктировать" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0" Command="{Binding EditCarModel}"/>
+                <Button Grid.Row="0" Grid.Column="2" Content="Удалить" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0" Command="{Binding DeleteCarModel}"/>
 
             </Grid>
             
