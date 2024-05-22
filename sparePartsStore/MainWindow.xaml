@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:sparePartsStore"
         mc:Ignorable="d" 
-        Title="" MinHeight="700" MinWidth="1200">
+MinHeight="700" Height="Auto" MinWidth="1214" Width="Auto" >
+
     <Grid>
         <!--фрейм отображение страниц на главном окне-->
         <Frame x:Name="mainFrame"  NavigationUIVisibility="Hidden"/>

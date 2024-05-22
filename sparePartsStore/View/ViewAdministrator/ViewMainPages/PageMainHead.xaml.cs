@@ -1,4 +1,5 @@
-﻿using System;
+﻿using sparePartsStore.Helper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,6 +32,11 @@ namespace sparePartsStore.View.ViewAdministrator.ViewMainPages
 
             // запуск страницы
             startPage();
+
+            // подписываемся на событие запуска страницы добавления марки авто
+            WorkingWithData.launchPageAddCarBrand += Add_CarBrands;
+            // подписываемся на событие запуска страницы списка марок после закрытия страницы добавления
+            WorkingWithData.closePageAddCarBrand += LaunchCarBrand;
         }
 
         // анимация включена
@@ -112,7 +118,7 @@ namespace sparePartsStore.View.ViewAdministrator.ViewMainPages
         }
 
         // страна
-        private void Btn_Country (object sender, RoutedEventArgs e)
+        private void Btn_Country(object sender, RoutedEventArgs e)
         {
             // открываем основное меню
             basicMenu();
@@ -181,6 +187,7 @@ namespace sparePartsStore.View.ViewAdministrator.ViewMainPages
             // очистка фреймов памяти
             ClearMemoryAfterFrame();
             administratorFrame.Navigate(new Uri("/View/ViewAdministrator/ViewSettingRole/PageListRole.xaml", UriKind.Relative));
+
         }
 
         // настройки
@@ -189,7 +196,7 @@ namespace sparePartsStore.View.ViewAdministrator.ViewMainPages
 
         }
 
-        private void Btn_UserSetting(object  sender, RoutedEventArgs e)
+        private void Btn_UserSetting(object sender, RoutedEventArgs e)
         {
             // скрываем кнопку шестерёнка и отображаем кнопку меню
             _btnSetting.Visibility = Visibility.Hidden;
@@ -208,7 +215,7 @@ namespace sparePartsStore.View.ViewAdministrator.ViewMainPages
         {
             // скрываем кнопку меню и отображаем кнопку шестерёнок
             _btnSetting.Visibility = Visibility.Visible;
-            _btnOutMenu.Visibility= Visibility.Hidden;
+            _btnOutMenu.Visibility = Visibility.Hidden;
 
             // открываем основеное меню
             basicMenu();
@@ -217,6 +224,27 @@ namespace sparePartsStore.View.ViewAdministrator.ViewMainPages
             startPage();
         }
 
+        #region WorkListBrand
+        // запуск страницы добавить марку авто
+        public void Add_CarBrands(object sender, EventAggregator e)
+        {
+            // очистка фреймов памяти
+            ClearMemoryAfterFrame();
+            _menu.Visibility = Visibility.Collapsed; // отключаем меню основное
+            _btnSetting.Visibility= Visibility.Collapsed; // отключаем кнопку настроек
+            administratorFrame.Navigate(new Uri("/View/ViewAdministrator/ViewWorking/PageWorkListBrand.xaml", UriKind.Relative));
+        }
 
+        // запуск страницы списка марок
+        public void LaunchCarBrand(object sender, EventAggregator e)
+        {
+            // очистка фреймов памяти
+            ClearMemoryAfterFrame();
+            _menu.Visibility = Visibility.Visible; // включаем меню основное
+            _btnSetting.Visibility = Visibility.Visible; // включаем кнопку настроек
+            // автоматичесое отображение страницы при входе в учетную запись адинистратора
+            administratorFrame.Navigate(new Uri("/View/ViewAdministrator/ViewWorkingWithData/PageListCarBrands.xaml", UriKind.Relative));
+        }
+        #endregion
     }
 }

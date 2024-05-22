@@ -10,8 +10,6 @@
 
   <ItemGroup>
     <Folder Include="Model\" />
-    <Folder Include="Helper\" />
-    <Folder Include="View\ViewAdministrator\ViewWorking\" />
     <Folder Include="View\ViewAuthorization\" />
   </ItemGroup>
 

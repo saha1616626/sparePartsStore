@@ -33,16 +33,25 @@
         <!--шапка-->
         <Grid Grid.Row="0" Background="#FFF1D7">
 
-            <Grid MinWidth="1200">
+            <Grid MinWidth="1200" HorizontalAlignment="Center">
                 <!--логотип-->
                 <TextBlock Text="Автозапчасти" FontSize="30" Foreground="Black" FontWeight="Bold" HorizontalAlignment="Left" Margin="50,0,0,0" VerticalAlignment="Center"/>
 
-                <!--иконка + название пароля-->
+                <!--иконка + навазние роли-->
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,50,0">
-                    <!--название роли-->
-                    <TextBlock Text="Администратор: " FontSize="24" VerticalAlignment="Center" FontWeight="Regular"/>
-                    <!--названик компании или ИП-->
-                    <TextBlock Text="ООО 'Рога и Копыта'" FontSize="24"  VerticalAlignment="Center" FontWeight="Regular"/>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <!--название роли-->
+                        <TextBlock Grid.Column="0" Text="Администратор: " FontSize="24" VerticalAlignment="Center" FontWeight="Regular"/>
+                        <!--названик компании или ИП-->
+                        <TextBlock Grid.Column="1" Text="ООО 'Рога и Копыта'" FontSize="24"  VerticalAlignment="Center" FontWeight="Regular" Margin="0,0,0,0"/>
+                    </Grid>
+                    
                     <!--шестерёнка-->
                     <Grid  Margin="30,0,0,0" Visibility="Visible" x:Name="_btnSetting">
                         <Grid.ColumnDefinitions>
@@ -52,15 +61,15 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="45"/>
                         </Grid.RowDefinitions>
-                        
+
                         <materialDesign:PackIcon Grid.Column="0" Grid.Row="0" Kind="Cog" Width="45" Height="45"/>
 
                         <Button Grid.Column="0" Grid.Row="0" Height="45" Width="45" Style="{StaticResource TransparentButton}" Click="Btn_UserSetting"/>
                     </Grid>
-                    
+
                     <!--возврат в меню-->
                     <!--меню иконка-->
-                    <Grid  Margin="30,0,0,0" Visibility="Hidden" x:Name="_btnOutMenu">
+                    <Grid  Margin="30,0,0,0" Visibility="Collapsed" x:Name="_btnOutMenu">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="45"/>
                         </Grid.ColumnDefinitions>
@@ -77,13 +86,13 @@
                 </StackPanel>
             </Grid>
         </Grid>
-        
+
         <!--меню-->
-        <Grid Grid.Row="1" Background="AliceBlue">
+        <Grid Grid.Row="1" Background="AliceBlue" x:Name="_menu">
             <!--разметка для размещения кнопок-->
-            
+
             <!--основное меню-->
-            <Grid Margin="0,0,0,0" Width="1100" Visibility="Visible" x:Name="_basicMenu">
+            <Grid Margin="0,0,0,0" Width="1100" x:Name="_basicMenu">
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="10*"/>
@@ -95,24 +104,25 @@
                     <ColumnDefinition Width="5*"/>
                     <ColumnDefinition Width="10*"/>
                 </Grid.ColumnDefinitions>
-                
-                    <Button Content="Поиск запчастей" Grid.Column="0" Style="{StaticResource BtnMenuHead}" Click="Btn_SearchParts" />
+
+                <Button Content="Поиск запчастей" Grid.Column="0" Style="{StaticResource BtnMenuHead}" Click="Btn_SearchParts" />
                 <Button Content="Марка" Grid.Column="1" Style="{StaticResource BtnMenuHead}" Click="Btn_carBrand"/>
-                    <Button Content="Модель" Grid.Column="2" Style="{StaticResource BtnMenuHead}" Click="Btn_carModel"/>
-                    <Button Content="Агрегат" Grid.Column="3" Style="{StaticResource BtnMenuHead}" Click="Btn_Unit"/>
-                    <Button Content="Узел" Grid.Column="4" Style="{StaticResource BtnMenuHead}" Click="Btn_Knot"/>
-                    <Button Content="Запчасть" Grid.Column="5" Style="{StaticResource BtnMenuHead}" Click="Btn_Details"/>
-                    <Button Content="Страна" Grid.Column="6" Style="{StaticResource BtnMenuHead}" Click="Btn_Country"/>
-                    <Button Content="Производитель" Grid.Column="7" Style="{StaticResource BtnMenuHead}" Click="Btn_Manufacture"/>
+                <Button Content="Модель" Grid.Column="2" Style="{StaticResource BtnMenuHead}" Click="Btn_carModel"/>
+                <Button Content="Агрегат" Grid.Column="3" Style="{StaticResource BtnMenuHead}" Click="Btn_Unit"/>
+                <Button Content="Узел" Grid.Column="4" Style="{StaticResource BtnMenuHead}" Click="Btn_Knot"/>
+                <Button Content="Запчасть" Grid.Column="5" Style="{StaticResource BtnMenuHead}" Click="Btn_Details"/>
+                <Button Content="Страна" Grid.Column="6" Style="{StaticResource BtnMenuHead}" Click="Btn_Country"/>
+                <Button Content="Производитель" Grid.Column="7" Style="{StaticResource BtnMenuHead}" Click="Btn_Manufacture"/>
             </Grid>
-            
+
             <!--меню настроек-->
             <Grid Visibility="Hidden" x:Name="_settingMenu">
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/> <!--настройки аккаунта (выход из аккаунта)-->
+                    <ColumnDefinition Width="*"/>
+                    <!--настройки аккаунта (выход из аккаунта)-->
                 </Grid.ColumnDefinitions>
 
                 <Button Content="Пользователм" Grid.Column="0" Style="{StaticResource BtnMenuHead}" Click="Btn_User" />
@@ -120,14 +130,14 @@
                 <Button Content="Настройки" Grid.Column="2" Style="{StaticResource BtnMenuHead}" Click="Btn_Setting"/>
 
             </Grid>
-            
+
         </Grid>
-        
+
         <!--фрейм-->
         <Grid Grid.Row="2">
             <!--отображение страниц внутри header для администратора-->
             <Frame x:Name="administratorFrame"  NavigationUIVisibility="Hidden"/>
         </Grid>
-        
+
     </Grid>
 </Page>
