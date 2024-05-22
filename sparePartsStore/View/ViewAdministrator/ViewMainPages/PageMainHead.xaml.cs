@@ -37,6 +37,9 @@ namespace sparePartsStore.View.ViewAdministrator.ViewMainPages
             WorkingWithData.launchPageAddCarBrand += Add_CarBrands;
             // подписываемся на событие запуска страницы списка марок после закрытия страницы добавления
             WorkingWithData.closePageAddCarBrand += LaunchCarBrand;
+
+            // подписываемя на событие запуска страницы редактирования марки
+            WorkingWithData.launchPageEditCarBrand += Edit_CarBrand;
         }
 
         // анимация включена
@@ -235,7 +238,7 @@ namespace sparePartsStore.View.ViewAdministrator.ViewMainPages
             administratorFrame.Navigate(new Uri("/View/ViewAdministrator/ViewWorking/PageWorkListBrand.xaml", UriKind.Relative));
         }
 
-        // запуск страницы списка марок
+        // запуск страницы списка марок. после выхода.
         public void LaunchCarBrand(object sender, EventAggregator e)
         {
             // очистка фреймов памяти
@@ -244,6 +247,27 @@ namespace sparePartsStore.View.ViewAdministrator.ViewMainPages
             _btnSetting.Visibility = Visibility.Visible; // включаем кнопку настроек
             // автоматичесое отображение страницы при входе в учетную запись адинистратора
             administratorFrame.Navigate(new Uri("/View/ViewAdministrator/ViewWorkingWithData/PageListCarBrands.xaml", UriKind.Relative));
+        }
+
+        // запуск страницы для редактирования
+        public void Edit_CarBrand(object sender, EventAggregator e)
+        {
+            // очистка фреймов памяти
+            ClearMemoryAfterFrame();
+            _menu.Visibility = Visibility.Collapsed; // отключаем меню основное
+            _btnSetting.Visibility = Visibility.Collapsed; // отключаем кнопку настроек
+            administratorFrame.Navigate(new Uri("/View/ViewAdministrator/ViewWorking/PageWorkListBrand.xaml", UriKind.Relative));
+
+            // задержка, что PageWorkListBrand успела открыться
+            Task.Run(async () =>
+            {
+                await Task.Delay(1); // Ждем завершения задержки
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    // изменяем название кнопки
+                    WorkingWithData.RenameButtonBrand();
+                });
+            });
         }
         #endregion
     }

@@ -15,17 +15,35 @@ namespace sparePartsStore.ViewModel
     {
         // открывам страницу добавления данных "марка авто"
         #region openPageAddCarBrand
-        private RelayCommand _add_CarBrands;
-        public RelayCommand Add_CarBrands
+        private RelayCommand _addCarBrands;
+        public RelayCommand AddCarBrands
         {
             get
             {
-                return _add_CarBrands ??
-                    (_add_CarBrands = new RelayCommand(obj =>
+                return _addCarBrands ??
+                    (_addCarBrands = new RelayCommand(obj =>
                     {
 
                         //  очищаем фрейм и запускаем страницу добавления данных
                         WorkingWithData.LaunchPageAddCarBrand(); // вызываем событие запуска страницы 
+
+                    }, (obj) => true));
+            }
+        }
+        #endregion
+
+        // открываем страницу для редактирования
+        #region openPageEditCarBrand
+        private RelayCommand _editCarBrand;
+        public RelayCommand EditCarBrand
+        {
+            get
+            {
+                return _editCarBrand ??
+                    (_editCarBrand = new RelayCommand(obj =>
+                    {
+                        // вызываем события для запуска страныцы редактирования марки авто
+                        WorkingWithData.LaunchPageEditCarBrand();
 
                     }, (obj) => true));
             }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using sparePartsStore.Helper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,19 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
     /// </summary>
     public partial class PageWorkListBrand : Page
     {
+
         public PageWorkListBrand()
         {
             InitializeComponent();
+
+            // подписка на событие, если мы редактируем данные
+            WorkingWithData.renameButtonBrand += nameButtonAdd;
+        }
+
+        // обновление названия кнопки в зависимости от действия edit or add
+        private void nameButtonAdd(object sender, EventAggregator e)
+        {
+            RenameButtonBrand.Content = "Редактировать"; 
         }
     }
 }

@@ -22,5 +22,19 @@ namespace sparePartsStore.Helper
         {
             closePageAddCarBrand?.Invoke(null, new EventAggregator());
         }
+
+        // событие входа на страницу редактирования данных списка марок
+        public static event EventHandler<EventAggregator> launchPageEditCarBrand; // подписываемя в PageMainHead
+        public static void LaunchPageEditCarBrand() // вызвываем в ListCarBrandViewModel
+        {
+            launchPageEditCarBrand?.Invoke(null, new EventAggregator());
+        }
+
+        // событие на смену названия кнопки "Редактировать" на странице PageWorkListBrand
+        public static event EventHandler<EventAggregator> renameButtonBrand; // подписываемя на странице PageWorkListBrand
+        public static void RenameButtonBrand() // вызывается событие в PageMainHead
+        {
+            renameButtonBrand?.Invoke(null, new EventAggregator());
+        }
     }
 }
