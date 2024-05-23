@@ -13,6 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using sparePartsStore.ViewModel;
+using sparePartsStore.View.ViewAdministrator.ViewMainPages;
 
 namespace sparePartsStore.View.ViewAdministrator.ViewWorking
 {
@@ -26,6 +28,8 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
         {
             InitializeComponent();
 
+            DataContext = new ListCarBrandViewModel();
+
             // подписка на событие, если мы редактируем данные
             WorkingWithData.renameButtonBrand += nameButtonAdd;
         }
@@ -35,5 +39,6 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
         {
             RenameButtonBrand.Content = "Редактировать"; 
         }
+
     }
 }

@@ -5,9 +5,14 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       xmlns:local="clr-namespace:sparePartsStore.View.ViewAdministrator.ViewMainPages" 
-      xmlns:local1="clr-namespace:sparePartsStore.View.ViewAdministrator.ViewWorkingWithData"
-      mc:Ignorable="d" 
+      xmlns:local1="clr-namespace:sparePartsStore.View.ViewAdministrator.ViewWorkingWithData" 
+      xmlns:ViewModel="clr-namespace:sparePartsStore.ViewModel"
+      mc:Ignorable="d"
       Title="" MinHeight="700" Height="Auto" MinWidth="1200" Width="Auto">
+
+    <Page.Resources>
+        <ViewModel:MainHeadViewModel x:Key="MainHeadViewModel" />
+    </Page.Resources>
 
     <Grid>
 
@@ -134,9 +139,12 @@
         </Grid>
 
         <!--фрейм-->
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="2" >
             <!--отображение страниц внутри header для администратора-->
-            <Frame x:Name="administratorFrame"  NavigationUIVisibility="Hidden"/>
+            <!--<Frame x:Name="administratorFrame"  NavigationUIVisibility="Hidden"/>-->
+
+            
+            <Frame x:Name="mainFrame" Content="{Binding MainFrame, Mode=TwoWay}"/>
         </Grid>
 
     </Grid>

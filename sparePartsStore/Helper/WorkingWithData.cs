@@ -36,5 +36,12 @@ namespace sparePartsStore.Helper
         {
             renameButtonBrand?.Invoke(null, new EventAggregator());
         }
+
+        // событие на очистку данных страницы PageMainHead
+        public static event EventHandler<EventAggregator> clearMemoryAfterFrame; // подписываемся в PageMainHead
+        public static void ClearMemoryAfterFrame() // вызываем событие в MainHeadViewModel
+        {
+            clearMemoryAfterFrame?.Invoke(null, new EventAggregator()); 
+        }
     }
 }
