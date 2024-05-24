@@ -58,7 +58,7 @@
                     </Grid>
                     
                     <!--шестерёнка-->
-                    <Grid  Margin="30,0,0,0" Visibility="Visible" x:Name="_btnSetting">
+                    <Grid  Margin="30,0,0,0" x:Name="_btnSetting" Visibility="{Binding IsSettingVisible, Mode=TwoWay, Source={StaticResource MainHeadViewModel}}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="45"/>
                         </Grid.ColumnDefinitions>
@@ -74,7 +74,7 @@
 
                     <!--возврат в меню-->
                     <!--меню иконка-->
-                    <Grid  Margin="30,0,0,0" Visibility="Collapsed" x:Name="_btnOutMenu">
+                    <Grid  Margin="30,0,0,0" x:Name="_btnOutMenu" Visibility="{Binding IsOutMenu, Mode=TwoWay, Source={StaticResource MainHeadViewModel}}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="45"/>
                         </Grid.ColumnDefinitions>
@@ -93,11 +93,11 @@
         </Grid>
 
         <!--меню-->
-        <Grid Grid.Row="1" Background="AliceBlue" x:Name="_menu">
+        <Grid Grid.Row="1" Background="AliceBlue" x:Name="_menu" Visibility="{Binding IsMenu, Mode=TwoWay, Source={StaticResource MainHeadViewModel}}">
             <!--разметка для размещения кнопок-->
 
             <!--основное меню-->
-            <Grid Margin="0,0,0,0" Width="1100" x:Name="_basicMenu">
+            <Grid Margin="0,0,0,0" Width="1100" x:Name="_basicMenu" Visibility="{Binding IsBasicMenu, Mode=TwoWay, Source={StaticResource MainHeadViewModel}}">
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="10*"/>
@@ -121,7 +121,7 @@
             </Grid>
 
             <!--меню настроек-->
-            <Grid Visibility="Hidden" x:Name="_settingMenu">
+            <Grid x:Name="_settingMenu" Visibility="{Binding IsSettingMenu, Mode=TwoWay, Source={StaticResource MainHeadViewModel}}">
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
