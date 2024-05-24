@@ -23,15 +23,15 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
     /// </summary>
     public partial class PageWorkListBrand : Page
     {
-
+        private readonly ListCarBrandViewModel _listCarBrandViewModel; // здесь храним экз. класса ListCarBrandViewModel
         public PageWorkListBrand()
         {
             InitializeComponent();
 
-            DataContext = new ListCarBrandViewModel();
+           
 
             // подписка на событие, если мы редактируем данные
-            WorkingWithData.renameButtonBrand += nameButtonAdd;
+            //WorkingWithData.renameButtonBrand += nameButtonAdd;
         }
 
         // обновление названия кнопки в зависимости от действия edit or add

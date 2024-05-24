@@ -50,7 +50,7 @@ namespace sparePartsStore.ViewModel
                     (_addCarBrands = new RelayCommand(obj =>
                     {
 
-                        //  очищаем фрейм и запускаем страницу добавления данных
+                        //  вызваем событие в MainHeadViewModel для запуска страницы добавления марок авто
                         WorkingWithData.LaunchPageAddCarBrand(); // вызываем событие запуска страницы 
 
                     }, (obj) => true));
@@ -69,18 +69,9 @@ namespace sparePartsStore.ViewModel
                     (_editCarBrand = new RelayCommand(obj =>
                     {
                         // вызываем события для запуска страныцы редактирования марки авто
-                        WorkingWithData.LaunchPageEditCarBrand();
+                        //WorkingWithData.LaunchPageEditCarBrand();
 
-                        // задержка, что PageWorkListBrand успе
-                        Task.Run(async () =>
-                        {
-                            await Task.Delay(10); // Ждем завершения задержки
-                            Application.Current.Dispatcher.Invoke(() =>
-                            {
-                                TextBrand = "Тест передачи данных для редактирования";
-
-                            });
-                        });
+                        
 
 
                     }, (obj) => true));
@@ -100,7 +91,7 @@ namespace sparePartsStore.ViewModel
                     (_closePageAddOrDeleteCarBrands = new RelayCommand(obj =>
                     {
                         // закрываем страницу добавления товара
-                        WorkingWithData.ClosePageAddCarBrand(); // вызов события закрытия страницы
+                        //WorkingWithData.ClosePageAddCarBrand(); // вызов события закрытия страницы
                     }, (obj) => true));
             }
         }

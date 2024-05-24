@@ -30,18 +30,14 @@ namespace sparePartsStore.ViewModel
                 OnPropertyChanged(nameof(MainFrame));
             }
         }
-
-        public MainHeadViewModel(Frame frame)
+        public MainHeadViewModel()
         {
-            _mainFrame = frame; // ссылка на фрейм из PageMainHead
 
-            // запуск страницы при открытии PageMainHead
-            //startMainPage();
+            // подписываемя на событие запуска страницы добавления марок авто
+            WorkingWithData.launchPageAddCarBrand += LaunchPageAddCarBrand;
         }
 
-        public MainHeadViewModel() { }
-
-        // запуск страниц по кнопкам или автозапуск
+        // запуск страницы - поиск запчастей
         #region launchWorkPage
 
         // кнопка запуска страницы - поиск запчастей
@@ -53,7 +49,7 @@ namespace sparePartsStore.ViewModel
                 return _btn_SearchParts ??
                     (_btn_SearchParts = new RelayCommand(obj =>
                     {
-                        startMainPage();
+                        startMainPage(); // запускаем страницу - "поиск запчастей"
                     }, (obj) => true));
             }
         }
@@ -67,33 +63,38 @@ namespace sparePartsStore.ViewModel
             ViewSearchSpareParts viewSearchSpareParts = new ViewSearchSpareParts();
             MainFrame.Navigate(viewSearchSpareParts);
 
-            //NavigationManager.StartFrame = _mainFrame;
-            //MainFrame.Navigate(viewSearchSpareParts);
         }
 
         #endregion
 
+        // страница - марка авто
+        #region CarBrand
 
-
-        // запуск страницы марка авто
-        public void PageListCarBrandsBtn()
+        // кнопка запуска страницы - марки авто
+        private RelayCommand _btn_carBrand { get; set; }
+        public RelayCommand Btn_CarBrand
         {
-            // событие для очистка фреймов из памяти в PageMainHead
-            WorkingWithData.ClearMemoryAfterFrame();
-            // экз. класс страницы марок авто
-            PageListCarBrands pageListCarBrands = new PageListCarBrands();
-            MainFrame.Navigate(pageListCarBrands);
+            get
+            {
+                return _btn_carBrand ??
+                    (_btn_carBrand = new RelayCommand(obj =>
+                    {
+                        // событие для очистка фреймов из памяти в PageMainHead
+                        WorkingWithData.ClearMemoryAfterFrame();
+                        PageListCarBrands pageListCarBrands = new PageListCarBrands();
+                        MainFrame.Navigate(pageListCarBrands);
+                    }, (obj) => true));
+            }
         }
 
-        // запуск страницы поиска запчастей
-        public void PageListSearchPartsBtn()
+        // запуск страницы - добавить марку авто
+        private void LaunchPageAddCarBrand(object sender, EventAggregator e)
         {
-            // событие для очистка фреймов из памяти в PageMainHead
-            WorkingWithData.ClearMemoryAfterFrame();
-            // экз. класс страницы марок авто
-            ViewSearchSpareParts viewSearchSpareParts = new ViewSearchSpareParts();
-            MainFrame.Navigate(viewSearchSpareParts);
+
         }
+
+        #endregion
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")

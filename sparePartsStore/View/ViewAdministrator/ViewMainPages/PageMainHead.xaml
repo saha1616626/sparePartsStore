@@ -7,7 +7,7 @@
       xmlns:local="clr-namespace:sparePartsStore.View.ViewAdministrator.ViewMainPages" 
       xmlns:local1="clr-namespace:sparePartsStore.View.ViewAdministrator.ViewWorkingWithData" 
       xmlns:ViewModel="clr-namespace:sparePartsStore.ViewModel"
-      mc:Ignorable="d"
+      mc:Ignorable="d" Loaded="autoStartPage"
       Title="" MinHeight="700" Height="Auto" MinWidth="1200" Width="Auto">
 
     <Page.Resources>
@@ -111,7 +111,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Button Content="Поиск запчастей" Grid.Column="0" Style="{StaticResource BtnMenuHead}" Command="{Binding Btn_SearchParts, Source={StaticResource MainHeadViewModel}}"/>
-                <Button Content="Марка" Grid.Column="1" Style="{StaticResource BtnMenuHead}" Click="Btn_carBrand"/>
+                <Button Content="Марка" Grid.Column="1" Style="{StaticResource BtnMenuHead}" Command="{Binding Btn_CarBrand, Source={StaticResource MainHeadViewModel}}"/>
                 <Button Content="Модель" Grid.Column="2" Style="{StaticResource BtnMenuHead}" Click="Btn_carModel"/>
                 <Button Content="Агрегат" Grid.Column="3" Style="{StaticResource BtnMenuHead}" Click="Btn_Unit"/>
                 <Button Content="Узел" Grid.Column="4" Style="{StaticResource BtnMenuHead}" Click="Btn_Knot"/>

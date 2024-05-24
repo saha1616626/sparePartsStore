@@ -32,38 +32,35 @@ namespace sparePartsStore.View.ViewAdministrator.ViewMainPages
         {
             InitializeComponent();
 
-            // тестово запускаем страницу посик запчастей
-            //administratorFrame.Navigate(new Uri("/View/ViewAdministrator/ViewWorkingWithData/PageListManufacture.xaml", UriKind.Relative));
-            //administratorFrame.Navigate(new Uri("/View/ViewAdministrator/ViewWorkingWithData/PageListAnalogues.xaml", UriKind.Relative));
-
             // подписываемся на событие запуска страницы добавления марки авто
-            WorkingWithData.launchPageAddCarBrand += Add_CarBrands;
+            //WorkingWithData.launchPageAddCarBrand += Add_CarBrands;
             // подписываемся на событие запуска страницы списка марок после закрытия страницы добавления
-            WorkingWithData.closePageAddCarBrand += LaunchCarBrand;
+            //WorkingWithData.closePageAddCarBrand += LaunchCarBrand;
 
             // подписываемя на событие запуска страницы редактирования марки
-            WorkingWithData.launchPageEditCarBrand += Edit_CarBrand;
+            //WorkingWithData.launchPageEditCarBrand += Edit_CarBrand;
 
             // ======== Update ======== 23/05/2024
             _mainHeadViewModel = (MainHeadViewModel)this.Resources["MainHeadViewModel"]; // получаем экз класса MainHeadViewModel основанный на контексте данных в xaml разметке
             _mainHeadViewModel.MainFrame = mainFrame; // Передаем через зависимости ссылку на фрейм
 
-            // запуск первоначальной страницы
-            Task.Run(async () =>
-            {
-                await Task.Delay(600); // Ждем завершения задержки
-                System.Windows.Application.Current.Dispatcher.Invoke(() =>
-                {
-                    ClearMemoryAfterFrame();
-                    startPage();
-                });
-            });
-
             WorkingWithData.clearMemoryAfterFrame += ClearMemoryAfterFrame; // очистка ресурсов
         }
 
-
-
+        // после загрузки текущей страницы запускается фрейм
+        public void autoStartPage(object sender, RoutedEventArgs e)
+        {
+            // запуск первоначальной страницы
+            Task.Run(async () =>
+            {
+                await Task.Delay(500); // Ждем завершения загрузки
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                {
+                    ClearMemoryAfterFrame();
+                    _mainHeadViewModel.startMainPage();
+                });
+            });
+        }
 
         // очистка памяти из ViewModel MainHeadViewModel
         private void ClearMemoryAfterFrame(object sender, EventAggregator e)
@@ -118,17 +115,17 @@ namespace sparePartsStore.View.ViewAdministrator.ViewMainPages
 
 
         // марка
-        private void Btn_carBrand(object sender, RoutedEventArgs e)
-        {
-            //// открываем основное меню
-            //basicMenu();
-            //// очистка фреймов памяти
-            //ClearMemoryAfterFrame();
-            //// автоматичесое отображение страницы при входе в учетную запись адинистратора
-            //administratorFrame.Navigate(new Uri("/View/ViewAdministrator/ViewWorkingWithData/PageListCarBrands.xaml", UriKind.Relative));
+        //private void Btn_carBrand(object sender, RoutedEventArgs e)
+        //{
+        //    //// открываем основное меню
+        //    //basicMenu();
+        //    //// очистка фреймов памяти
+        //    //ClearMemoryAfterFrame();
+        //    //// автоматичесое отображение страницы при входе в учетную запись адинистратора
+        //    //administratorFrame.Navigate(new Uri("/View/ViewAdministrator/ViewWorkingWithData/PageListCarBrands.xaml", UriKind.Relative));
 
-            _mainHeadViewModel.PageListCarBrandsBtn();
-        }
+        //    _mainHeadViewModel.PageListCarBrandsBtn();
+        //}
 
         // модель
         private void Btn_carModel(object sender, RoutedEventArgs e)
@@ -289,30 +286,30 @@ namespace sparePartsStore.View.ViewAdministrator.ViewMainPages
         }
 
         // запуск страницы для редактирования
-        public void Edit_CarBrand(object sender, EventAggregator e)
-        {
-            // очистка фреймов памяти
-            ClearMemoryAfterFrame();
-            _menu.Visibility = Visibility.Collapsed; // отключаем меню основное
-            _btnSetting.Visibility = Visibility.Collapsed; // отключаем кнопку настроек
-            //administratorFrame.Navigate(new Uri("/View/ViewAdministrator/ViewWorking/PageWorkListBrand.xaml", UriKind.Relative));
+        //public void Edit_CarBrand(object sender, EventAggregator e)
+        //{
+        //    // очистка фреймов памяти
+        //    ClearMemoryAfterFrame();
+        //    _menu.Visibility = Visibility.Collapsed; // отключаем меню основное
+        //    _btnSetting.Visibility = Visibility.Collapsed; // отключаем кнопку настроек
+        //    //administratorFrame.Navigate(new Uri("/View/ViewAdministrator/ViewWorking/PageWorkListBrand.xaml", UriKind.Relative));
 
-            PageWorkListBrand pageWorkListBrand = new PageWorkListBrand();
+        //    PageWorkListBrand pageWorkListBrand = new PageWorkListBrand();
 
-            //NavigationManager.StartFrame = administratorFrame;
-            //administratorFrame.Navigate(pageWorkListBrand);
+        //    //NavigationManager.StartFrame = administratorFrame;
+        //    //administratorFrame.Navigate(pageWorkListBrand);
 
-            // задержка, что PageWorkListBrand успела открыться
-            Task.Run(async () =>
-            {
-                await Task.Delay(1); // Ждем завершения задержки
-                System.Windows.Application.Current.Dispatcher.Invoke(() =>
-                {
-                    // изменяем название кнопки
-                    WorkingWithData.RenameButtonBrand();
-                });
-            });
-        }
+        //    // задержка, что PageWorkListBrand успела открыться
+        //    Task.Run(async () =>
+        //    {
+        //        await Task.Delay(1); // Ждем завершения задержки
+        //        System.Windows.Application.Current.Dispatcher.Invoke(() =>
+        //        {
+        //            // изменяем название кнопки
+        //            WorkingWithData.RenameButtonBrand();
+        //        });
+        //    });
+        //}
 
         // запуск страницы списка марок. после выхода из добавления или редактирования.
         public void LaunchCarBrand(object sender, EventAggregator e)
