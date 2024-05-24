@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -27,19 +28,13 @@ namespace sparePartsStore.View.ViewAdministrator.ViewMainPages
     public partial class PageMainHead : Page
     {
         private readonly MainHeadViewModel _mainHeadViewModel;
-        public PageMainHead(MainHeadViewModel mainHeadViewModel)
+        public PageMainHead()
         {
             InitializeComponent();
-
-            //MainHeadViewModel mainHeadViewModel = new MainHeadViewModel(mainFrame);
-
 
             // тестово запускаем страницу посик запчастей
             //administratorFrame.Navigate(new Uri("/View/ViewAdministrator/ViewWorkingWithData/PageListManufacture.xaml", UriKind.Relative));
             //administratorFrame.Navigate(new Uri("/View/ViewAdministrator/ViewWorkingWithData/PageListAnalogues.xaml", UriKind.Relative));
-
-            // запуск страницы
-            //startPage();
 
             // подписываемся на событие запуска страницы добавления марки авто
             WorkingWithData.launchPageAddCarBrand += Add_CarBrands;
@@ -49,18 +44,14 @@ namespace sparePartsStore.View.ViewAdministrator.ViewMainPages
             // подписываемя на событие запуска страницы редактирования марки
             WorkingWithData.launchPageEditCarBrand += Edit_CarBrand;
 
-
             // ======== Update ======== 23/05/2024
-            //MainHeadViewModel mainHeadViewModel = new MainHeadViewModel(mainFrame); // передача ссылки на фрейм
-            //mainHeadViewModel.MainFrame = mainFrame;
-
-            _mainHeadViewModel = mainHeadViewModel; // Создаем экз MainHeadViewModel
+            _mainHeadViewModel = (MainHeadViewModel)this.Resources["MainHeadViewModel"]; // получаем экз класса MainHeadViewModel основанный на контексте данных в xaml разметке
             _mainHeadViewModel.MainFrame = mainFrame; // Передаем через зависимости ссылку на фрейм
-            //_mainHeadViewModel.startMainPage(); // Запускаем начальную страницу
 
+            // запуск первоначальной страницы
             Task.Run(async () =>
             {
-                await Task.Delay(1000); // Ждем завершения задержки
+                await Task.Delay(600); // Ждем завершения задержки
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
                     ClearMemoryAfterFrame();
@@ -115,12 +106,16 @@ namespace sparePartsStore.View.ViewAdministrator.ViewMainPages
             _mainHeadViewModel.startMainPage();
         }
 
+
+
         // страница поиска запчастей
-        private void Btn_SearchParts(object sender, RoutedEventArgs e)
-        {
-            //startPage();
-            _mainHeadViewModel.PageListSearchPartsBtn();
-        }
+        //private void Btn_SearchParts(object sender, RoutedEventArgs e)
+        //{
+        //    //startPage();
+        //    //_mainHeadViewModel.PageListSearchPartsBtn();
+        //}
+
+
 
         // марка
         private void Btn_carBrand(object sender, RoutedEventArgs e)

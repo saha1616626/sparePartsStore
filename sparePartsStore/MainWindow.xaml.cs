@@ -24,11 +24,8 @@ namespace sparePartsStore
         {
             InitializeComponent();
 
-            // тестовый запуск страницы администратора
-            //mainFrame.Navigate(new Uri("/View/ViewAdministrator/ViewMainPages/PageMainHead.xaml", UriKind.Relative));
-
-            MainHeadViewModel mainHeadViewModel = new MainHeadViewModel(); // создали экз ViewModel, чтобы можно было потом с ним общаться в PageMainHead
-            PageMainHead pageMainHead = new PageMainHead(mainHeadViewModel);
+            // запуск страницы администратора
+            PageMainHead pageMainHead = new PageMainHead();
 
             NavigationManager.StartFrame = mainFrame;
             mainFrame.Navigate(pageMainHead);

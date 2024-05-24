@@ -41,7 +41,24 @@ namespace sparePartsStore.ViewModel
 
         public MainHeadViewModel() { }
 
-        // начальная страница при запуске экрана 
+        // запуск страниц по кнопкам или автозапуск
+        #region launchWorkPage
+
+        // кнопка запуска страницы - поиск запчастей
+        private RelayCommand _btn_SearchParts {  get; set; }
+        public RelayCommand Btn_SearchParts
+        {
+            get
+            {
+                return _btn_SearchParts ??
+                    (_btn_SearchParts = new RelayCommand(obj =>
+                    {
+                        startMainPage();
+                    }, (obj) => true));
+            }
+        }
+
+        // начальная страница - поиск запчастей
         public void startMainPage()
         {
             // событие для очистка фреймов из памяти в PageMainHead
@@ -49,7 +66,14 @@ namespace sparePartsStore.ViewModel
             // автоматичесое отображение страницы при входе в учетную запись адинистратора
             ViewSearchSpareParts viewSearchSpareParts = new ViewSearchSpareParts();
             MainFrame.Navigate(viewSearchSpareParts);
+
+            //NavigationManager.StartFrame = _mainFrame;
+            //MainFrame.Navigate(viewSearchSpareParts);
         }
+
+        #endregion
+
+
 
         // запуск страницы марка авто
         public void PageListCarBrandsBtn()
