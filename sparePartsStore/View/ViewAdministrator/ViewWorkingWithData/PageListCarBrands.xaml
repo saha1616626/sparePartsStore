@@ -77,7 +77,7 @@
                 ColumnHeaderStyle="{StaticResource columnTable}">
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Марка" Binding="{Binding numberParts}" MinWidth="500"/>
+                    <DataGridTextColumn Header="Марка" Binding="{Binding NameCarBrand}" MinWidth="500"/>
                 </DataGrid.Columns>
                 
             </DataGrid>

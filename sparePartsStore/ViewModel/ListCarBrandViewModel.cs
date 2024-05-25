@@ -44,6 +44,7 @@ namespace sparePartsStore.ViewModel
         {
             try
             {
+                ObservableCollection<CarBrand> carBrands = new ObservableCollection<CarBrand>(); // список данных из БД
                 using (SparePartsStoreContext context = new SparePartsStoreContext())
                 {
                     List<CarBrand> carBrand = context.CarBrands.ToList(); // получаем список марок авто
@@ -53,10 +54,10 @@ namespace sparePartsStore.ViewModel
                         CarBrand cBrand = new CarBrand();
                         cBrand.NameCarBrand = brand.NameCarBrand;
                         // добавляем в список
-                        ListCarBrandRead.Add(cBrand);
+                        carBrands.Add(cBrand);
                     }
                 }
-                return ListCarBrand;
+                return carBrands;
                 throw new Exception("Ошибка работы БД!");
             }
             catch (Exception ex)
