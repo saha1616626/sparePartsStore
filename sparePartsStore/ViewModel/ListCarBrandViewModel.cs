@@ -1,8 +1,10 @@
 ﻿using sparePartsStore.Helper;
+using sparePartsStore.Model;
 using sparePartsStore.View.ViewAdministrator.ViewMainPages;
 using sparePartsStore.View.ViewAdministrator.ViewWorking;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -17,85 +19,52 @@ namespace sparePartsStore.ViewModel
     public class ListCarBrandViewModel : INotifyPropertyChanged
     {
 
-        //// свойства
-
-        //// свойства страницы марки
-        //#region Brand
-        //// поле названия марки
-        //private string? _textBrand {  get; set; }
-        //public string? TextBrand
-        //{
-        //    get { return _textBrand; }
-        //    set 
-        //    {
-        //        if (_textBrand != value)
-        //        {
-        //            _textBrand = value;
-        //            OnPropertyChanged(nameof(TextBrand));
-        //        }
-        //    }
-        //}
-
-
-        //#endregion
-
-        // открывам страницу добавления данных "марка авто"
-        #region openPageAddCarBrand
-        private RelayCommand _addCarBrands;
-        public RelayCommand AddCarBrands
+        public ListCarBrandViewModel() // конструктор
         {
-            get
+            // чтение данных из БД
+            ListCarBrandRead = GetListCarBrand();
+            // вывод данных в таблицу
+            ListCarBrand = LoadCarBrandBD();
+        }
+
+        // коллекция считанная из бд
+        public ObservableCollection<CarBrand> ListCarBrandRead { get; set; } = new ObservableCollection<CarBrand>();
+        // коллекция для отображения списка марок авто
+        public ObservableCollection<CarBrand> ListCarBrand { get; set; } = new ObservableCollection<CarBrand>();
+
+        // метод для вывод из БД списка марок авто для отображения в таблице
+        private ObservableCollection<CarBrand> LoadCarBrandBD()
+        {
+            ListCarBrand = ListCarBrandRead; // получаем данные для вывода
+            return ListCarBrand;
+        }
+
+        // метод для получения коллекции марок авто
+        private ObservableCollection<CarBrand> GetListCarBrand()
+        {
+            try
             {
-                return _addCarBrands ??
-                    (_addCarBrands = new RelayCommand(obj =>
+                using (SparePartsStoreContext context = new SparePartsStoreContext())
+                {
+                    List<CarBrand> carBrand = context.CarBrands.ToList(); // получаем список марок авто
+                    // копируем данные из БД в ListCarBrandRead
+                    foreach(var brand in carBrand)
                     {
-
-                        //  вызваем событие в MainHeadViewModel для запуска страницы добавления марок авто
-                        WorkingWithData.LaunchPageAddCarBrand(); // вызываем событие запуска страницы 
-
-                    }, (obj) => true));
+                        CarBrand cBrand = new CarBrand();
+                        cBrand.NameCarBrand = brand.NameCarBrand;
+                        // добавляем в список
+                        ListCarBrandRead.Add(cBrand);
+                    }
+                }
+                return ListCarBrand;
+                throw new Exception("Ошибка работы БД!");
+            }
+            catch (Exception ex)
+            {
+                MessageBoxResult result = System.Windows.MessageBox.Show(ex.ToString(), "Внимание!", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                return null;
             }
         }
-        #endregion
-
-        //// открываем страницу для редактирования
-        //#region openPageEditCarBrand
-        //private RelayCommand _editCarBrand;
-        //public RelayCommand EditCarBrand
-        //{
-        //    get
-        //    {
-        //        return _editCarBrand ??
-        //            (_editCarBrand = new RelayCommand(obj =>
-        //            {
-        //                // вызываем события для запуска страныцы редактирования марки авто
-        //                //WorkingWithData.LaunchPageEditCarBrand();
-
-
-
-
-        //            }, (obj) => true));
-        //    }
-        //}
-
-        //#endregion
-
-        //// выход из страницы добавить или редактировать на страницу списка марок авто
-        //#region closePageAddOrDeleteCarBrand
-        //private RelayCommand _closePageAddOrDeleteCarBrands;
-        //public RelayCommand ClosePageAddOrDeleteCarBrands
-        //{
-        //    get
-        //    {
-        //        return _closePageAddOrDeleteCarBrands ??
-        //            (_closePageAddOrDeleteCarBrands = new RelayCommand(obj =>
-        //            {
-        //                // закрываем страницу добавления товара
-        //                //WorkingWithData.ClosePageAddCarBrand(); // вызов события закрытия страницы
-        //            }, (obj) => true));
-        //    }
-        //}
-        //#endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")

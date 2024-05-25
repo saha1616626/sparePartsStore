@@ -1,4 +1,7 @@
-﻿using sparePartsStore.Helper;
+﻿using MaterialDesignThemes.Wpf;
+using Microsoft.EntityFrameworkCore;
+using sparePartsStore.Helper;
+using sparePartsStore.Model;
 using sparePartsStore.View;
 using sparePartsStore.View.ViewAdministrator.ViewMainPages;
 using sparePartsStore.View.ViewAdministrator.ViewWorking;
@@ -92,6 +95,10 @@ namespace sparePartsStore.ViewModel
 
             // подписываемя на событие запуска страницы добавления марки авто
             WorkingWithData.launchPageAddCarBrand += LaunchPageAddCarBrand;
+            // подписываемя на событие запуска страницы редактирования марки авто
+            WorkingWithData.launchPageEditCarBrand += LaunchPageEditCarBrand;
+            // подписываемся на событие сохранения данных марки авто после редактирования или добваления данных
+            WorkingWithData.saveDataCreateOrEditCarBrands += WorkDataBrand;
         }
 
         // запуск страницы - поиск запчастей
@@ -144,17 +151,79 @@ namespace sparePartsStore.ViewModel
             }
         }
 
+        // объект страницы для редактирования и добавления данных марок авто
+        PageWorkListBrand pageWorkListBrand;
+        // флаг, который нам сообщает, редактирует пользователь таблицу или добавлят новые данные
+        bool addOrEditBrand; // если true - значит добавлять, если false - значит редактировать
+
         // запуск страницы добавления марки авто
         private void LaunchPageAddCarBrand(object sender, EventAggregator e)
         {
-            PageWorkListBrand pageWorkListBrand = new PageWorkListBrand();
-            MainFrame.NavigationService.Navigate(pageWorkListBrand);
+            pageWorkListBrand = new PageWorkListBrand(); // экз страницы для добавления
 
+            MainFrame.NavigationService.Navigate(pageWorkListBrand);
+            pageWorkListBrand.RenameButtonBrand.Content = "Добавить"; // измененяем кнопку
+            // поднимаем флаг, что мы добавляем данные
+            addOrEditBrand = true;
             // показываем, что было открыто основное меню перед его скрытием
             typeMenu = true;
             // скрываем шестерёнку и основное меню, чтобы нельзя было перемещаться между страницами
             selectedMenu();
         }
+
+        // запуск страницы редактирования марки авто
+        private void LaunchPageEditCarBrand(object sender, EventAggregator e)
+        {
+            pageWorkListBrand = new PageWorkListBrand(); // экз страницы для редактирования
+
+            MainFrame.NavigationService.Navigate(pageWorkListBrand); // запуск страницы
+            pageWorkListBrand.RenameButtonBrand.Content = "Редактировать"; // измененяем кнопку
+            // поднимаем флаг, что мы редактируем данные
+            addOrEditBrand = false;
+            // показываем, что было открыто основное меню перед его скрытием
+            typeMenu = true;
+            // скрываем шестерёнку и основное меню, чтобы нельзя было перемещаться между страницами
+            selectedMenu();
+        }
+
+        // редактируем или добавляем данные в таблицу
+        private void WorkDataBrand(object sender, EventAggregator e)
+        {
+            if (addOrEditBrand) // если добавляем данные в таблицу марок авто
+            {
+                // подключаем БД
+                using (SparePartsStoreContext sparePartsStoreContext = new SparePartsStoreContext()) 
+                {
+                    List<CarBrand> carBrands = sparePartsStoreContext.CarBrands.ToList(); // получаем список марок авто
+
+                    // Создаём экз carBrands для добавлени данных
+                    CarBrand carBrand = new CarBrand();
+                    pageWorkListBrand.MyEventArgsObject += (sender, args) =>
+                    {
+                        CarBrand carBrands = (CarBrand)args.Value;
+                        carBrand.NameCarBrand = carBrands.NameCarBrand;
+                        sparePartsStoreContext.Add(carBrand); // вносим данные в бд
+                        sparePartsStoreContext.SaveChanges(); // сохраняем бд
+                    };
+                    pageWorkListBrand.Transmit(); // вызываем событие, чтобы полчить данные для записи в БД
+                }
+            }
+            else // если редактируем данные в таблице марок авто
+            {
+                // подключаем БД
+                using (SparePartsStoreContext sparePartsStoreContext = new SparePartsStoreContext())
+                {
+                    List<CarBrand> carBrands = sparePartsStoreContext.CarBrands.ToList(); // получаем список марок авто
+                }
+            }
+
+            // событие для очистка фреймов из памяти в PageMainHead
+            //WorkingWithData.ClearMemoryAfterFrame();
+            PageListCarBrands pageListCarBrands = new PageListCarBrands();
+            MainFrame.NavigationService.Navigate(pageListCarBrands);
+        }
+
+        #endregion
 
         // закрыть последнюю страницу
         private void CloseLastOnePage(object sender, EventAggregator e)
@@ -169,9 +238,6 @@ namespace sparePartsStore.ViewModel
             GC.Collect();
             GC.WaitForPendingFinalizers();
         }
-
-        #endregion
-
 
         // методы PageMainHead
         #region methodsPageMainHead

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using sparePartsStore.Helper;
+using sparePartsStore.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +25,20 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorkingWithData
         public PageListCarBrands()
         {
             InitializeComponent();
+        }
+
+        // переход на страницу добавить марку авто
+        private void AddCarBrand(object sender, EventArgs e)
+        {
+            // вызваем событие в MainHeadViewModel для запуска страницы добавления марок авто
+            WorkingWithData.LaunchPageAddCarBrand(); 
+        }
+
+        // переход на страницу редакирования марки авто
+        private void EditCarBrand(object sender, EventArgs e)
+        {
+            // вызваем событие в MainHeadViewModel для запуска страницы редактирования марок авто
+            WorkingWithData.LaunchPageEditCarBrand();
         }
     }
 }
