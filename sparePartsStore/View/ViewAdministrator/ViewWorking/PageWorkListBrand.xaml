@@ -46,7 +46,7 @@
         <!--поля для ввода данных-->
         <TextBox Grid.Row="1" Grid.Column="0" x:Name="nameBrand" Height="50" Margin="0,30,0,0"
              VerticalAlignment="Center" HorizontalAlignment="Center"
-             Text="{Binding Path=NameCarBrand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"   
+             Text=""   
              materialDesign:TextFieldAssist.HasClearButton="True"
              Style="{StaticResource MaterialDesignOutlinedTextBox}" 
              materialDesign:HintAssist.Hint="Введите название марки" 

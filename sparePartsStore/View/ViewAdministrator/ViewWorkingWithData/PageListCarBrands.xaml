@@ -52,7 +52,7 @@
             </Grid.RowDefinitions>
 
             <Button Grid.Row="0" Grid.Column="0" Content="Добавить" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" Click=" AddCarBrand"/>
-            <Button Grid.Row="0" Grid.Column="1" Content="Редктировать" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0" Click="EditCarBrand"/>
+            <Button Grid.Row="0" Grid.Column="1" Content="Редктировать" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0" Click="EditCarBrand" Command="{Binding Btn_EditCarBrand}" IsEnabled="{Binding IsEditButtonEnabled}" />
             <Button Grid.Row="0" Grid.Column="2" Content="Удалить" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0"/>
 
             <TextBox Grid.Row="1" Grid.ColumnSpan="3" x:Name="SearchParts" Height="50" Margin="0,20,0,0"

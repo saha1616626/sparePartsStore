@@ -1,4 +1,5 @@
 ﻿using sparePartsStore.Helper;
+using sparePartsStore.Model;
 using sparePartsStore.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -22,9 +23,13 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorkingWithData
     /// </summary>
     public partial class PageListCarBrands : Page
     {
+        private readonly ListCarBrandViewModel _listCarBrandViewModel; // привязанный ListCarBrandViewModel
         public PageListCarBrands()
         {
             InitializeComponent();
+
+            // получаем экз ListCarBrandViewModel
+            _listCarBrandViewModel = (ListCarBrandViewModel)this.Resources["ListCarBrandViewModel"];
         }
 
         // переход на страницу добавить марку авто
@@ -40,5 +45,23 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorkingWithData
             // вызваем событие в MainHeadViewModel для запуска страницы редактирования марок авто
             WorkingWithData.LaunchPageEditCarBrand();
         }
+
+        // событие передачи выбранных данных
+        public event EventHandler<MyEventArgsObject> EventDataSelectedItem;
+        protected virtual void TransmitSelectedData(CarBrand value)
+        {
+            EventDataSelectedItem?.Invoke(this, new MyEventArgsObject { Value = value });
+        }
+
+        // передаём в событие выбранные данные, в MainHeadViewModel для отображения этих данных на странице редактирования
+        public void TransmitData()
+        {
+            CarBrand carBrand = new CarBrand(); // экз для храненения передаваесых данных 
+
+            carBrand = _listCarBrandViewModel.TransmitBrand(); // получаем выбранные данные
+
+            TransmitSelectedData(carBrand); // передаём данные в событие
+        }
+
     }
 }

@@ -27,7 +27,7 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
         private readonly ListCarBrandViewModel _listCarBrandViewModel; // здесь храним экз. класса ListCarBrandViewModel
         public PageWorkListBrand()
         {
-            InitializeComponent();
+            InitializeComponent(); 
         }
 
         // закрываем страницу 
@@ -59,6 +59,12 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
             CarBrand carBrand = new CarBrand();
             carBrand.NameCarBrand = nameBrand.Text.Trim();
             TransmitData(carBrand); // передали название марки авто
+        }
+
+        // передача данных из MainHeadViewModel для вывода на экран и последующего редактирования
+        public void DataReception(CarBrand carBrand)
+        {
+            nameBrand.Text = carBrand.NameCarBrand.Trim();
         }
     }
 }

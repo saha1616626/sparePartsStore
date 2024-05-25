@@ -135,6 +135,7 @@ namespace sparePartsStore.ViewModel
         #region CarBrand
 
         // кнопка запуска страницы - марки авто
+        PageListCarBrands pageListCarBrands; // объект класса отображения списка марок авто
         private RelayCommand _btn_carBrand { get; set; }
         public RelayCommand Btn_CarBrand
         {
@@ -145,7 +146,7 @@ namespace sparePartsStore.ViewModel
                     {
                         // событие для очистка фреймов из памяти в PageMainHead
                         WorkingWithData.ClearMemoryAfterFrame();
-                        PageListCarBrands pageListCarBrands = new PageListCarBrands();
+                        pageListCarBrands = new PageListCarBrands();
                         MainFrame.NavigationService.Navigate(pageListCarBrands);
                     }, (obj) => true));
             }
@@ -184,6 +185,17 @@ namespace sparePartsStore.ViewModel
             typeMenu = true;
             // скрываем шестерёнку и основное меню, чтобы нельзя было перемещаться между страницами
             selectedMenu();
+
+            // получаем выбранный данные для редактирования
+            pageListCarBrands.EventDataSelectedItem += (sender, args) =>
+            {
+                CarBrand carBrand = (CarBrand)args.Value; // получаем выбранные данные
+
+                // передаём данные для редактирования (отображаем)
+                pageWorkListBrand.DataReception(carBrand);
+            };
+            // вызываем событие для передачи данных
+            pageListCarBrands.TransmitData();
         }
 
         // редактируем или добавляем данные в таблицу
@@ -218,9 +230,10 @@ namespace sparePartsStore.ViewModel
             }
 
             // событие для очистка фреймов из памяти в PageMainHead
-            //WorkingWithData.ClearMemoryAfterFrame();
+            WorkingWithData.ClearMemoryAfterFrame();
             PageListCarBrands pageListCarBrands = new PageListCarBrands();
             MainFrame.NavigationService.Navigate(pageListCarBrands);
+            selectedMenu(); // отображаем меню
         }
 
         #endregion

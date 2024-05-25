@@ -18,7 +18,6 @@ namespace sparePartsStore.ViewModel
     // класс для работы с маркамо авто
     public class ListCarBrandViewModel : INotifyPropertyChanged
     {
-
         public ListCarBrandViewModel() // конструктор
         {
             // чтение данных из БД
@@ -26,6 +25,31 @@ namespace sparePartsStore.ViewModel
             // вывод данных в таблицу
             ListCarBrand = LoadCarBrandBD();
         }
+
+        // выбранные данные в таблице
+        private object _selectedCarBrand;
+        public object SelectedCarBrand
+        {
+            get { return _selectedCarBrand; }
+            set
+            {
+                _selectedCarBrand = value;
+                OnPropertyChanged(nameof(SelectedCarBrand));
+                OnPropertyChanged(nameof(IsEditButtonEnabled)); // Уведомляем об изменении доступности кнопки
+            }
+        }
+        // отображение кнопки редактирования данных
+        private bool _isEditButtonEnabled;
+        public bool IsEditButtonEnabled
+        {
+            get { return _selectedCarBrand != null; } // возвращает true, если выбран объект в таблице
+            set
+            {
+                _isEditButtonEnabled = value;
+                OnPropertyChanged(nameof(IsEditButtonEnabled));
+            }
+        }
+
 
         // коллекция считанная из бд
         public ObservableCollection<CarBrand> ListCarBrandRead { get; set; } = new ObservableCollection<CarBrand>();
@@ -65,6 +89,28 @@ namespace sparePartsStore.ViewModel
                 MessageBoxResult result = System.Windows.MessageBox.Show(ex.ToString(), "Внимание!", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
                 return null;
             }
+        }
+
+        // редактирования данных таблицы
+        private RelayCommand _btn_EditCarBrand {  get; set; }
+        public RelayCommand Btn_EditCarBrand
+        {
+            get
+            {
+                return _btn_EditCarBrand ??
+                    (_btn_EditCarBrand = new RelayCommand(obj =>
+                    {
+
+                    }, (obj) => true));
+            }
+        }
+
+        // передача выбранного объекта в таблице
+        public CarBrand TransmitBrand()
+        {
+            CarBrand carBrand = new CarBrand();
+            carBrand = (CarBrand)SelectedCarBrand;
+            return carBrand;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
