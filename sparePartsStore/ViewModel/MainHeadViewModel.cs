@@ -25,8 +25,8 @@ namespace sparePartsStore.ViewModel
         public Frame MainFrame
         {
             get { return _mainFrame; }
-            set 
-            { 
+            set
+            {
                 _mainFrame = value;
                 OnPropertyChanged(nameof(MainFrame));
             }
@@ -76,7 +76,7 @@ namespace sparePartsStore.ViewModel
         }
 
         // свойство для отображения меню настроек администратора
-        private Visibility _isSettingMenu = Visibility.Collapsed;
+        private Visibility _isSettingMenu = Visibility.Hidden;
         public Visibility IsSettingMenu
         {
             get { return _isSettingMenu; }
@@ -87,6 +87,9 @@ namespace sparePartsStore.ViewModel
 
         public MainHeadViewModel()
         {
+            // событие на закрытие страницы
+            WorkingWithData.closePage += CloseLastOnePage;
+
             // подписываемя на событие запуска страницы добавления марки авто
             WorkingWithData.launchPageAddCarBrand += LaunchPageAddCarBrand;
         }
@@ -95,7 +98,7 @@ namespace sparePartsStore.ViewModel
         #region launchWorkPage
 
         // кнопка запуска страницы - поиск запчастей
-        private RelayCommand _btn_SearchParts {  get; set; }
+        private RelayCommand _btn_SearchParts { get; set; }
         public RelayCommand Btn_SearchParts
         {
             get
@@ -136,22 +139,42 @@ namespace sparePartsStore.ViewModel
                         // событие для очистка фреймов из памяти в PageMainHead
                         WorkingWithData.ClearMemoryAfterFrame();
                         PageListCarBrands pageListCarBrands = new PageListCarBrands();
-                        MainFrame.Navigate(pageListCarBrands);
+                        MainFrame.NavigationService.Navigate(pageListCarBrands);
                     }, (obj) => true));
             }
         }
 
-        // запуск страницы - добавить марку авто
+        // запуск страницы добавления марки авто
         private void LaunchPageAddCarBrand(object sender, EventAggregator e)
         {
             PageWorkListBrand pageWorkListBrand = new PageWorkListBrand();
-            MainFrame.Navigate(pageWorkListBrand);
+            MainFrame.NavigationService.Navigate(pageWorkListBrand);
 
             // показываем, что было открыто основное меню перед его скрытием
             typeMenu = true;
             // скрываем шестерёнку и основное меню, чтобы нельзя было перемещаться между страницами
             selectedMenu();
         }
+
+        // закрыть последнюю страницу
+        private void CloseLastOnePage(object sender, EventAggregator e)
+        {
+
+            // закрываем страницу
+            MainFrame.NavigationService.GoBack();
+            // изменяем меню
+            selectedMenu();
+
+            // сборка мусора и освобождение неиспользуемых ресурсов
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        }
+
+        #endregion
+
+
+        // методы PageMainHead
+        #region methodsPageMainHead
 
         // скрываем основное меню и открываем меню настроек
         private void settingMenu()
@@ -167,25 +190,25 @@ namespace sparePartsStore.ViewModel
             IsBasicMenu = Visibility.Visible; // вкл основное меню
         }
 
-        #endregion
-
         // переменная, которая показывает, было скрыто меню или нет
         private bool visibilityMenu = false; // меню скрыто
 
-        // метод для скрытия или отображения меню
+        // метод для скрытия или отображения меню, иконок при редактировании данных
         private void selectedMenu()
         {
             if (typeMenu) // если основное меню
             {
-                if(visibilityMenu) // основное меню скрыто
+                if (visibilityMenu) // основное меню скрыто
                 {
-                    IsBasicMenu = Visibility.Visible;
+                    IsMenu = Visibility.Visible; // включаем меню (любое)
+                    IsSettingVisible = Visibility.Visible; // включаем шестерёнку
 
                     visibilityMenu = false; // меню не скрыто
                 }
                 else // основное меню не скрыто
                 {
-                    IsBasicMenu = Visibility.Collapsed;
+                    IsMenu = Visibility.Collapsed; // скрываем меню (любое)
+                    IsSettingVisible = Visibility.Collapsed; // скрываем шестерёнку
 
                     visibilityMenu = true; // меню скрыто
                 }
@@ -195,6 +218,9 @@ namespace sparePartsStore.ViewModel
 
             }
         }
+
+        #endregion
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")

@@ -40,5 +40,12 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
             RenameButtonBrand.Content = "Редактировать"; 
         }
 
+        // закрываем страницу
+        private void ClosePageAddOrDeleteCarBrands(object sender, EventArgs e)
+        {
+            // вызываем события для закрытия страницы
+            WorkingWithData.ClosePage();
+        }
+
     }
 }

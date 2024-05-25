@@ -37,7 +37,7 @@
 
             <!-- Верхняя часть экрана -->
             <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
-                <Button Content="Домой" Margin="50, 4, 0, 0" Padding="-20, -3, 0, 0" Width="100" Command="{Binding ClosePageAddOrDeleteCarBrands}"  Background="Gray" BorderBrush="Black"/>
+                <Button Content="Домой" Margin="50, 4, 0, 0" Padding="-20, -3, 0, 0" Width="100" Click="ClosePageAddOrDeleteCarBrands"  Background="Gray" BorderBrush="Black"/>
                 <materialDesign:PackIcon Kind="Home" Margin="120, 10, 0, 0" Width="20" Height="20"/>
             </Grid>
 

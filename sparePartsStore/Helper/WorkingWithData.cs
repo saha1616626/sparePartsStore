@@ -16,12 +16,12 @@ namespace sparePartsStore.Helper
             launchPageAddCarBrand?.Invoke(null, new EventAggregator());
         }
 
-        //// событие выхода на страницу списка марок после на жатия на кнопку выход в меню
-        //public static event EventHandler<EventAggregator> closePageAddCarBrand; // подписываемся в PageMainHead
-        //public static void ClosePageAddCarBrand() // вызываем событие в ListCarBrandViewModel
-        //{
-        //    closePageAddCarBrand?.Invoke(null, new EventAggregator());
-        //}
+        // событие выхода из страницы на предидущую страницу 
+        public static event EventHandler<EventAggregator> closePage; // подписываемся MainHeadViewModel
+        public static void ClosePage() // вызываем событие в PageWorkListBrand
+        {
+            closePage?.Invoke(null, new EventAggregator());
+        }
 
         //// событие входа на страницу редактирования данных списка марок
         //public static event EventHandler<EventAggregator> launchPageEditCarBrand; // подписываемя в PageMainHead

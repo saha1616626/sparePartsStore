@@ -17,27 +17,27 @@ namespace sparePartsStore.ViewModel
     public class ListCarBrandViewModel : INotifyPropertyChanged
     {
 
-        // свойства
+        //// свойства
 
-        // свойства страницы марки
-        #region Brand
-        // поле названия марки
-        private string? _textBrand {  get; set; }
-        public string? TextBrand
-        {
-            get { return _textBrand; }
-            set 
-            {
-                if (_textBrand != value)
-                {
-                    _textBrand = value;
-                    OnPropertyChanged(nameof(TextBrand));
-                }
-            }
-        }
+        //// свойства страницы марки
+        //#region Brand
+        //// поле названия марки
+        //private string? _textBrand {  get; set; }
+        //public string? TextBrand
+        //{
+        //    get { return _textBrand; }
+        //    set 
+        //    {
+        //        if (_textBrand != value)
+        //        {
+        //            _textBrand = value;
+        //            OnPropertyChanged(nameof(TextBrand));
+        //        }
+        //    }
+        //}
 
 
-        #endregion
+        //#endregion
 
         // открывам страницу добавления данных "марка авто"
         #region openPageAddCarBrand
@@ -58,44 +58,44 @@ namespace sparePartsStore.ViewModel
         }
         #endregion
 
-        // открываем страницу для редактирования
-        #region openPageEditCarBrand
-        private RelayCommand _editCarBrand;
-        public RelayCommand EditCarBrand
-        {
-            get
-            {
-                return _editCarBrand ??
-                    (_editCarBrand = new RelayCommand(obj =>
-                    {
-                        // вызываем события для запуска страныцы редактирования марки авто
-                        //WorkingWithData.LaunchPageEditCarBrand();
-
-                        
+        //// открываем страницу для редактирования
+        //#region openPageEditCarBrand
+        //private RelayCommand _editCarBrand;
+        //public RelayCommand EditCarBrand
+        //{
+        //    get
+        //    {
+        //        return _editCarBrand ??
+        //            (_editCarBrand = new RelayCommand(obj =>
+        //            {
+        //                // вызываем события для запуска страныцы редактирования марки авто
+        //                //WorkingWithData.LaunchPageEditCarBrand();
 
 
-                    }, (obj) => true));
-            }
-        }
 
-        #endregion
 
-        // выход из страницы добавить или редактировать на страницу списка марок авто
-        #region closePageAddOrDeleteCarBrand
-        private RelayCommand _closePageAddOrDeleteCarBrands;
-        public RelayCommand ClosePageAddOrDeleteCarBrands
-        {
-            get
-            {
-                return _closePageAddOrDeleteCarBrands ??
-                    (_closePageAddOrDeleteCarBrands = new RelayCommand(obj =>
-                    {
-                        // закрываем страницу добавления товара
-                        //WorkingWithData.ClosePageAddCarBrand(); // вызов события закрытия страницы
-                    }, (obj) => true));
-            }
-        }
-        #endregion
+        //            }, (obj) => true));
+        //    }
+        //}
+
+        //#endregion
+
+        //// выход из страницы добавить или редактировать на страницу списка марок авто
+        //#region closePageAddOrDeleteCarBrand
+        //private RelayCommand _closePageAddOrDeleteCarBrands;
+        //public RelayCommand ClosePageAddOrDeleteCarBrands
+        //{
+        //    get
+        //    {
+        //        return _closePageAddOrDeleteCarBrands ??
+        //            (_closePageAddOrDeleteCarBrands = new RelayCommand(obj =>
+        //            {
+        //                // закрываем страницу добавления товара
+        //                //WorkingWithData.ClosePageAddCarBrand(); // вызов события закрытия страницы
+        //            }, (obj) => true));
+        //    }
+        //}
+        //#endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
