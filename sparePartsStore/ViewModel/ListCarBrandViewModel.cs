@@ -27,8 +27,8 @@ namespace sparePartsStore.ViewModel
         }
 
         // выбранные данные в таблице
-        private object _selectedCarBrand;
-        public object SelectedCarBrand
+        private CarBrand _selectedCarBrand;
+        public CarBrand SelectedCarBrand
         {
             get { return _selectedCarBrand; }
             set
@@ -76,6 +76,7 @@ namespace sparePartsStore.ViewModel
                     foreach(var brand in carBrand)
                     {
                         CarBrand cBrand = new CarBrand();
+                        cBrand.CarBrandId = brand.CarBrandId;
                         cBrand.NameCarBrand = brand.NameCarBrand;
                         // добавляем в список
                         carBrands.Add(cBrand);

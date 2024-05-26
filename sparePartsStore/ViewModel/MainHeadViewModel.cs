@@ -226,12 +226,32 @@ namespace sparePartsStore.ViewModel
                 using (SparePartsStoreContext sparePartsStoreContext = new SparePartsStoreContext())
                 {
                     List<CarBrand> carBrands = sparePartsStoreContext.CarBrands.ToList(); // получаем список марок авто
+
+                    pageWorkListBrand.MyEventArgsObject += (sender, args) =>
+                    {
+                        CarBrand carBrand = (CarBrand)args.Value; // получаем отредактированные данные
+                        // получаем id объекта для редактирования
+
+                        // получаем объект из БД, чтобы внести в него изменения. Id берем из GetCarBrand
+                        CarBrand cBrand = carBrands.FirstOrDefault(carBrands => carBrands.CarBrandId == carBrand.CarBrandId);
+
+                        if (cBrand != null)
+                        {
+                            // обновляем список БД
+                            cBrand.NameCarBrand = carBrand.NameCarBrand;
+                            sparePartsStoreContext.Update(cBrand);
+                            //sparePartsStoreContext.Entry(c).Property(p => p.NameCarBrand).IsModified = true; // альтернатива обновления данных
+                            sparePartsStoreContext.SaveChanges(); // сохраняем бд
+                        }
+
+                    };
+                    pageWorkListBrand.Transmit(); // вызываем событие, чтобы полчить данные для изменения в БД
                 }
             }
 
             // событие для очистка фреймов из памяти в PageMainHead
             WorkingWithData.ClearMemoryAfterFrame();
-            PageListCarBrands pageListCarBrands = new PageListCarBrands();
+            pageListCarBrands = new PageListCarBrands(); // обновляем экз. класса
             MainFrame.NavigationService.Navigate(pageListCarBrands);
             selectedMenu(); // отображаем меню
         }

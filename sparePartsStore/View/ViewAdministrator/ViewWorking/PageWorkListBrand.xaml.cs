@@ -54,9 +54,10 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
             MyEventArgsObject?.Invoke(this, new MyEventArgsObject { Value = value});
         }
         // метод передачи данных из TextBox в MainHeadViewModel
-        public void Transmit()
+        public void Transmit() // передаются данные для редакирования или добавления
         {
             CarBrand carBrand = new CarBrand();
+            carBrand.CarBrandId = GetCarBrand.CarBrandId;
             carBrand.NameCarBrand = nameBrand.Text.Trim();
             TransmitData(carBrand); // передали название марки авто
         }
@@ -64,7 +65,11 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
         // передача данных из MainHeadViewModel для вывода на экран и последующего редактирования
         public void DataReception(CarBrand carBrand)
         {
+            GetCarBrand = carBrand; // сохраняем объект данных
             nameBrand.Text = carBrand.NameCarBrand.Trim();
         }
+
+        // переменная, которая хранит данные текущего объекта таблицы марки авто
+        private CarBrand GetCarBrand = new CarBrand();
     }
 }
