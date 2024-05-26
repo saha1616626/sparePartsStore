@@ -30,6 +30,13 @@ namespace sparePartsStore.Helper
             saveDataCreateOrEditCarBrands?.Invoke(null, new EventAggregator());
         }
 
+        // событие на удаление данных марок авто
+        public static event EventHandler<EventAggregator> saveDataDeleteCarBrands; // подписываемся в MainHeadViewModel
+        public static void SaveDataDeleteCarBrands() // вызываем в PageWorkListBrand
+        {
+            saveDataDeleteCarBrands?.Invoke(null, new EventAggregator());
+        }
+
         // событие выхода из страницы на предидущую страницу 
         public static event EventHandler<EventAggregator> closePage; // подписываемся MainHeadViewModel
         public static void ClosePage() // вызываем событие в PageWorkListBrand
@@ -44,5 +51,7 @@ namespace sparePartsStore.Helper
         {
             clearMemoryAfterFrame?.Invoke(null, new EventAggregator()); 
         }
+
+        
     }
 }

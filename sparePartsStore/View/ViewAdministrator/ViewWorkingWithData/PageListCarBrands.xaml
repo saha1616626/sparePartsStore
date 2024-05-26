@@ -13,7 +13,7 @@
         <ViewModel:ListCarBrandViewModel x:Key="ListCarBrandViewModel"/>
     </Page.Resources>
 
-    <Grid Background="White" Margin="50,0,50,0" DataContext="{StaticResource ListCarBrandViewModel}">
+    <Grid Background="White" Margin="50,0,50,0" DataContext="{StaticResource ListCarBrandViewModel}" HorizontalAlignment="Center" MinWidth="1100">
 
         <!--стили-->
         <Grid.Resources>
@@ -25,8 +25,8 @@
         </Grid.Resources>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
@@ -35,10 +35,10 @@
         </Grid.RowDefinitions>
 
         <!--Список марок автомобилей-->
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="Список марок автомобилей" FontSize="30" Foreground="Black" FontWeight="DemiBold" Margin="0,40,0,40" VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Список марок автомобилей" FontSize="30" Foreground="Black" FontWeight="DemiBold" Margin="0,40,0,40" VerticalAlignment="Center" HorizontalAlignment="Left"/>
 
         <!--кнопки управления-->
-        <Grid Grid.Row="1" Grid.Column="0">
+        <Grid Grid.Row="1" Grid.Column="0" Width="400" HorizontalAlignment="Left">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -53,7 +53,7 @@
 
             <Button Grid.Row="0" Grid.Column="0" Content="Добавить" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" Click=" AddCarBrand"/>
             <Button Grid.Row="0" Grid.Column="1" Content="Редктировать" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0" Click="EditCarBrand" Command="{Binding Btn_EditCarBrand}" IsEnabled="{Binding IsEditButtonEnabled}" />
-            <Button Grid.Row="0" Grid.Column="2" Content="Удалить" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0"/>
+            <Button Grid.Row="0" Grid.Column="2" Content="Удалить" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0" Click="Btn_OpenPopup" IsEnabled="{Binding IsEditButtonEnabled}"/>
 
             <TextBox Grid.Row="1" Grid.ColumnSpan="3" x:Name="SearchParts" Height="50" Margin="0,20,0,0"
                          VerticalAlignment="Center" 
@@ -67,20 +67,76 @@
         </Grid>
         
         <!--таблица-->
-        <Grid Grid.Row="1" Grid.Column="1" MinWidth="600">
-            <DataGrid
-                ItemsSource="{Binding ListCarBrand}"
-                SelectedItem="{Binding SelectedCarBrand}"
-                HorizontalAlignment="Center"
-                AutoGenerateColumns="False"
-                Style="{StaticResource MaterialDesignDataGrid}"
-                ColumnHeaderStyle="{StaticResource columnTable}">
-
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Марка" Binding="{Binding NameCarBrand}" MinWidth="500"/>
-                </DataGrid.Columns>
+        <Grid Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <DataGrid Height="400" RowHeight="50" FontSize="18"
+                    ItemsSource="{Binding ListCarBrand}"
+                    SelectedItem="{Binding SelectedCarBrand}"
+                    HorizontalAlignment="Center"
+                    AutoGenerateColumns="False"
                 
-            </DataGrid>
+                    Style="{StaticResource MaterialDesignDataGrid}"
+                    ColumnHeaderStyle="{StaticResource columnTableHeader}">
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Марка" Binding="{Binding NameCarBrand}" MinWidth="500" IsReadOnly="True"/>
+                    </DataGrid.Columns>
+
+                </DataGrid>
+            </ScrollViewer>
         </Grid>
+
+        <!--фон для Popup-->
+        <Border Grid.ColumnSpan="4" Grid.RowSpan="3" x:Name="DarkBackground" Background="#80000000" Visibility="Collapsed" MouseLeftButtonDown="DarkBackground_MouseDown" Panel.ZIndex="1" Margin="-500,0,-500,-500"></Border>
+
+        <!-- размещение Popup относительно данного grid-->
+        <Grid x:Name="positionPopup" Grid.RowSpan="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <!--Popup-->
+
+        <Grid>
+            <Popup x:Name="DeletePopup" PlacementTarget="{Binding ElementName=positionPopup}" Placement="Center" Grid.ColumnSpan="3" Grid.RowSpan="3" HorizontalOffset="0" VerticalOffset="60" StaysOpen="False" Closed="MyPopup_Closed" AllowsTransparency="False" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Grid Background="Gray"> <!--фон-->
+                    <Border Background="AliceBlue" Style="{StaticResource OutlineOfPopup}" >
+                        <Grid Width="400" Height="250">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Text="Удаление данных" Margin="0, 10, 0, 0" FontSize="30" FontWeight="Bold"/>
+
+                                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center" Height="130" Margin="10,20,10,0">
+                                    <TextBlock Text="Вы действительно хоти удалить?" FontSize="20" FontWeight="DemiBold" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{Binding DeleteNameCarBrand}" TextWrapping="Wrap" x:Name="DeleteNameCarBrand" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,30,0,0"  FontSize="20" FontWeight="DemiBold"/>
+                                </StackPanel>
+
+                                <Grid Grid.Row="2" Grid.Column="0" Margin="0,0,0,0" VerticalAlignment="Bottom">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Button Grid.Row="0" Grid.Column="0" Content="Отмена" Width="150" Height="35" Background="Gray" BorderBrush="Black" />
+                                    <Button Grid.Row="0" Grid.Column="1" Content="Удалить" Width="150" Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0" Click="Btn_DeleteData"/>
+
+                                </Grid>
+                                
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Popup>
+        </Grid>
+        
     </Grid>
 </Page>

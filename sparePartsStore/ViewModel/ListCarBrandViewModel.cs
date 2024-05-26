@@ -54,7 +54,12 @@ namespace sparePartsStore.ViewModel
         // коллекция считанная из бд
         public ObservableCollection<CarBrand> ListCarBrandRead { get; set; } = new ObservableCollection<CarBrand>();
         // коллекция для отображения списка марок авто
-        public ObservableCollection<CarBrand> ListCarBrand { get; set; } = new ObservableCollection<CarBrand>();
+        private ObservableCollection<CarBrand> _listCarBrand {  get; set; }
+        public ObservableCollection<CarBrand> ListCarBrand
+        {
+            get { return _listCarBrand; }
+            set { _listCarBrand = value; OnPropertyChanged(nameof(ListCarBrand)); }
+        }
 
         // метод для вывод из БД списка марок авто для отображения в таблице
         private ObservableCollection<CarBrand> LoadCarBrandBD()
@@ -112,6 +117,15 @@ namespace sparePartsStore.ViewModel
             CarBrand carBrand = new CarBrand();
             carBrand = (CarBrand)SelectedCarBrand;
             return carBrand;
+        }
+
+        // обновляем отображение таблицы после удаления данных
+        public void UpdateTabel()
+        {
+            // чтение данных из БД
+            ListCarBrandRead = GetListCarBrand();
+            // вывод данных в таблицу
+            ListCarBrand = LoadCarBrandBD();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

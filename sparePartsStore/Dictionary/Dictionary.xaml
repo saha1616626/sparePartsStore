@@ -35,7 +35,21 @@
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="IsTabStop" Value="False"/>
     </Style>
-    
-    
+
+    <!--стиль для обводки Popup-->
+    <Style x:Key="OutlineOfPopup" TargetType="Border">
+        <Setter Property="Border.CornerRadius" Value="10" />
+        <Setter Property="Border.Background" Value="Transparent" />
+    </Style>
+
+    <!--Стиль верхних столбцов таблицы-->
+    <Style x:Key="columnTableHeader" BasedOn="{StaticResource columnTable}" TargetType="{x:Type DataGridColumnHeader}">
+        <Setter Property="Height" Value="40" />
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontSize" Value="20"/>
+    </Style>
+
 
 </ResourceDictionary>

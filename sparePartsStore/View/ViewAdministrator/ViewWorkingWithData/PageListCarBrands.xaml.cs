@@ -63,5 +63,61 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorkingWithData
             TransmitSelectedData(carBrand); // передаём данные в событие
         }
 
+        #region Popup
+
+        // кнопка выбора адреса
+        private void Btn_OpenPopup(object sender, RoutedEventArgs e)
+        {
+            // отображаем Popup
+            DeletePopup.IsOpen = true;
+            DarkBackground.Visibility = Visibility.Visible; // Показать затемненный фон
+
+            // получаем объект для отображения
+            CarBrand carBrand = new CarBrand();
+            carBrand = _listCarBrandViewModel.TransmitBrand();
+            string deleteItemName = carBrand.NameCarBrand.Trim();
+            DeleteNameCarBrand.Text = deleteItemName;
+
+
+        }
+
+        // скрыть фон при запуске popup
+        private void MyPopup_Closed(object sender, EventArgs e)
+        {
+            DarkBackground.Visibility = Visibility.Collapsed;
+        }
+
+        // метод для события. закрыть попап (после удаления или отмены)
+        //private void ClosingPopup(object sender, UpdateEventArgs e)
+        //{
+        //    //AddresPopup.IsOpen = false; // Закрыть Popup при щелчке на затемненном фоне
+        //    //DarkBackground.Visibility = Visibility.Collapsed; // Скрыть затемненный фон
+        //}
+
+        // потеря фокуса popup
+        private void DarkBackground_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            //AddresPopup.IsOpen = false; // Закрыть Popup при щелчке на затемненном фоне
+            //DarkBackground.Visibility = Visibility.Collapsed; // Скрыть затемненный фон
+        }
+
+        #endregion
+
+        // кнопка удаления данных из таблицы (Popup)
+        private void Btn_DeleteData(object sender, RoutedEventArgs e)
+        {
+            // вызываем событие удаления данных из таблицы
+            WorkingWithData.SaveDataDeleteCarBrands();
+
+            DeletePopup.IsOpen = false; // Закрыть Popup при щелчке на затемненном фоне
+            DarkBackground.Visibility = Visibility.Collapsed; // Скрыть затемненный фон
+        }
+
+        // обновляем список отображения данных в таблице
+        public void UpTable()
+        {
+            _listCarBrandViewModel.UpdateTabel();
+        }
+
     }
 }

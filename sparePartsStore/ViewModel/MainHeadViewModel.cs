@@ -99,6 +99,8 @@ namespace sparePartsStore.ViewModel
             WorkingWithData.launchPageEditCarBrand += LaunchPageEditCarBrand;
             // подписываемся на событие сохранения данных марки авто после редактирования или добваления данных
             WorkingWithData.saveDataCreateOrEditCarBrands += WorkDataBrand;
+            // подписываемся на событие удаления данных марок авто
+            WorkingWithData.saveDataDeleteCarBrands += DeleteDataBrand;
         }
 
         // запуск страницы - поиск запчастей
@@ -255,6 +257,38 @@ namespace sparePartsStore.ViewModel
             MainFrame.NavigationService.Navigate(pageListCarBrands);
             selectedMenu(); // отображаем меню
         }
+
+
+        // удаляем данные из таблицы
+        private void DeleteDataBrand(object sender, EventAggregator e)
+        {
+                // получаем выбранные данные для удаления
+                pageListCarBrands.EventDataSelectedItem += (sender, args) =>
+                {
+                    // подключаем БД
+                    using (SparePartsStoreContext sparePartsStoreContext = new SparePartsStoreContext())
+                    {
+                        List<CarBrand> carBrands = sparePartsStoreContext.CarBrands.ToList(); // получаем список марок авто
+
+                        CarBrand carBrand = (CarBrand)args.Value; // получаем выбранные данные
+
+                        // удаляем данные из БД
+                        CarBrand cBrand = carBrands.FirstOrDefault(carBrands => carBrands.CarBrandId == carBrand.CarBrandId);
+
+                        if (cBrand != null)
+                        {
+                            sparePartsStoreContext.CarBrands.Remove(cBrand); // удаляем объект
+                            sparePartsStoreContext.SaveChanges(); // сохраняем бд
+
+                            // обновляем список
+                            pageListCarBrands.UpTable();
+                        }
+                    }
+                };
+                // вызываем событие для передачи данных
+                pageListCarBrands.TransmitData();
+        }
+
 
         #endregion
 
