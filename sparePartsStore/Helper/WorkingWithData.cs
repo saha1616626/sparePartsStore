@@ -93,6 +93,8 @@ namespace sparePartsStore.Helper
             clearMemoryAfterFrame?.Invoke(null, new EventAggregator());
         }
 
+        // событие на 
+
         #endregion        
     }
 }

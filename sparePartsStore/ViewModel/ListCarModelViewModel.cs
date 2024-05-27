@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace sparePartsStore.ViewModel
 {
@@ -16,11 +17,32 @@ namespace sparePartsStore.ViewModel
     {
         public ListCarModelViewModel() // конструктор
         {
-            // чтение данных из БД
+            //чтение данных из БД
             ListCarModelRead = GetListCarModel();
 
-            // вывод данных в таблицу
+            //вывод данных в таблицу
             ListCarModelDPO = LoadCarModelBD();
+        }
+
+        // выбранные данныиз таблицы
+        private CarModelDPO _selectedCarModel {  get; set; }
+        public CarModelDPO SelectedCarModel
+        {
+            get { return _selectedCarModel; }
+            set 
+            { 
+                _selectedCarModel = value; 
+                OnPropertyChanged(nameof(SelectedCarModel)); 
+                OnPropertyChanged(nameof(IsWorkButtonEnable)); 
+            }
+        }
+
+        // отображение кнопки редактировать или удалить при выборе данных в таблице
+        private bool _isWorkButtonEnable;
+        public bool IsWorkButtonEnable
+        {
+            get { return _selectedCarModel != null; } // если нажто поле в таблице
+            set { _isWorkButtonEnable = value; OnPropertyChanged(nameof(IsWorkButtonEnable)); }
         }
 
         // коллекция считанная из БД 
@@ -43,10 +65,13 @@ namespace sparePartsStore.ViewModel
             // экз для преобразования данных
             CarModelDPO carModelDPO = new CarModelDPO();   
 
-            // проходимся по списку ListCarModelRead для заполнения списка ListCarModelDPO
-            foreach(var model in ListCarModelRead)
+            if (ListCarModelRead != null)
             {
-                carModels.Add(carModelDPO.CopyFromCarModel(model)); // добавляем данные 
+                // проходимся по списку ListCarModelRead для заполнения списка ListCarModelDPO
+                foreach (var model in ListCarModelRead.ToList())
+                {
+                    carModels.Add(carModelDPO.CopyFromCarModel(model)); // добавляем данные 
+                }
             }
 
             return carModels;
@@ -64,24 +89,84 @@ namespace sparePartsStore.ViewModel
                 using (SparePartsStoreContext context = new SparePartsStoreContext())
                 {
                     List<CarModel> carModel = context.CarModels.ToList(); // получаем список моделей авто
-                    // копируем данные в список из БД
-                    foreach(var model in carModels)
+                    if(carModel != null)
                     {
-                        CarModel cModel = new CarModel();
-                        cModel.CarBrandId = model.CarBrandId;
-                        cModel.NameCarModel = model.NameCarModel;
-                        cModel.CarBrandId = model.CarBrandId;
-                        // добавляем в список
-                        carModels.Add(cModel);
+                        // копируем данные в список из БД
+                        foreach (var model in carModel)
+                        {
+                            CarModel cModel = new CarModel();
+                            cModel.CarBrandId = model.CarBrandId;
+                            cModel.NameCarModel = model.NameCarModel;
+                            cModel.CarModelId = model.CarModelId;
+                            // добавляем в список
+                            carModels.Add(cModel);
+                        }
                     }
                 }
-
+                return carModels;
                 throw new Exception("Ошибка работы БД!");
             }
             catch (Exception ex)
             {
                 MessageBoxResult result = System.Windows.MessageBox.Show(ex.ToString(), "Внимание!", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
                 return null;
+            }
+        }
+
+        // передаём получаенные выбранные данные из таблицы
+        public CarModelDPO TransmitionBrand()
+        {
+            CarModelDPO carModelDPO = new CarModelDPO();
+            carModelDPO = (CarModelDPO)SelectedCarModel;
+            return carModelDPO;
+        }
+
+        // получаем данные для ComBox
+        public List<CarBrand> GetCarModelOnComboBox()
+        {
+            // список, котроый будет в себе хранить значения comBox
+            using (SparePartsStoreContext context = new SparePartsStoreContext())
+            {
+                List<CarBrand> carBrands = context.CarBrands.ToList(); // получили список моделей авто из БД
+                List<CarBrand> brands = new List<CarBrand>(); // список для ComBox
+                // записываем массив carModelList в carModelDPOs
+                foreach (CarBrand carBrand in carBrands)
+                {
+                    // добавляем данные в список
+                    brands.Add(carBrand);
+                }
+                // возвращаем массив обратно
+                return brands;
+            }
+        }
+
+        // переменная, которая хранит текущие данные в поле у PageWorkListModel
+        public TextBox NameModelInput {  get; set; }
+
+        // проверяем, есть ли совпадения данных перед добавления
+        public bool CheckingForMatchDB()
+        {
+            bool noCoincidence = true; // по умолчанию нет совпадения
+
+            using (SparePartsStoreContext context = new SparePartsStoreContext())
+            {
+                List<CarModel> carModel = context.CarModels.ToList(); // получаем список моделей авто
+                noCoincidence = !carModel.Any(num => num.NameCarModel.ToLower().Contains(NameModelInput.Text.ToLower()));
+
+            }
+
+            return noCoincidence;
+        }
+
+        // свойство поля для ввода названия модели авто
+        private TextBox _outNameModel;
+        public TextBox OutNameModel
+        {
+            get { return _outNameModel; }
+            set
+            {
+                _outNameModel = value;
+                OnPropertyChanged(nameof(OutNameModel));
             }
         }
 

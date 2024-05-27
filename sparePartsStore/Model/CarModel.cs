@@ -20,22 +20,22 @@ public partial class CarModel
     // замена string CarBrandName на int CarBrandId
     public CarModel CopyFromCarModelDPO(CarModelDPO carModel)
     {
-        ListCarModelViewModel listCarModelViewModel = new ListCarModelViewModel();
-        int carModelId = 0;
-        foreach(var name in listCarModelViewModel.ListCarModelDPO)
+        ListCarBrandViewModel listCarBrandViewModel = new ListCarBrandViewModel();
+        int carBrandId = 0;
+        foreach(var name in listCarBrandViewModel.ListCarBrand)
         {
-            if (name.CarModelId == carModel.CarModelId)
+            if (name.NameCarBrand == carModel.CarBrandName)
             {
-                carModelId = name.CarModelId;
+                carBrandId = name.CarBrandId;
                 break;  
             }
         }
 
-        if(carModelId != 0)
+        if(carBrandId != 0)
         {
             this.CarModelId = carModel.CarModelId;
             this.NameCarModel = carModel.NameCarModel;
-            this.CarBrandId = carModelId;
+            this.CarBrandId = carBrandId;
         }
         return this;
     }

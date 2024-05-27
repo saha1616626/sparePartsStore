@@ -4,11 +4,16 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:sparePartsStore.View.ViewAdministrator.ViewWorkingWithData"
-      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+      xmlns:ViewModel="clr-namespace:sparePartsStore.ViewModel"
       mc:Ignorable="d" 
       Title="" MinHeight="700" Height="Auto" MinWidth="1200" Width="Auto">
 
-    <Grid Background="White" Margin="50,0,50,0" HorizontalAlignment="Center" MinWidth="1100">
+    <Page.Resources>
+        <ViewModel:ListCarModelViewModel x:Key="ListCarModelViewModel"/>
+    </Page.Resources>
+
+    <Grid Background="White" Margin="50,0,50,0" HorizontalAlignment="Center" MinWidth="1100" DataContext="{StaticResource ListCarModelViewModel}">
 
         <!--стили-->
         <Grid.Resources>
@@ -50,8 +55,8 @@
                 </Grid.ColumnDefinitions>
 
                 <Button Grid.Row="0" Grid.Column="0" Content="Добавить" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" Click="AddCarModel"/>
-                <Button Grid.Row="0" Grid.Column="1" Content="Редктировать" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0" Command="{Binding EditCarModel}"/>
-                <Button Grid.Row="0" Grid.Column="2" Content="Удалить" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0" Command="{Binding DeleteCarModel}"/>
+                <Button Grid.Row="0" Grid.Column="1" Content="Редктировать" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0" Command="{Binding EditCarModel}" Click="EditCarModel" IsEnabled="{Binding IsWorkButtonEnable}"/>
+                <Button Grid.Row="0" Grid.Column="2" Content="Удалить" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0" Command="{Binding DeleteCarModel}" IsEnabled="{Binding IsWorkButtonEnable}"/>
 
             </Grid>
             
@@ -69,18 +74,23 @@
             
             <!--таблица-->
             <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="0,40,0,0" MinWidth="0">
-                <DataGrid
-                HorizontalAlignment="Center"
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <DataGrid IsReadOnly="True"
+                HorizontalAlignment="Center" RowHeight="50" FontSize="18"
                 AutoGenerateColumns="False"
+                CellStyle="{StaticResource DataGridCellStyle}"
+                ItemsSource="{Binding ListCarModelDPO}"
+                SelectedItem="{Binding SelectedCarModel}"
                 Style="{StaticResource MaterialDesignDataGrid}"
-                 ColumnHeaderStyle="{StaticResource columnTableHeader}">
+                ColumnHeaderStyle="{StaticResource columnTableHeader}">
 
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Модель" Binding="{Binding numberParts}" Width="*"/>
-                        <DataGridTextColumn Header="Марка" Binding="{Binding numberParts}" Width="*"/>
+                        <DataGridTextColumn Header="Модель" Binding="{Binding NameCarModel}" Width="*" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Марка" Binding="{Binding CarBrandName}" Width="*" IsReadOnly="True"/>
                     </DataGrid.Columns>
 
                 </DataGrid>
+                </ScrollViewer>
             </Grid>
 
         </Grid>

@@ -69,12 +69,13 @@
         
         <!--таблица-->
         <Grid Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                 <DataGrid Height="400" RowHeight="50" FontSize="18"
                     ItemsSource="{Binding ListCarBrand}"
                     SelectedItem="{Binding SelectedCarBrand}"
-                    HorizontalAlignment="Center"
+                    HorizontalAlignment="Center"  IsReadOnly="True"
                     AutoGenerateColumns="False"
+                    CellStyle="{StaticResource DataGridCellStyle}"
                     Style="{StaticResource MaterialDesignDataGrid}"
                     ColumnHeaderStyle="{StaticResource columnTableHeader}">
 

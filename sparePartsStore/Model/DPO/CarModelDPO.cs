@@ -20,7 +20,7 @@ namespace sparePartsStore.Model.DPO
             set { _nameCarModel = value; OnPropertyChanged(nameof(NameCarModel)); }
         }
         private string _carBrandName { get; set; } // название марки авто
-        public string CarBrandName
+        public string CarBrandName  
         {
             get { return _carBrandName; }
             set { _carBrandName = value; OnPropertyChanged(nameof(CarBrandName)); }
@@ -30,22 +30,22 @@ namespace sparePartsStore.Model.DPO
         public CarModelDPO CopyFromCarModel(CarModel carModel)
         {
             CarModelDPO carModelDPO = new CarModelDPO();
-            ListCarModelViewModel listCarModelViewModel = new ListCarModelViewModel();
-            string nameCarModel = string.Empty;
-            foreach(var name in listCarModelViewModel.ListCarModelDPO)
+            ListCarBrandViewModel listCarBrandViewModel = new ListCarBrandViewModel();
+            string nameCarRand = string.Empty;
+            foreach(var name in listCarBrandViewModel.ListCarBrand)
             {
-                if(name.CarModelId == carModel.CarModelId)
+                if(name.CarBrandId == carModel.CarBrandId)
                 {
-                    nameCarModel = name.NameCarModel;
+                    nameCarRand = name.NameCarBrand;
                     break;
                 }
             }
 
-            if(nameCarModel != string.Empty)
+            if(nameCarRand != string.Empty)
             {
                 carModelDPO.CarModelId = carModel.CarModelId;
                 carModelDPO.NameCarModel = carModel.NameCarModel;
-                carModelDPO.CarBrandName = nameCarModel;
+                carModelDPO.CarBrandName = nameCarRand;
             }
 
             return carModelDPO;

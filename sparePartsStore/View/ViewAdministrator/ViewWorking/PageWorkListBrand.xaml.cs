@@ -62,7 +62,14 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
             else // если текст есть 
             {
                 _listCarBrandViewModel.NameBrandInput = nameBrand;
-                bool Checking = _listCarBrandViewModel.CheckingForMatchDB();
+
+                bool Checking = true; // по умолчанию не повторяется
+
+                if (RenameButtonBrand.Content != "Редактировать") // если режим редактирования, то проверка на уникальность не выполняется
+                {
+                    Checking = _listCarBrandViewModel.CheckingForMatchDB();
+                }
+                
                 // проверяем нет ли совпадения в БД
                 if (Checking)
                 {

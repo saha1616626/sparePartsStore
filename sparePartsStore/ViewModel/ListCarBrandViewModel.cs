@@ -179,7 +179,7 @@ namespace sparePartsStore.ViewModel
             }
         }
 
-        // переменная, которая хранит текущие данные в поле PageWorkListBrand
+        // переменная, которая хранит текущие данные в поле у PageWorkListBrand
         public TextBox NameBrandInput {  get; set; }
 
         // проверяем, есть ли совпадения в БД перед добавление в БД

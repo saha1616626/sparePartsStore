@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using sparePartsStore.Helper;
 using sparePartsStore.Model;
+using sparePartsStore.Model.DPO;
 using sparePartsStore.View;
 using sparePartsStore.View.ViewAdministrator.ViewMainPages;
 using sparePartsStore.View.ViewAdministrator.ViewWorking;
@@ -106,6 +107,10 @@ namespace sparePartsStore.ViewModel
 
             // подписываемся на событие запуска страницы добавления модели авто
             WorkingWithData.launchinPageAddCarModel += LaunchPageAddCarModel;
+            // подписываемся на событие запуска страницы редактирования модели авто
+            WorkingWithData.launchpageEditCarModel += LaunchPageEditCarModel;
+            // подписываемся на событие сохранения данных модели авто после редактирования или добваления данных
+            WorkingWithData.saveDataCreateOrEditCarModels += WorkDataModel;
         }
 
         // запуск страницы - поиск запчастей
@@ -338,12 +343,14 @@ namespace sparePartsStore.ViewModel
             typeMenu = true;
             // скрываем шестерёнку и основное меню, чтобы нельзя было перемещаться между страницами
             selectedMenu();
+            // добавлем данные в ComBox
+            pageWorkListModel.DataReceptionAdd();
         }
 
         // запуск страницы редактирования модели авто
         private void LaunchPageEditCarModel(object sender, EventAggregator e)
         {
-            pageWorkListBrand = new PageWorkListBrand(); // экз страницы для редактирования
+            pageWorkListModel = new PageWorkListModel(); // экз страницы для редактирования
 
             MainFrame.NavigationService.Navigate(pageWorkListModel);
             pageWorkListModel.RenameButtonBrand.Content = "Редактировать"; // измененяем кнопку
@@ -355,7 +362,78 @@ namespace sparePartsStore.ViewModel
             // скрываем шестерёнку и основное меню, чтобы нельзя было перемещаться между страницами
             selectedMenu();
 
+            // получаем выбранные данные для редактирования
+            pageListCarModel.EventDataSelectedCarModelItem += (sender, args) =>
+            {
+                CarModelDPO carModelDPO = (CarModelDPO)args.Value; // получаем выбранные данные
 
+                // передаём данные для редактирования (отображения в полях)
+                pageWorkListModel.DataReception(carModelDPO);
+            };
+            // вызываем событие для предачи данных
+            pageListCarModel.TransmitiData();
+        }
+
+        // редактируем или добавляем данные в таблицу
+        private void WorkDataModel(object sender, EventAggregator e)
+        {
+            if (addOrEditModel) // если добавляем данные
+            {
+                // подключаем БД
+                using (SparePartsStoreContext sparePartsStoreContext = new SparePartsStoreContext())
+                {
+                    List<CarModel> carModels = sparePartsStoreContext.CarModels.ToList(); // получаем список моделей авто
+
+                    // создаём экз для добавления данных
+                    CarModel carModel = new CarModel();
+                    pageWorkListModel.EventArgsCarModel += (sender, args) =>
+                    {
+                        CarModelDPO carModelDPO = (CarModelDPO)args.Value;
+                        // преобразовываем CarModelDPO в CarModel
+                        CarModel carModels = carModel.CopyFromCarModelDPO(carModelDPO);
+
+                        // переносим данные
+                        carModel.NameCarModel = carModels.NameCarModel;
+                        carModel.CarBrand = carModels.CarBrand;
+
+                        sparePartsStoreContext.Add(carModel); // вносим данные в бд
+                        sparePartsStoreContext.SaveChanges(); // сохраняем бд
+                    };
+                    pageWorkListModel.Transmit();
+                }
+            } 
+            else // если редактируем данные
+            {
+                // подключаем БД
+                using (SparePartsStoreContext sparePartsStoreContext = new SparePartsStoreContext())
+                {
+                    List<CarModel> carModels = sparePartsStoreContext.CarModels.ToList(); // получаем список моделей авто
+
+                    pageWorkListModel.EventArgsCarModel += (sender, args) =>
+                    {
+                        CarModelDPO carModelDPO = (CarModelDPO)args.Value;
+
+                        // получаем объект из БД, чтобы внести в него изменения. Id берем из getCarModelDPOs
+                        CarModel cModel = carModels.FirstOrDefault(carModel => carModel.CarModelId == carModelDPO.CarModelId);
+                        if (cModel != null)
+                        {
+                            // обновляем БД
+                            CarModel model = new CarModel();
+                            model = model.CopyFromCarModelDPO(carModelDPO);
+                            cModel.NameCarModel = model.NameCarModel;
+                            cModel.CarBrand = model.CarBrand;
+                            sparePartsStoreContext.Update(cModel);// вносим данные в бд
+                            sparePartsStoreContext.SaveChanges(); // сохраняем бд
+                        }
+                    };
+                    pageWorkListModel.Transmit(); // вызываем событие, чтобы полчить данные для изменения в БД
+                }
+            }
+
+            WorkingWithData.ClearMemoryAfterFrame();
+            pageListCarModel = new PageListCarModels(); // обновляем экз. класса
+            MainFrame.NavigationService.Navigate(pageListCarModel);
+            selectedMenu(); // отображаем меню
         }
 
         #endregion
