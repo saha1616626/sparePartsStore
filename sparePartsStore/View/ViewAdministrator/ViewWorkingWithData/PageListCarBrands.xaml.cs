@@ -3,6 +3,7 @@ using sparePartsStore.Model;
 using sparePartsStore.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.IO.Packaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -117,6 +118,25 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorkingWithData
         public void UpTable()
         {
             _listCarBrandViewModel.UpdateTabel();
+        }
+
+        // событие на ввод данных в текстовое поле поиска марок авто
+        private void TextBoxNameBrand(object sender, TextChangedEventArgs e)
+        {
+            // получаем текст из поля при изменении данных
+            var textBox = sender as TextBox;
+            if (textBox != null)
+            {
+                // приводим к формату string
+                string nameBrand = textBox.Text;
+
+                // передаем данные во ViewModel
+                //if(this.DataContext is ListCarBrandViewModel listCarBrandViewModel) // получаем достп к экз ViewModel
+                //{
+                //    listCarBrandViewModel.HandlerTextBoxChanged(nameBrand);
+                //}
+                _listCarBrandViewModel.HandlerTextBoxChanged(nameBrand);
+            }
         }
 
     }

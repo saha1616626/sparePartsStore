@@ -1,4 +1,5 @@
-﻿using sparePartsStore.Helper;
+﻿using Microsoft.IdentityModel.Tokens;
+using sparePartsStore.Helper;
 using sparePartsStore.Model;
 using sparePartsStore.View.ViewAdministrator.ViewMainPages;
 using sparePartsStore.View.ViewAdministrator.ViewWorking;
@@ -111,6 +112,18 @@ namespace sparePartsStore.ViewModel
             }
         }
 
+        // свойство данных поля текста
+        private TextBox _outNameBrand;
+        public TextBox OutNameBrand
+        {
+            get { return _outNameBrand; }
+            set
+            {
+                _outNameBrand = value;
+                OnPropertyChanged(nameof(OutNameBrand));
+            }
+        }
+
         // передача выбранного объекта в таблице
         public CarBrand TransmitBrand()
         {
@@ -126,6 +139,59 @@ namespace sparePartsStore.ViewModel
             ListCarBrandRead = GetListCarBrand();
             // вывод данных в таблицу
             ListCarBrand = LoadCarBrandBD();
+        }
+
+        // свойство обновления данных таблицы при вводе данных в поле
+        private string _nameBrand {  get; set; }
+        private string NameBrand
+        {
+            get { return _nameBrand; }
+            set { _nameBrand = value; OnPropertyChanged(nameof(NameBrand)); } 
+        }
+
+        // список для фильтров таблицы
+        public ObservableCollection<CarBrand> ListSearch { get; set; } = new ObservableCollection<CarBrand>();
+
+        // поиск марок авто
+        public void HandlerTextBoxChanged(string nameBrand)
+        {
+            if(nameBrand.Trim() != "")
+            {
+                ListSearch = GetListCarBrand(); // получаем актуальные данные из БД
+                // создаём список с поиском по введенным данным в таблице
+                var resCarBrand = ListSearch.Where(num => num.NameCarBrand.ToLower().Contains(nameBrand.ToLower())).ToList();
+                ListCarBrand.Clear(); // очищаем основной список
+                // вносим актуальные данные основного списка
+                foreach (CarBrand carBrand in resCarBrand)
+                {
+                    ListCarBrand.Add(carBrand); // добавляем данные
+                }
+            }
+            if (nameBrand.Trim() == "")
+            {
+                ListCarBrand.Clear(); // очищаем основной список
+                ListSearch.Clear(); // очищаем доп список
+                ListSearch = GetListCarBrand();// получаем актуальные данные из БД
+                foreach (var zakazchik in ListSearch)
+                {
+                    ListCarBrand.Add(zakazchik);
+                }
+            }
+        }
+
+        // проверяем, есть ли совпадения в БД перед добавление в БД
+        public bool CheckingForMatchDB()
+        {
+            bool noCoincidence = true; // по умолчанию нет совпадения
+
+            using (SparePartsStoreContext context = new SparePartsStoreContext())
+            {
+                List<CarBrand> carBrand = context.CarBrands.ToList(); // получаем список марок авто
+                noCoincidence = !carBrand.Any(num => num.NameCarBrand.ToLower().Contains(OutNameBrand.Text.ToLower()));
+
+            }
+
+            return noCoincidence;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

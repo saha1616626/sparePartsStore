@@ -11,9 +11,25 @@
 
     <Page.Resources>
         <ViewModel:ListCarBrandViewModel x:Key="ListCarBrandViewModel"/>
+
+        <!--анимация при некорректом вводе-->
+        <Storyboard x:Key="FocusAnimation">
+            <ColorAnimation Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
+                            From="#de6d6d" To="Transparent" Duration="0:0:3" AutoReverse="False"/>
+        </Storyboard>
+        <!--переопределяем анимацию подсветки textBox при наведении-->
+        <Style x:Key="CustomFilledTextBox" BasedOn="{StaticResource MaterialDesignFilledTextBox}" TargetType="TextBox">
+            <Style.Triggers>
+                <Trigger Property="IsFocused" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard Storyboard="{StaticResource FocusAnimation}"/>
+                    </Trigger.EnterActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Page.Resources>
 
-    <Grid Background="White" Margin="50,0,50,0">
+    <Grid Background="White" Margin="50,0,50,0" DataContext="{StaticResource ListCarBrandViewModel}">
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -24,7 +40,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        
+
         <!--название-->
         <TextBlock Grid.Row="0" Grid.Column="0" Text="Марка" FontSize="30" Foreground="Black" FontWeight="DemiBold" Margin="0,80,0,40" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
@@ -43,10 +59,15 @@
 
         </Grid>
 
+        <!--поле для вывода ошибок-->
+        <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" Margin="0,50,20,0" x:Name="errorInput" FontWeight="DemiBold" FontSize="24">
+
+        </TextBlock>
+
         <!--поля для ввода данных-->
         <TextBox Grid.Row="1" Grid.Column="0" x:Name="nameBrand" Height="50" Margin="0,30,0,0"
              VerticalAlignment="Center" HorizontalAlignment="Center"
-             Text=""   
+             Text="{Binding OutNameBrand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"   
              materialDesign:TextFieldAssist.HasClearButton="True"
              Style="{StaticResource MaterialDesignOutlinedTextBox}" 
              materialDesign:HintAssist.Hint="Введите название марки" 
@@ -65,6 +86,6 @@
             <Button Grid.Row="0" Grid.Column="1" Content="Добавить" x:Name="RenameButtonBrand" Width="150" Height="35" Background="Gray" BorderBrush="Black" Margin="20,0,0,0" Click="SaveData"/>
 
         </Grid>
-        
+
     </Grid>
 </Page>
