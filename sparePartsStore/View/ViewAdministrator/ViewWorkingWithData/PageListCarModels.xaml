@@ -8,7 +8,7 @@
       mc:Ignorable="d" 
       Title="" MinHeight="700" Height="Auto" MinWidth="1200" Width="Auto">
 
-    <Grid Background="White" Margin="50,0,50,0">
+    <Grid Background="White" Margin="50,0,50,0" HorizontalAlignment="Center" MinWidth="1100">
 
         <!--стили-->
         <Grid.Resources>
@@ -49,7 +49,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Row="0" Grid.Column="0" Content="Добавить" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" Command="{Binding AddCarModel}"/>
+                <Button Grid.Row="0" Grid.Column="0" Content="Добавить" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" Click="AddCarModel"/>
                 <Button Grid.Row="0" Grid.Column="1" Content="Редктировать" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0" Command="{Binding EditCarModel}"/>
                 <Button Grid.Row="0" Grid.Column="2" Content="Удалить" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0" Command="{Binding DeleteCarModel}"/>
 
@@ -73,7 +73,7 @@
                 HorizontalAlignment="Center"
                 AutoGenerateColumns="False"
                 Style="{StaticResource MaterialDesignDataGrid}"
-                ColumnHeaderStyle="{StaticResource columnTable}">
+                 ColumnHeaderStyle="{StaticResource columnTableHeader}">
 
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Модель" Binding="{Binding numberParts}" Width="*"/>

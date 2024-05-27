@@ -112,7 +112,7 @@
 
                 <Button Content="Поиск запчастей" Grid.Column="0" Style="{StaticResource BtnMenuHead}" Command="{Binding Btn_SearchParts, Source={StaticResource MainHeadViewModel}}"/>
                 <Button Content="Марка" Grid.Column="1" Style="{StaticResource BtnMenuHead}" Command="{Binding Btn_CarBrand, Source={StaticResource MainHeadViewModel}}"/>
-                <Button Content="Модель" Grid.Column="2" Style="{StaticResource BtnMenuHead}" Click="Btn_carModel"/>
+                <Button Content="Модель" Grid.Column="2" Style="{StaticResource BtnMenuHead}" Click="Btn_carModel" Command="{Binding Btn_carModel, Source={StaticResource MainHeadViewModel}}"/>
                 <Button Content="Агрегат" Grid.Column="3" Style="{StaticResource BtnMenuHead}" Click="Btn_Unit"/>
                 <Button Content="Узел" Grid.Column="4" Style="{StaticResource BtnMenuHead}" Click="Btn_Knot"/>
                 <Button Content="Запчасть" Grid.Column="5" Style="{StaticResource BtnMenuHead}" Click="Btn_Details"/>

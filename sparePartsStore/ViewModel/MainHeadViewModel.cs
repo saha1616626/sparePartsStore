@@ -93,6 +93,7 @@ namespace sparePartsStore.ViewModel
             // событие на закрытие страницы
             WorkingWithData.closePage += CloseLastOnePage;
 
+
             // подписываемя на событие запуска страницы добавления марки авто
             WorkingWithData.launchPageAddCarBrand += LaunchPageAddCarBrand;
             // подписываемя на событие запуска страницы редактирования марки авто
@@ -101,6 +102,10 @@ namespace sparePartsStore.ViewModel
             WorkingWithData.saveDataCreateOrEditCarBrands += WorkDataBrand;
             // подписываемся на событие удаления данных марок авто
             WorkingWithData.saveDataDeleteCarBrands += DeleteDataBrand;
+
+
+            // подписываемся на событие запуска страницы добавления модели авто
+            WorkingWithData.launchinPageAddCarModel += LaunchPageAddCarModel;
         }
 
         // запуск страницы - поиск запчастей
@@ -289,6 +294,69 @@ namespace sparePartsStore.ViewModel
                 pageListCarBrands.TransmitData();
         }
 
+
+        #endregion
+
+        // страница - модель авто
+        #region CarModel 
+
+        PageListCarModels pageListCarModel; // объект класса отображения списка моделей авто
+
+        // запуск страницы модели авто
+        private RelayCommand _btn_carModel {  get; set; }
+        public RelayCommand Btn_carModel
+        {
+            get 
+            {
+                return _btn_carModel ??
+                    (_btn_carBrand = new RelayCommand((obj) =>
+                    {
+                        // событие для очистка фреймов из памяти в PageMainHead
+                        WorkingWithData.ClearMemoryAfterFrame();
+                        // автоматичесое отображение страницы при входе в учетную запись адинистратора
+                        pageListCarModel = new PageListCarModels();
+                        MainFrame.Navigate(pageListCarModel);
+                    }, (obj) => true));
+            }
+        }
+
+        // объект страницы для редактирования и добавления данных моделей авто
+        PageWorkListModel pageWorkListModel;
+        // флаг, который нам сообщает, редактирует пользователь таблицу или добавлят новые данные
+        bool addOrEditModel; // если true - значит добавлять, если false - значит редактировать
+
+        // запуск страницы добавления модели авто
+        private void LaunchPageAddCarModel(object sender, EventAggregator e)
+        {
+            pageWorkListModel = new PageWorkListModel(); // экз страницы для добавления модели авто
+
+            MainFrame.NavigationService.Navigate(pageWorkListModel);
+            pageWorkListModel.RenameButtonBrand.Content = "Добавить"; // измененяем кнопку
+            // поднимаем флаг, что мы добавляем данные
+            addOrEditModel = true;
+            // показываем, что было открыто основное меню перед его скрытием
+            typeMenu = true;
+            // скрываем шестерёнку и основное меню, чтобы нельзя было перемещаться между страницами
+            selectedMenu();
+        }
+
+        // запуск страницы редактирования модели авто
+        private void LaunchPageEditCarModel(object sender, EventAggregator e)
+        {
+            pageWorkListBrand = new PageWorkListBrand(); // экз страницы для редактирования
+
+            MainFrame.NavigationService.Navigate(pageWorkListModel);
+            pageWorkListModel.RenameButtonBrand.Content = "Редактировать"; // измененяем кнопку
+
+            // поднимаем флаг, что мы редактируем данные
+            addOrEditModel = false;
+            // показываем, что было открыто основное меню перед его скрытием
+            typeMenu = true;
+            // скрываем шестерёнку и основное меню, чтобы нельзя было перемещаться между страницами
+            selectedMenu();
+
+
+        }
 
         #endregion
 

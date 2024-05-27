@@ -1,4 +1,6 @@
-﻿using System;
+﻿using sparePartsStore.Helper;
+using sparePartsStore.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,5 +26,16 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorkingWithData
         {
             InitializeComponent();
         }
+
+        // кнопка добавления модели авто
+        private void AddCarModel(object sender, RoutedEventArgs e)
+        {
+            // вызваем событие в MainHeadViewModel для запуска страницы добавления моделей авто
+            WorkingWithData.LaunchinPageAddCarModel();
+        }
+
+        // событие передачи выбранных данных в таблице моделей авто
+        public event EventHandler<MyEventArgsObject> EventDataSelectedCarModelItem;
+        protected virtual void TransmitSelectedData(CarModel carModelq) {
     }
 }

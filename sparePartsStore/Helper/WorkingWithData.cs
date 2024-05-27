@@ -9,6 +9,9 @@ namespace sparePartsStore.Helper
     // класс определеня событий
     public static class WorkingWithData
     {
+        // марки авто
+        #region CarBrand
+
         // события запуска страницы добавления марки автомобиля из MainHeadViewModel
         public static event EventHandler<EventAggregator> launchPageAddCarBrand; // подписываемся в MainHeadViewModel
         public static void LaunchPageAddCarBrand() // вызываем событие в ListCarBrandViewModel
@@ -37,6 +40,44 @@ namespace sparePartsStore.Helper
             saveDataDeleteCarBrands?.Invoke(null, new EventAggregator());
         }
 
+        #endregion
+
+        // модели авто
+        #region CarModel
+
+        // событие запуска страницы добавления марки авто из MainHeadViewModel
+        public static event EventHandler<EventAggregator> launchinPageAddCarModel; // подписываемся в MainHeadViewModel
+        public static void LaunchinPageAddCarModel() // вызываем в PageListCarModels
+        {
+            launchinPageAddCarModel?.Invoke(null, new EventAggregator());
+        }
+
+        // событие запуска страницы редактирования марки авто из MainHeadViewModel
+        public static event EventHandler<EventAggregator> launchpageEditCarModel; // подписываемся в MainHeadViewModel
+        public static void LaunchpageEditCarModel() // вызываем в PageListCarModels
+        {
+            launchpageEditCarModel?.Invoke(null, new EventAggregator());
+        }
+
+        // событие изменение БД после добавления или редактирования данных моделей авто
+        public static event EventHandler<EventAggregator> saveDataCreateOrEditCarModels; // подписываемся в MainHeadViewModel
+        public static void SaveDataCreateOrEditCarModels() // вызываем в PageWorkListModel
+        {
+            saveDataCreateOrEditCarModels?.Invoke(null, new EventAggregator());
+        }
+        
+        // событие на удаление данных моделей авто
+        public static event EventHandler<EventAggregator> saveDataDeleteCarModels; // подписываемся в MainHeadViewModel
+        public static void SaveDataDeleteCarModels() // вызваем в PageListCarModels
+        {
+            saveDataDeleteCarModels?.Invoke(null, new EventAggregator());
+        }
+
+        #endregion
+
+        // общие события
+        #region GeneralEvent
+
         // событие выхода из страницы на предидущую страницу 
         public static event EventHandler<EventAggregator> closePage; // подписываемся MainHeadViewModel
         public static void ClosePage() // вызываем событие в PageWorkListBrand
@@ -49,9 +90,9 @@ namespace sparePartsStore.Helper
         public static event EventHandler<EventAggregator> clearMemoryAfterFrame; // подписываемся в PageMainHead
         public static void ClearMemoryAfterFrame() // вызываем событие в MainHeadViewModel
         {
-            clearMemoryAfterFrame?.Invoke(null, new EventAggregator()); 
+            clearMemoryAfterFrame?.Invoke(null, new EventAggregator());
         }
 
-        
+        #endregion        
     }
 }
