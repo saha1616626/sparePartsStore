@@ -61,7 +61,7 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
             }
             else // если текст есть 
             {
-                _listCarBrandViewModel.OutNameBrand = nameBrand;
+                _listCarBrandViewModel.NameBrandInput = nameBrand;
                 bool Checking = _listCarBrandViewModel.CheckingForMatchDB();
                 // проверяем нет ли совпадения в БД
                 if (Checking)

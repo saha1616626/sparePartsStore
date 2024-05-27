@@ -179,6 +179,9 @@ namespace sparePartsStore.ViewModel
             }
         }
 
+        // переменная, которая хранит текущие данные в поле PageWorkListBrand
+        public TextBox NameBrandInput {  get; set; }
+
         // проверяем, есть ли совпадения в БД перед добавление в БД
         public bool CheckingForMatchDB()
         {
@@ -187,7 +190,7 @@ namespace sparePartsStore.ViewModel
             using (SparePartsStoreContext context = new SparePartsStoreContext())
             {
                 List<CarBrand> carBrand = context.CarBrands.ToList(); // получаем список марок авто
-                noCoincidence = !carBrand.Any(num => num.NameCarBrand.ToLower().Contains(OutNameBrand.Text.ToLower()));
+                noCoincidence = !carBrand.Any(num => num.NameCarBrand.ToLower().Contains(NameBrandInput.Text.ToLower()));
 
             }
 

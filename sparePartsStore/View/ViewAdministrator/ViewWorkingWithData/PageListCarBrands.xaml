@@ -75,7 +75,6 @@
                     SelectedItem="{Binding SelectedCarBrand}"
                     HorizontalAlignment="Center"
                     AutoGenerateColumns="False"
-                
                     Style="{StaticResource MaterialDesignDataGrid}"
                     ColumnHeaderStyle="{StaticResource columnTableHeader}">
 
