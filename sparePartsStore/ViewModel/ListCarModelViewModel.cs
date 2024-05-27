@@ -170,6 +170,62 @@ namespace sparePartsStore.ViewModel
             }
         }
 
+        // передача выбранного объекта в Popup
+        public CarModelDPO TransmitModel()
+        {
+            CarModelDPO carModelDPO = new CarModelDPO();
+            carModelDPO = (CarModelDPO)SelectedCarModel;
+            return carModelDPO;
+        }
+
+        // обновляем отображение таблицы после удаления данных
+        public void UpdateTabel()
+        {
+            //чтение данных из БД
+            ListCarModelRead = GetListCarModel();
+
+            //вывод данных в таблицу
+            ListCarModelDPO = LoadCarModelBD();
+        }
+
+        // список для фильтров таблицы
+        public ObservableCollection<CarModel> ListSearch { get; set; } = new ObservableCollection<CarModel>();
+
+        // поиск марок авто
+        public void HandlerTextBoxChanged(string nameModel)
+        {
+            if(nameModel.Trim() != "")
+            {
+                ListSearch = GetListCarModel(); // получаем актуальные данные из БД
+                // создаём список с поиском по введенным данным в таблице
+                var resCarModel = ListSearch.Where(num => num.NameCarModel.ToLower().Contains(nameModel.ToLower())).ToList();
+                if(resCarModel.Count > 0)
+                {
+                    ListCarModelDPO.Clear();// очищаем основной список
+                    // вносим актуальные данные основного списка
+                    foreach(var carModel in resCarModel)
+                    {
+                        CarModelDPO carModelDPO = new CarModelDPO();
+                        carModelDPO = carModelDPO.CopyFromCarModel(carModel);
+                        ListCarModelDPO.Add(carModelDPO); // добавляем данные
+                    }
+                }
+            }
+
+            if(nameModel.Trim() == "")
+            {
+                ListCarModelDPO.Clear();// очищаем основной список
+                ListSearch.Clear(); // очищаем доп список
+                ListSearch = GetListCarModel(); // получаем актуальные данные из БД
+                foreach(var carModel in ListSearch)
+                {
+                    CarModelDPO carModelDPO = new CarModelDPO();
+                    carModelDPO = carModelDPO.CopyFromCarModel(carModel);
+                    ListCarModelDPO.Add(carModelDPO);
+                }
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {

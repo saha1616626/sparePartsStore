@@ -90,7 +90,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Row="0" Grid.Column="0" Content="Отмена" Width="150" Height="35" Background="Gray" BorderBrush="Black"/>
+            <Button Grid.Row="0" Grid.Column="0" Content="Отмена" Click="ClosePageAddOrDeleteCarModel" Width="150" Height="35" Background="Gray" BorderBrush="Black"/>
             <Button Grid.Row="0" Grid.Column="1" Content="Добавить" x:Name="RenameButtonBrand" Width="150" Height="35" Background="Gray" BorderBrush="Black" Margin="20,0,0,0" Click="SaveData"/>
 
         </Grid>

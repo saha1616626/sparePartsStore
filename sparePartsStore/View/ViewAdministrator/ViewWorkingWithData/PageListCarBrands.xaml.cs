@@ -88,21 +88,12 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorkingWithData
             DarkBackground.Visibility = Visibility.Collapsed;
         }
 
-        // метод для события. закрыть попап (после удаления или отмены)
-        //private void ClosingPopup(object sender, UpdateEventArgs e)
-        //{
-        //    //AddresPopup.IsOpen = false; // Закрыть Popup при щелчке на затемненном фоне
-        //    //DarkBackground.Visibility = Visibility.Collapsed; // Скрыть затемненный фон
-        //}
-
-        // потеря фокуса popup
+        // потеря фокуса popup (нажатиа на фон)
         private void DarkBackground_MouseDown(object sender, MouseButtonEventArgs e)
         {
             //AddresPopup.IsOpen = false; // Закрыть Popup при щелчке на затемненном фоне
             //DarkBackground.Visibility = Visibility.Collapsed; // Скрыть затемненный фон
         }
-
-        #endregion
 
         // кнопка удаления данных из таблицы (Popup)
         private void Btn_DeleteData(object sender, RoutedEventArgs e)
@@ -113,6 +104,16 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorkingWithData
             DeletePopup.IsOpen = false; // Закрыть Popup при щелчке на затемненном фоне
             DarkBackground.Visibility = Visibility.Collapsed; // Скрыть затемненный фон
         }
+
+        // закрываем Popup
+        private void closePopup(object sender, RoutedEventArgs e)
+        {
+            DeletePopup.IsOpen = false; // Закрыть Popup при щелчке на затемненном фоне
+            DarkBackground.Visibility = Visibility.Collapsed; // Скрыть затемненный фон
+        }
+
+        #endregion
+
 
         // обновляем список отображения данных в таблице
         public void UpTable()

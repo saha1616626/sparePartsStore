@@ -111,6 +111,8 @@ namespace sparePartsStore.ViewModel
             WorkingWithData.launchpageEditCarModel += LaunchPageEditCarModel;
             // подписываемся на событие сохранения данных модели авто после редактирования или добваления данных
             WorkingWithData.saveDataCreateOrEditCarModels += WorkDataModel;
+            // подписываемся на событие удаления данных марок авто
+            WorkingWithData.saveDataDeleteCarModels += DeleteDataModel;
         }
 
         // запуск страницы - поиск запчастей
@@ -434,6 +436,33 @@ namespace sparePartsStore.ViewModel
             pageListCarModel = new PageListCarModels(); // обновляем экз. класса
             MainFrame.NavigationService.Navigate(pageListCarModel);
             selectedMenu(); // отображаем меню
+        }
+
+        // удаляем данные из таблицы
+        private void DeleteDataModel(object sender, EventAggregator e)
+        {
+            // получаем данные для удаления
+            pageListCarModel.EventDataSelectedCarModelItem += (sender, args) =>
+            {
+                // подключаем БД
+                using (SparePartsStoreContext sparePartsStoreContext = new SparePartsStoreContext())
+                {
+                    List<CarModel> carModels = sparePartsStoreContext.CarModels.ToList(); // получаем список из БД
+                    CarModelDPO carModelDPO = (CarModelDPO)args.Value; // получили выбранные данные из таблицы
+                    // находим в списке БД элемент для удаления
+                    CarModel carModel = carModels.FirstOrDefault(carModel => carModel.CarModelId == carModelDPO.CarModelId);
+                    if(carModel != null)
+                    {
+                        sparePartsStoreContext.CarModels.Remove(carModel);
+                        sparePartsStoreContext.SaveChanges(); // сохраняем бд
+
+                        // обновляем список
+                        pageListCarModel.UpTable();
+                    }
+                }
+            };
+            // вызываем событие для передачи данных
+            pageListCarModel.TransmitiData();
         }
 
         #endregion

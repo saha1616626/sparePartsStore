@@ -85,9 +85,16 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
             if (nameModelCar.Text.Trim().IsNullOrEmpty())
             {
                 errorInput.Text = "Заполните все поля!";
-                StartAnimation(nameModelCar);
+                StartAnimation(nameModelCar); // запуск анимации
                 BeginFadeAnimation(errorInput);
             }
+            if (CbCarModel.Text.Trim().IsNullOrEmpty())
+            {
+                errorInput.Text = "Заполните все поля!";
+                StartAnimation(CbCarModel);
+                BeginFadeAnimation(errorInput);
+            }
+
             else // если есть текст
             {
                 _listCarModelViewModel.NameModelInput = nameModelCar;
@@ -107,8 +114,17 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
                 }
                 else // если данные уже есть в таблице
                 {
-                    errorInput.Text = "Данная марка уже есть в баазе!";
-                    BeginFadeAnimation(errorInput);
+                    if (nameModelCar.Text.Trim() == "")
+                    {
+                        errorInput.Text = "Заполните все поля!";
+                        StartAnimation(nameModelCar); // запуск анимации
+                        BeginFadeAnimation(errorInput);
+                    }
+                    else
+                    {
+                        errorInput.Text = "Данная марка уже есть в баазе!";
+                        BeginFadeAnimation(errorInput);
+                    }
                 }
             }
         }
@@ -141,6 +157,11 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
 
         // запуск анимации
         private void StartAnimation(TextBox textBox)
+        {
+            _focusAnimation.Begin(textBox);
+        }
+        // запуск анимации с перегрузкой
+        private void StartAnimation(ComboBox textBox)
         {
             _focusAnimation.Begin(textBox);
         }
