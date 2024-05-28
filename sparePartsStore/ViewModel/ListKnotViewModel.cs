@@ -140,11 +140,25 @@ namespace sparePartsStore.ViewModel
         {
             bool noCoincidence = true; // по умолчанию нет совпадения
 
+            Unit unit = new Unit();
+            unit.UnitId = SelectedUnit.UnitId; // получаем ID узла
+
+            // проводим проверку на уникальность узла в выбранном агрегате. так, как один и тот-же узел может быть в разынх агрегатах
+
             using (SparePartsStoreContext context = new SparePartsStoreContext())
             {
                 List<Knot> knots = context.Knots.ToList(); // получаем список  узлов авто
-                noCoincidence = !knots.Any(num => num.NameKnot.ToLower().Contains(NameKnotInput.Text.ToLower()));
+                List<Knot> newKnot = new List<Knot>();
+                if (knots != null)
+                {
+                    newKnot = knots.Where(k => k.UnitId == unit.UnitId).ToList(); // получаем список узлом по выбранному агрегату в ComBox
+                }
 
+                // проверка наличия узла в определенном агрегате
+                if (newKnot != null)
+                {
+                    noCoincidence = !newKnot.Any(num => num.NameKnot.ToLower().Contains(NameKnotInput.Text.ToLower()));
+                }
             }
 
             return noCoincidence;
@@ -155,19 +169,31 @@ namespace sparePartsStore.ViewModel
         {
             bool noCoincidence = false; // по умолчанию совпадение не найдено
 
+            Unit unit = new Unit();
+            unit.UnitId = SelectedUnit.UnitId; // получаем ID узла
+
             using (SparePartsStoreContext context = new SparePartsStoreContext())
             {
                 List<Knot> knots = context.Knots.ToList(); // получаем список узлов
-                foreach (Knot k in knots)
+                List<Knot> newKnot = new List<Knot>();
+                if (knots != null)
                 {
-                    if (k.KnotId == knot.KnotId) // если находим данные в списке БД, которые в текущий момент редактируем, то пропускаем
-                    {
-                        continue;
-                    }
+                    newKnot = knots.Where(k => k.UnitId == unit.UnitId).ToList(); // получаем список узлом по выбранному агрегату в ComBox
+                }
 
-                    if (k.NameKnot.ToLower().Trim() == NameKnotInput.Text.ToLower().Trim()) // если нашли совпадение в таблице
+                if(newKnot != null) // проверяем совпадение в определенном агрегате
+                {
+                    foreach (Knot k in newKnot)
                     {
-                        noCoincidence = true;
+                        if (k.KnotId == knot.KnotId) // если находим данные в списке БД, которые в текущий момент редактируем, то пропускаем
+                        {
+                            continue;
+                        }
+
+                        if (k.NameKnot.ToLower().Trim() == NameKnotInput.Text.ToLower().Trim()) // если нашли совпадение в таблице
+                        {
+                            noCoincidence = true;
+                        }
                     }
                 }
             }
