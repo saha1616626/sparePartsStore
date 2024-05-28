@@ -1,6 +1,7 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using sparePartsStore.Helper;
 using sparePartsStore.Model;
+using sparePartsStore.Model.DPO;
 using sparePartsStore.View.ViewAdministrator.ViewMainPages;
 using sparePartsStore.View.ViewAdministrator.ViewWorking;
 using System;
@@ -192,6 +193,31 @@ namespace sparePartsStore.ViewModel
                 List<CarBrand> carBrand = context.CarBrands.ToList(); // получаем список марок авто
                 noCoincidence = !carBrand.Any(num => num.NameCarBrand.ToLower().Contains(NameBrandInput.Text.ToLower()));
 
+            }
+
+            return noCoincidence;
+        }
+
+        // если пользователь редактирует данные проверяем, что он не изменяет данные уже существующие в таблице
+        public bool CheckingForMatchEditDB(CarBrand brand)
+        {
+            bool noCoincidence = false; // по умолчанию совпадение не найдено
+
+            using (SparePartsStoreContext context = new SparePartsStoreContext())
+            {
+                List<CarBrand> brands = context.CarBrands.ToList(); // получаем список агрегатов
+                foreach (CarBrand b in brands)
+                {
+                    if (b.CarBrandId == brand.CarBrandId) // если находим данные в списке БД, которые в текущий момент редактируем, то пропускаем
+                    {
+                        continue;
+                    }
+
+                    if (b.NameCarBrand.ToLower().Trim() == NameBrandInput.Text.ToLower().Trim()) // если нашли совпадение в таблице
+                    {
+                        noCoincidence = true;
+                    }
+                }
             }
 
             return noCoincidence;

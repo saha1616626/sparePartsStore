@@ -18,6 +18,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Xml.Serialization;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 
 namespace sparePartsStore.ViewModel
 {
@@ -116,7 +117,13 @@ namespace sparePartsStore.ViewModel
 
 
             // подписываемся на событие запуска страницы добавления агрегата авто
-
+            WorkingWithData.launchPageAddUnit += LaunchPageAddUnit;
+            // подписываемся на событие запуска страницы редактирования агрегата авто
+            WorkingWithData.launchpageEditUnit += LaunchPageEditUnit;
+            // подписываемся на событие сохранения данных агрегата авто после редактирования или добваления данных
+            WorkingWithData.saveDataCreateOrEditUnit += WorkDataUnit;
+            // подписываемся на событие удаления данных агрегатов авто
+            WorkingWithData.saveDataDeleteUnit += DeleteDataUnit;
         }
 
         // запуск страницы - поиск запчастей
@@ -530,8 +537,93 @@ namespace sparePartsStore.ViewModel
             // получаем выбранный данные для редактирования
             pageListUnit.EventDataSelectedUnitItem += (sender, args) =>
             {
-                Unit unit = (Unit)args.Value;
+                Unit unit = (Unit)args.Value; // получаем данные
+
+                // передаём данные в поля ввода
+                pageWorkUnit.DataReception(unit);
             };
+            // вызываем событие для передачи данных
+            pageListUnit.TransmitData();
+        }
+
+        // редактируем или добавляем данные в таблицу
+        private void WorkDataUnit(object sender, EventAggregator e)
+        {
+            if(addOrEditUnit) // если добавляем данные в таблицу агрегатов авто
+            {
+                // подключаем БД
+                using (SparePartsStoreContext sparePartsStoreContext = new SparePartsStoreContext())
+                {
+                    // создаём экз Unit для добавления данных
+                    Unit unit = new Unit();
+                    pageWorkUnit.EventArgsUnit += (sender, args) =>
+                    {
+                        Unit units = (Unit)args.Value;
+                        unit.NameUnit = units.NameUnit;
+                        sparePartsStoreContext.Add(unit); // вносим данные в бд
+                        sparePartsStoreContext.SaveChanges(); // сохраняем бд
+                    };
+                    pageWorkUnit.Transmit(); // вызываем событие, чтобы полчить данные для записи в БД
+                }
+            }
+            else // если редактируем данные в таблице марок авто
+            {
+                // подключаем БД
+                using (SparePartsStoreContext sparePartsStoreContext = new SparePartsStoreContext())
+                {
+                    List<Unit> unitList = sparePartsStoreContext.Units.ToList();
+
+                    pageWorkUnit.EventArgsUnit += (sender, args) =>
+                    {
+                        Unit unitsInput = (Unit)args.Value; // получаем отредактированные данные
+
+                        // получаем id объекта для редактирования
+                        // получаем объект из БД, чтобы внести в него изменения. Id берем из GetUnit
+                        Unit unit = unitList.FirstOrDefault(units => units.UnitId == unitsInput.UnitId);
+                        if (unit != null)
+                        {
+                            // обновляем список БД
+                            unit.NameUnit = unitsInput.NameUnit;
+                            sparePartsStoreContext.Update(unit);
+                            sparePartsStoreContext.SaveChanges(); // сохраняем бд
+                        }
+                    };
+                    pageWorkUnit.Transmit(); // вызываем событие, чтобы полчить данные для записи в БД
+                }
+            }
+
+            // событие для очистка фреймов из памяти в PageMainHead
+            WorkingWithData.ClearMemoryAfterFrame();
+            pageListUnit = new PageListUnit(); // обновляем экз. класса
+            MainFrame.NavigationService.Navigate(pageListUnit);
+            selectedMenu(); // отображаем меню
+        }
+
+        // удаляем данные из таблицы
+        private void DeleteDataUnit(object sender, EventAggregator e)
+        {
+            // получаем выбранные данные для удаления
+            pageListUnit.EventDataSelectedUnitItem += (sender, args) =>
+            {
+                // подключаем БД
+                using (SparePartsStoreContext sparePartsStoreContext = new SparePartsStoreContext())
+                {
+                    List<Unit> units = sparePartsStoreContext.Units.ToList(); // получаем список агрегатов
+                    Unit unitInput = (Unit)args.Value; // получаем выбранные данные для удаления
+                    // удаляем данные из БД
+                    Unit unitDelete = units.FirstOrDefault(unit => unit.UnitId == unitInput.UnitId);
+                    if (unitDelete != null)
+                    {
+                        sparePartsStoreContext.Units.Remove(unitDelete); // удаляем объект
+                        sparePartsStoreContext.SaveChanges(); // сохраняем бд
+
+                        // обновляем список
+                        pageListUnit.UpTable();
+                    }
+                }
+            };
+            // вызываем событие для передачи данных
+            pageListUnit.TransmitData();
         }
 
         #endregion

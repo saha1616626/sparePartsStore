@@ -14,7 +14,7 @@
     </Page.Resources>
 
     <!--агрегат-->
-    <Grid Background="White" Margin="50,0,50,0" DataContext="{Binding ListUnitViewModel}">
+    <Grid Background="White" Margin="50,0,50,0" DataContext="{StaticResource ListUnitViewModel}">
 
         <!--стили-->
         <Grid.Resources>
@@ -26,8 +26,8 @@
         </Grid.Resources>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
@@ -39,7 +39,7 @@
         <TextBlock Grid.Row="0" Grid.Column="0" Text="Список агрегатов автомобиля" FontSize="30" Foreground="Black" FontWeight="DemiBold" Margin="0,40,0,40" VerticalAlignment="Center"/>
 
         <!--кнопки управления-->
-        <Grid Grid.Row="1" Grid.Column="0">
+        <Grid Grid.Row="1" Grid.Column="0" Width="425" HorizontalAlignment="Left">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -69,9 +69,9 @@
         </Grid>
 
         <!--таблица-->
-        <Grid Grid.Row="1" Grid.Column="1" MinWidth="600">
+        <Grid Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" DataContext="{StaticResource ListUnitViewModel}">
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                <DataGrid IsReadOnly="True"
+                <DataGrid IsReadOnly="True" Height="400"
                HorizontalAlignment="Center" RowHeight="50" FontSize="18"
                AutoGenerateColumns="False"
                CellStyle="{StaticResource DataGridCellStyle}"
@@ -81,7 +81,7 @@
                ColumnHeaderStyle="{StaticResource columnTableHeader}">
 
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Агрегат" Binding="{Binding NameUnit}" Width="*" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Агрегат" Binding="{Binding NameUnit}" Width="*" IsReadOnly="True" />
                     </DataGrid.Columns>
 
                 </DataGrid>

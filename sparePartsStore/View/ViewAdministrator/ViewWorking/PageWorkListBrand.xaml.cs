@@ -18,6 +18,7 @@ using sparePartsStore.View.ViewAdministrator.ViewMainPages;
 using sparePartsStore.Model;
 using System.Windows.Media.Animation;
 using Microsoft.IdentityModel.Tokens;
+using System.Windows.Automation.Text;
 
 namespace sparePartsStore.View.ViewAdministrator.ViewWorking
 {
@@ -69,7 +70,31 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
                 {
                     Checking = _listCarBrandViewModel.CheckingForMatchDB();
                 }
-                
+                else // если пользователь редактирует данные проверяем, что он не изменяет данные уже существующие в таблице
+                {
+                    bool CheckingItem = _listCarBrandViewModel.CheckingForMatchEditDB(GetCarBrand);
+                    if (CheckingItem)
+                    {
+                        errorInput.Text = "Данный агрегат уже есть в базе!";
+                        BeginFadeAnimation(errorInput);
+
+                        Checking = false;
+                    }
+                    else
+                    {
+                        if (_listCarBrandViewModel.CheckingForMatchDB())
+                        {
+                            Checking = true;
+                        }
+                        else
+                        {
+                            errorInput.Text = "";
+                            Checking = false;
+                        }
+
+                    }
+                }
+
                 // проверяем нет ли совпадения в БД
                 if (Checking)
                 {
@@ -78,7 +103,7 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
                 }
                 else // если данные уже есть в таблице
                 {
-                    errorInput.Text = "Данная марка уже есть в баазе!";
+                    errorInput.Text = "Данная марка уже есть в базе!";
                     BeginFadeAnimation(errorInput);
                 }
 

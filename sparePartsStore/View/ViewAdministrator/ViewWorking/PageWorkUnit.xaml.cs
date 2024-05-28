@@ -87,6 +87,30 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
                 {
                     Checking = _listUnitViewModel.CheckingForMatchDB();
                 }
+                else // если пользователь редактирует данные проверяем, что он не изменяет данные уже существующие в таблице
+                {
+                   bool CheckingItem = _listUnitViewModel.CheckingForMatchEditDB(getUnit);
+                    if (CheckingItem)
+                    {
+                        errorInput.Text = "Данный агрегат уже есть в базе!";
+                        BeginFadeAnimation(errorInput);
+
+                        Checking = false;
+                    }
+                    else
+                    {
+                        if (_listUnitViewModel.CheckingForMatchDB())
+                        {
+                            Checking = true;
+                        }
+                        else
+                        {
+                            errorInput.Text = "";
+                            Checking = false;
+                        }
+                        
+                    }
+                }
 
                 // проверяем нет ли совпадения в БД
                 if (Checking)
@@ -104,7 +128,7 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
                     }
                     else
                     {
-                        errorInput.Text = "Данная марка уже есть в баазе!";
+                        errorInput.Text = "Данный агрегат уже есть в базе!";
                         BeginFadeAnimation(errorInput);
                     }
                 }

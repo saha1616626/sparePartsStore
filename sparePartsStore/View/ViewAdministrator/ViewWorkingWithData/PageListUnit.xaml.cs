@@ -55,7 +55,7 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorkingWithData
         }
 
         // метод для передачи из таблицы выбранных данных в событие 
-        public void TransmitiData()
+        public void TransmitData()
         {
             Unit unit = new Unit();
             unit = _listUnitViewModel.TransmitionUnit();
@@ -95,7 +95,7 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorkingWithData
         private void Btn_DeleteData(object sender, RoutedEventArgs e)
         {
             // вызываем событие удаления данных из таблицы
-            WorkingWithData.SaveDataDeleteCarModels();
+            WorkingWithData.SaveDataDeleteUnit();
 
             DeletePopup.IsOpen = false; // Закрыть Popup при щелчке на затемненном фоне
             DarkBackground.Visibility = Visibility.Collapsed; // Скрыть затемненный фон

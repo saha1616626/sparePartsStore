@@ -155,6 +155,31 @@ namespace sparePartsStore.ViewModel
             return noCoincidence;
         }
 
+        // если пользователь редактирует данные проверяем, что он не изменяет данные уже существующие в таблице
+        public bool CheckingForMatchEditDB(CarModelDPO model)
+        {
+            bool noCoincidence = false; // по умолчанию совпадение не найдено
+
+            using (SparePartsStoreContext context = new SparePartsStoreContext())
+            {
+                List<CarModel> models = context.CarModels.ToList(); // получаем список агрегатов
+                foreach (CarModel m in models)
+                {
+                    if (m.CarModelId == model.CarModelId) // если находим данные в списке БД, которые в текущий момент редактируем, то пропускаем
+                    {
+                        continue;
+                    }
+
+                    if (m.NameCarModel.ToLower().Trim() == NameModelInput.Text.ToLower().Trim()) // если нашли совпадение в таблице
+                    {
+                        noCoincidence = true;
+                    }
+                }
+            }
+
+            return noCoincidence;
+        }
+
         // свойство поля для ввода названия модели авто
         private TextBox _outNameModel;
         public TextBox OutNameModel

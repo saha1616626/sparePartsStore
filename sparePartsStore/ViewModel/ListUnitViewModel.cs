@@ -44,7 +44,11 @@ namespace sparePartsStore.ViewModel
         public bool IsWorkButtonEnable
         {
             get { return _selectedUnit != null; } // если нажто поле в таблице
-            set { _isWorkButtonEnable = value; OnPropertyChanged(nameof(IsWorkButtonEnable)); }
+            set 
+            { 
+                _isWorkButtonEnable = value; 
+                OnPropertyChanged(nameof(IsWorkButtonEnable)); 
+            }
         }
 
         // коллекция считанная из БД 
@@ -64,7 +68,7 @@ namespace sparePartsStore.ViewModel
             if(ListUnitRead != null)
             {
                 // копируем список ListUnitRead в список ListUnit
-                ListUnit = LoadUnit();
+                ListUnit = ListUnitRead;
             }
 
             return ListUnit;
@@ -123,6 +127,31 @@ namespace sparePartsStore.ViewModel
             {
                 List<Unit> units = context.Units.ToList(); // получаем список агрегатов
                 noCoincidence = !units.Any(num => num.NameUnit.ToLower().Contains(NameUnitInput.Text.ToLower()));
+            }
+
+            return noCoincidence;
+        }
+
+        // если пользователь редактирует данные проверяем, что он не изменяет данные уже существующие в таблице
+        public bool CheckingForMatchEditDB(Unit unit)
+        {
+            bool noCoincidence = false; // по умолчанию совпадение не найдено
+
+            using (SparePartsStoreContext context = new SparePartsStoreContext())
+            {
+                List<Unit> units = context.Units.ToList(); // получаем список агрегатов
+                foreach (Unit u in units)
+                {
+                    if(u.UnitId == unit.UnitId) // если находим данные в списке БД, которые в текущий момент редактируем, то пропускаем
+                    {
+                        continue;
+                    }
+
+                    if(u.NameUnit.ToLower().Trim() == NameUnitInput.Text.ToLower().Trim()) // если нашли совпадение в таблице
+                    {
+                        noCoincidence = true;
+                    }
+                }
             }
 
             return noCoincidence;

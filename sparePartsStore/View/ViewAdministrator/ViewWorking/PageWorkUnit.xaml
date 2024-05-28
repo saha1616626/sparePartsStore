@@ -58,7 +58,7 @@
 
             <!-- Верхняя часть экрана -->
             <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
-                <Button Content="Домой" Margin="50, 4, 0, 0" Padding="-20, -3, 0, 0" Width="100" Command="{Binding ClosePageAddOrDeleteCarBrands}"  Background="Gray" BorderBrush="Black"/>
+                <Button Content="Домой" Margin="50, 4, 0, 0" Padding="-20, -3, 0, 0" Width="100" Command="{Binding ClosePageAddOrDeleteCarBrands}" Click="ClosePageAddOrDeleteCarModel"  Background="Gray" BorderBrush="Black"/>
                 <materialDesign:PackIcon Kind="Home" Margin="120, 10, 0, 0" Width="20" Height="20"/>
             </Grid>
 
@@ -82,7 +82,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Row="0" Grid.Column="0" Content="Отмена" Width="150" Height="35" Background="Gray" BorderBrush="Black"/>
+            <Button Grid.Row="0" Grid.Column="0" Content="Отмена" Width="150" Height="35" Background="Gray" BorderBrush="Black" Click="ClosePageAddOrDeleteCarModel"/>
             <Button Grid.Row="0" Grid.Column="1" Content="Добавить" x:Name="RenameButtonBrand" Width="150" Height="35" Background="Gray" BorderBrush="Black" Margin="20,0,0,0" Click="SaveData"/>
 
         </Grid>

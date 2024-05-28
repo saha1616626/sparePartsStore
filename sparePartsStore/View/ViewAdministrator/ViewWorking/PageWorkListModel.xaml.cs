@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Automation.Text;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -105,6 +106,30 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
                 {
                     Checking = _listCarModelViewModel.CheckingForMatchDB();
                 }
+                else // если пользователь редактирует данные проверяем, что он не изменяет данные уже существующие в таблице
+                {
+                    bool CheckingItem = _listCarModelViewModel.CheckingForMatchEditDB(getCarModelDPOs);
+                    if (CheckingItem)
+                    {
+                        errorInput.Text = "Данный агрегат уже есть в базе!";
+                        BeginFadeAnimation(errorInput);
+
+                        Checking = false;
+                    }
+                    else
+                    {
+                        if (_listCarModelViewModel.CheckingForMatchDB())
+                        {
+                            Checking = true;
+                        }
+                        else
+                        {
+                            errorInput.Text = "";
+                            Checking = false;
+                        }
+
+                    }
+                }
 
                 // проверяем нет ли совпадения в БД
                 if (Checking)
@@ -122,7 +147,7 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
                     }
                     else
                     {
-                        errorInput.Text = "Данная марка уже есть в баазе!";
+                        errorInput.Text = "Данная модель уже есть в базе!";
                         BeginFadeAnimation(errorInput);
                     }
                 }
