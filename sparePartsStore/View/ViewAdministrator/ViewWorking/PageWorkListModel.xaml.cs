@@ -38,7 +38,7 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
             _listCarModelViewModel = (ListCarModelViewModel)this.Resources["ListCarModelViewModel"];
 
             // анимация при неккорректном вводе данных в поля. подключаем ресурс
-            _focusAnimation = (Storyboard)FindResource("FocusAnimation"); // анимация не изчезнит, пока на полях не будет фокуса
+            _focusAnimation = (Storyboard)FindResource("FocusAnimation"); // анимация исчезает через n интервал времени
         }
 
         // переменная, которая хранит переданные данные из MainHeadViewModel для редактирования
@@ -112,7 +112,7 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
                     // вызываем событие для сохранения данных в классе MainHeadViewModel
                     WorkingWithData.SaveDataCreateOrEditCarModels();
                 }
-                else // если данные уже есть в таблице
+                else // если если все поля заполнены
                 {
                     if (nameModelCar.Text.Trim() == "")
                     {

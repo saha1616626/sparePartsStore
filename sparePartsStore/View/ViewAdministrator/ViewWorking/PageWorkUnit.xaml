@@ -11,11 +11,27 @@
 
 
     <Page.Resources>
-        <local1:ListCarBrandViewModel x:Key="ListCarBrandViewModel"/>
+        <local1:ListUnitViewModel x:Key="ListUnitViewModel"/>
+
+        <!--анимация при некорректом вводе-->
+        <Storyboard x:Key="FocusAnimation">
+            <ColorAnimation Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
+                    From="#de6d6d" To="Transparent" Duration="0:0:3" AutoReverse="False"/>
+        </Storyboard>
+        <!--переопределяем анимацию подсветки textBox при наведении-->
+        <Style x:Key="CustomFilledTextBox" BasedOn="{StaticResource MaterialDesignFilledTextBox}" TargetType="TextBox">
+            <Style.Triggers>
+                <Trigger Property="IsFocused" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard Storyboard="{StaticResource FocusAnimation}"/>
+                    </Trigger.EnterActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Page.Resources>
 
     <!--агрегат-->
-    <Grid Background="White" Margin="50,0,50,0" DataContext="{StaticResource ListCarBrandViewModel}">
+    <Grid Background="White" Margin="50,0,50,0" DataContext="{StaticResource ListUnitViewModel}">
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -30,6 +46,9 @@
         <!--название-->
         <TextBlock Grid.Row="0" Grid.Column="0" Text="Агрегат" FontSize="30" Foreground="Black" FontWeight="DemiBold" Margin="0,80,0,40" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
+        <!--поле для вывода ошибок-->
+        <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" Margin="0,50,20,0" x:Name="errorInput" FontWeight="DemiBold" FontSize="24">
+        
         <!--возврат на главную-->
         <Grid  Grid.Row="0" Grid.Column="0" Visibility="Visible" x:Name="closeFrame" Margin="0,0,0,40">
             <Grid.RowDefinitions>
@@ -46,7 +65,7 @@
         </Grid>
 
         <!--поля для ввода данных-->
-        <TextBox Grid.Row="1" Grid.Column="0" x:Name="NameModelInput" Height="50" Margin="0,30,0,0"
+        <TextBox Grid.Row="1" Grid.Column="0" x:Name="nameUnit" Height="50" Margin="0,30,0,0"
              VerticalAlignment="Center" HorizontalAlignment="Center"
              Text="{Binding OutNameUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"   
              materialDesign:TextFieldAssist.HasClearButton="True"
@@ -64,7 +83,7 @@
             </Grid.ColumnDefinitions>
 
             <Button Grid.Row="0" Grid.Column="0" Content="Отмена" Width="150" Height="35" Background="Gray" BorderBrush="Black"/>
-            <Button Grid.Row="0" Grid.Column="1" Content="Добавить" x:Name="RenameButtonBrand" Width="150" Height="35" Background="Gray" BorderBrush="Black" Margin="20,0,0,0"/>
+            <Button Grid.Row="0" Grid.Column="1" Content="Добавить" x:Name="RenameButtonBrand" Width="150" Height="35" Background="Gray" BorderBrush="Black" Margin="20,0,0,0" Click="SaveData"/>
 
         </Grid>
 
