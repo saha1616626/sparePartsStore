@@ -46,9 +46,9 @@
         </Grid>
 
         <!--поля для ввода данных-->
-        <TextBox Grid.Row="1" Grid.Column="0" x:Name="SearchParts" Height="50" Margin="0,30,0,0"
+        <TextBox Grid.Row="1" Grid.Column="0" x:Name="NameModelInput" Height="50" Margin="0,30,0,0"
              VerticalAlignment="Center" HorizontalAlignment="Center"
-             Text="{Binding InputLogin, UpdateSourceTrigger=PropertyChanged}"   
+             Text="{Binding OutNameUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"   
              materialDesign:TextFieldAssist.HasClearButton="True"
              Style="{StaticResource MaterialDesignOutlinedTextBox}" 
              materialDesign:HintAssist.Hint="Введите название агрегата" 

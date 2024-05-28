@@ -45,9 +45,6 @@ namespace sparePartsStore.ViewModel
             set { _isWorkButtonEnable = value; OnPropertyChanged(nameof(IsWorkButtonEnable)); }
         }
 
-        // коллекция считанная из БД 
-        public ObservableCollection<CarModelDPO> ListCarModelReadDPO { get; set; } = new ObservableCollection<CarModelDPO>();
-
         // список отображения моделей авто на экране
         private ObservableCollection<CarModelDPO> _listCarModelDPO { get; set; }
         public ObservableCollection<CarModelDPO> ListCarModelDPO
@@ -143,7 +140,7 @@ namespace sparePartsStore.ViewModel
         // переменная, которая хранит текущие данные в поле у PageWorkListModel
         public TextBox NameModelInput {  get; set; }
 
-        // проверяем, есть ли совпадения данных перед добавления
+        // проверяем, есть ли совпадения данных перед добавлением
         public bool CheckingForMatchDB()
         {
             bool noCoincidence = true; // по умолчанию нет совпадения
