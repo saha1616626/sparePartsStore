@@ -113,6 +113,10 @@ namespace sparePartsStore.ViewModel
             WorkingWithData.saveDataCreateOrEditCarModels += WorkDataModel;
             // подписываемся на событие удаления данных марок авто
             WorkingWithData.saveDataDeleteCarModels += DeleteDataModel;
+
+
+            // подписываемся на событие запуска страницы добавления агрегата авто
+
         }
 
         // запуск страницы - поиск запчастей
@@ -467,6 +471,74 @@ namespace sparePartsStore.ViewModel
 
         #endregion
 
+        // страница - агрегат авто
+        #region Unit
+
+        // кнопка запуска страницы - марки авто
+        PageListUnit pageListUnit; // объект класса отображения списка марок авто
+
+        private RelayCommand _btn_unit {  get; set; }
+        public RelayCommand Btn_unit
+        {
+            get
+            {
+                return _btn_unit ??
+                    (_btn_unit = new RelayCommand(obj =>
+                    {
+                        // событие для очистка фреймов из памяти в PageMainHead
+                        WorkingWithData.ClearMemoryAfterFrame();
+                        pageListUnit = new PageListUnit();
+                        MainFrame.NavigationService.Navigate(pageListUnit);
+                    }, (obj) => true));
+            }
+        }
+
+        // объект страницы для редактирования и добавления данных агрегатов авто
+        PageWorkUnit pageWorkUnit;
+        // флаг, который нам сообщает, редактирует пользователь таблицу или добавлят новые данные
+        bool addOrEditUnit; // если true - значит добавлять, если false - значит редактировать
+
+        // запуск страницы добавления агрегата
+        private void LaunchPageAddUnit(object sender, EventAggregator e)
+        {
+            pageWorkUnit = new PageWorkUnit(); // экз страницы для добавления
+
+            MainFrame.NavigationService.Navigate(pageWorkUnit);
+            pageWorkUnit.RenameButtonBrand.Content = "Добавить"; // измененяем кнопку
+            // поднимаем флаг, что мы добавляем данные
+            addOrEditUnit = true;
+            // показываем, что было открыто основное меню перед его скрытием
+            typeMenu = true;
+            // скрываем шестерёнку и основное меню, чтобы нельзя было перемещаться между страницами
+            selectedMenu();
+        }
+
+        // запуск страницы редактирования агрегата авто 
+        private void LaunchPageEditUnit(object sender, EventAggregator e)
+        {
+            pageWorkUnit = new PageWorkUnit(); // экз страницы для редактирования
+
+            MainFrame.NavigationService.Navigate(pageWorkUnit); // запуск страницы
+            pageWorkUnit.RenameButtonBrand.Content = "Редактировать"; // измененяем кнопку
+            // поднимаем флаг, что мы редактируем данные
+            addOrEditUnit = false;
+            // показываем, что было открыто основное меню перед его скрытием
+            typeMenu = true;
+            // скрываем шестерёнку и основное меню, чтобы нельзя было перемещаться между страницами
+            selectedMenu();
+
+            // получаем выбранный данные для редактирования
+            pageListUnit.EventDataSelectedUnitItem += (sender, args) =>
+            {
+                Unit unit = (Unit)args.Value;
+            };
+        }
+
+        #endregion
+
+        // методы PageMainHead
+        #region methodsPageMainHead
+
         // закрыть последнюю страницу
         private void CloseLastOnePage(object sender, EventAggregator e)
         {
@@ -480,9 +552,6 @@ namespace sparePartsStore.ViewModel
             GC.Collect();
             GC.WaitForPendingFinalizers();
         }
-
-        // методы PageMainHead
-        #region methodsPageMainHead
 
         // скрываем основное меню и открываем меню настроек
         private void settingMenu()
