@@ -189,16 +189,27 @@ namespace sparePartsStore.ViewModel
                 ListSearch = GetListUnitBD(); // получаем актуальные данные из БД
                 // создаём список с поиском по введенным данным в таблице
                 var resUnit = ListSearch.Where(num => num.NameUnit.ToLower().Contains(nameUnit.ToLower())).ToList();
-                if(resUnit.Count > 0)
+
+                // выведет всё, если ничего не найдено
+                //if (resUnit.Count > 0)
+                //{
+                //    ListUnit.Clear(); // очищаем список отображения данных в таблице
+                //    // вносим актуальные данные основного списка
+                //    foreach(var unit in resUnit)
+                //    {
+                //        Unit un = new Unit();
+                //        un = unit;
+                //        ListUnit.Add(un); // добавляем новые данные в список (с учетом фильтра)
+                //    }
+                //}
+
+                ListUnit.Clear(); // очищаем список отображения данных в таблице
+                                  // вносим актуальные данные основного списка
+                foreach (var unit in resUnit)
                 {
-                    ListUnit.Clear(); // очищаем список отображения данных в таблице
-                    // вносим актуальные данные основного списка
-                    foreach(var unit in resUnit)
-                    {
-                        Unit un = new Unit();
-                        un = unit;
-                        ListUnit.Add(un); // добавляем новые данные в список (с учетом фильтра)
-                    }
+                    Unit un = new Unit();
+                    un = unit;
+                    ListUnit.Add(un); // добавляем новые данные в список (с учетом фильтра)
                 }
             }
 

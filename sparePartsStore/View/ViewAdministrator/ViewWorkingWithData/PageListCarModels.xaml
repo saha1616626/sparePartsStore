@@ -31,7 +31,9 @@
         </Grid.RowDefinitions>
 
         <!--Список моделей автомобилей-->
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="Список моделей автомобилей" FontSize="30" Foreground="Black" FontWeight="DemiBold" HorizontalAlignment="Left" Margin="0,40,0,40" VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Список моделей автомобилей" 
+                   FontSize="30" Foreground="Black" FontWeight="DemiBold" HorizontalAlignment="Left" 
+                   Margin="0,40,0,40" VerticalAlignment="Center"/>
 
         <!--кнопки и таблица-->
         <Grid Grid.Row="1">

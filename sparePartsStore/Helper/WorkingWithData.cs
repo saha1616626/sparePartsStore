@@ -106,10 +106,40 @@ namespace sparePartsStore.Helper
             saveDataDeleteUnit?.Invoke(null, new EventAggregator());
         }
 
-
         #endregion
 
         // узел авто
+        #region Knot
+
+        // Событие запуска страницы добавления узла авто из MainHeadViewModel
+        public static event EventHandler<EventAggregator> launchPageAddKnot; // подписываемся в MainHeadViewModel
+        public static void LaunchPageAddKnot() // вызываем в PageListKnot
+        {
+            launchPageAddKnot?.Invoke(null, new EventAggregator());
+        }
+
+        // событие запуска страницы редактирования узлов авто из MainHeadViewModel
+        public static event EventHandler<EventAggregator> launchpageEditKnot; // подписываемся в MainHeadViewModel
+        public static void LaunchpageEditKnot() // вызываем в PageListKnot
+        {
+            launchpageEditKnot?.Invoke(null, new EventAggregator());
+        }
+
+        // событие изменение БД после добавления или редактирования узлов авто
+        public static event EventHandler<EventAggregator> saveDataCreateOrEditKnot; // подписываемся в MainHeadViewModel
+        public static void SaveDataCreateOrEditKnot() // вызываем в PageListKnot
+        {
+            saveDataCreateOrEditKnot?.Invoke(null, new EventAggregator());
+        }
+
+        // событие на удаление данных узлов авто
+        public static event EventHandler<EventAggregator> saveDataDeleteKnot; // подписываемся в MainHeadViewModel
+        public static void SaveDataDeleteKnot() // вызываем в PageListKnot
+        {
+            saveDataDeleteKnot?.Invoke(null, new EventAggregator());
+        }
+
+        #endregion
 
         // общие события
         #region GeneralEvent

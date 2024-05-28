@@ -221,16 +221,27 @@ namespace sparePartsStore.ViewModel
                 ListSearch = GetListCarModel(); // получаем актуальные данные из БД
                 // создаём список с поиском по введенным данным в таблице
                 var resCarModel = ListSearch.Where(num => num.NameCarModel.ToLower().Contains(nameModel.ToLower())).ToList();
-                if(resCarModel.Count > 0)
+
+                // выведет всё, если ничего не найдено// выведет всё, если ничего не найдено
+                //if (resCarModel.Count > 0)
+                //{
+                //    ListCarModelDPO.Clear();// очищаем основной список
+                //    // вносим актуальные данные основного списка
+                //    foreach(var carModel in resCarModel)
+                //    {
+                //        CarModelDPO carModelDPO = new CarModelDPO();
+                //        carModelDPO = carModelDPO.CopyFromCarModel(carModel);
+                //        ListCarModelDPO.Add(carModelDPO); // добавляем данные
+                //    }
+                //}
+
+                ListCarModelDPO.Clear();// очищаем основной список
+                                        // вносим актуальные данные основного списка
+                foreach (var carModel in resCarModel)
                 {
-                    ListCarModelDPO.Clear();// очищаем основной список
-                    // вносим актуальные данные основного списка
-                    foreach(var carModel in resCarModel)
-                    {
-                        CarModelDPO carModelDPO = new CarModelDPO();
-                        carModelDPO = carModelDPO.CopyFromCarModel(carModel);
-                        ListCarModelDPO.Add(carModelDPO); // добавляем данные
-                    }
+                    CarModelDPO carModelDPO = new CarModelDPO();
+                    carModelDPO = carModelDPO.CopyFromCarModel(carModel);
+                    ListCarModelDPO.Add(carModelDPO); // добавляем данные
                 }
             }
 

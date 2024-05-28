@@ -124,6 +124,16 @@ namespace sparePartsStore.ViewModel
             WorkingWithData.saveDataCreateOrEditUnit += WorkDataUnit;
             // подписываемся на событие удаления данных агрегатов авто
             WorkingWithData.saveDataDeleteUnit += DeleteDataUnit;
+
+
+            // подписываемся на событие запуска страницы добавления узла авто
+            WorkingWithData.launchPageAddKnot += LaunchPageAddKnot;
+            // подписываемся на событие запуска страницы редактирования узла авто
+            WorkingWithData.launchpageEditKnot += LaunchPageEditKnot;
+            // подписываемся на событие сохранения данных узла авто после редактирования или добваления данных
+            WorkingWithData.saveDataCreateOrEditKnot += WorkDataKnot;
+            // подписываемся на событие удаления данных узла авто
+            WorkingWithData.saveDataDeleteKnot += DeleteDataKnot;
         }
 
         // запуск страницы - поиск запчастей
@@ -624,6 +634,165 @@ namespace sparePartsStore.ViewModel
             };
             // вызываем событие для передачи данных
             pageListUnit.TransmitData();
+        }
+
+        #endregion
+
+        // запуск страницы - узел авто
+        #region Knot
+
+        PageListKnot pageListKnot; // объект класса отображения списка узлов авто
+        private RelayCommand _btn_Knot { get; set; }
+        public RelayCommand Btn_Knot
+        {
+            get
+            {
+                return _btn_Knot ??
+                    (_btn_Knot = new RelayCommand(obj =>
+                    {
+                        // событие для очистка фреймов из памяти в PageMainHead
+                        WorkingWithData.ClearMemoryAfterFrame();
+                        pageListKnot = new PageListKnot();
+                        MainFrame.NavigationService.Navigate(pageListKnot);
+                    }, (obj) => true));
+            }
+        }
+
+        // объект страницы для редактирования и добавления данных узлов авто
+        PageWorkKnot pageWorkKnot;
+        // флаг, который нам сообщает, редактирует пользователь таблицу или добавлят новые данные
+        bool addOrEditKnot; // если true - значит добавлять, если false - значит редактировать
+
+        // запуск страницы добавления узла авто
+        private void LaunchPageAddKnot(object sender, EventAggregator e)
+        {
+            pageWorkKnot = new PageWorkKnot(); // экз страницы для добавления
+
+            MainFrame.NavigationService.Navigate(pageWorkKnot);
+            pageWorkKnot.RenameButtonBrand.Content = "Добавить"; // измененяем кнопку
+            // поднимаем флаг, что мы добавляем данные
+            addOrEditKnot = true;
+            // показываем, что было открыто основное меню перед его скрытием
+            typeMenu = true;
+            // скрываем шестерёнку и основное меню, чтобы нельзя было перемещаться между страницами
+            selectedMenu();
+            // добавлем данные в ComBox
+            pageWorkKnot.DataReceptionAdd();
+        }
+
+        // запуск страницы редактирования узла авто
+        private void LaunchPageEditKnot(object sender, EventAggregator e)
+        {
+            pageWorkKnot = new PageWorkKnot(); // экз страницы для редактирования
+
+            MainFrame.NavigationService.Navigate(pageWorkKnot); // запуск страницы
+            pageWorkKnot.RenameButtonBrand.Content = "Редактировать"; // измененяем кнопку
+            // поднимаем флаг, что мы редактируем данные
+            addOrEditKnot = false;
+            // показываем, что было открыто основное меню перед его скрытием
+            typeMenu = true;
+            // скрываем шестерёнку и основное меню, чтобы нельзя было перемещаться между страницами
+            selectedMenu();
+
+            // получаем выбранный данные для редактирования
+            pageListKnot.EventDataSelectedKnotItem += (sender, args) =>
+            {
+                KnotDPO knotDPO = (KnotDPO)args.Value; // получаем выбранные данные
+
+                // передаём данные для редактирования (отображаем)
+                pageWorkKnot.DataReception(knotDPO);
+            };
+            // вызываем событие для передачи данных
+            pageListKnot.TransmitData();
+        }
+
+        // редактируем или добавляем данные в таблицу
+        private void WorkDataKnot(object sender, EventAggregator e)
+        {
+            if (addOrEditKnot) // если добавляем данные
+            {
+                // подключаем БД
+                using (SparePartsStoreContext sparePartsStoreContext = new SparePartsStoreContext())
+                {
+                    List<Knot> carModels = sparePartsStoreContext.Knots.ToList(); // получаем список узлов авто
+
+                    // создаём экз для добавления данных
+                    Knot knot = new Knot();
+                    pageWorkKnot.EventArgsKnot += (sender, args) =>
+                    {
+                        KnotDPO knotDPO = (KnotDPO)args.Value;
+                        // преобразовываем KnotDPO в Knot
+                        Knot knots = knot.CopyFromKnotDPO(knotDPO);
+
+                        // переносим данные
+                        knot.NameKnot = knots.NameKnot;
+                        knot.UnitId = knots.UnitId;
+
+                        sparePartsStoreContext.Add(knot); // вносим данные в бд
+                        sparePartsStoreContext.SaveChanges(); // сохраняем бд
+                    };
+                    pageWorkKnot.Transmit();
+                }
+            }
+            else // если редактируем данные
+            {
+                // подключаем БД
+                using (SparePartsStoreContext sparePartsStoreContext = new SparePartsStoreContext())
+                {
+                    List<Knot> knots = sparePartsStoreContext.Knots.ToList(); // получаем список узлов авто
+
+                    pageWorkKnot.EventArgsKnot += (sender, args) =>
+                    {
+                        KnotDPO knotDPO = (KnotDPO)args.Value;
+
+                        // получаем объект из БД, чтобы внести в него изменения. Id берем из getKnotDPOs
+                        Knot knot = knots.FirstOrDefault(knot => knot.KnotId == knotDPO.KnotId);
+                        if (knot != null)
+                        {
+                            // обновляем БД
+                            Knot knotUp = new Knot();
+                            knotUp = knotUp.CopyFromKnotDPO(knotDPO);
+                            knot.NameKnot = knotUp.NameKnot;
+                            knot.UnitId = knotUp.UnitId;
+                            sparePartsStoreContext.Update(knot);// вносим данные в бд
+                            sparePartsStoreContext.SaveChanges(); // сохраняем бд
+                        }
+                    };
+                    pageWorkKnot.Transmit(); // вызываем событие, чтобы полчить данные для изменения в БД
+                }
+            }
+
+            WorkingWithData.ClearMemoryAfterFrame();
+            pageListKnot = new PageListKnot(); // обновляем экз. класса
+            MainFrame.NavigationService.Navigate(pageListKnot);
+            selectedMenu(); // отображаем меню
+        }
+
+        // удаляем данные из таблицы
+        private void DeleteDataKnot(object sender, EventAggregator e)
+        {
+            // получаем данные для удаления
+            pageListKnot.EventDataSelectedKnotItem += (sender, args) =>
+            {
+                // подключаем БД
+                using (SparePartsStoreContext sparePartsStoreContext = new SparePartsStoreContext())
+                {
+                    List<Knot> knots = sparePartsStoreContext.Knots.ToList(); // получаем список из БД
+                    KnotDPO knotDPO = (KnotDPO)args.Value; // получили выбранные данные из таблицы
+                    // находим в списке БД элемент для удаления
+                    Knot knot = knots.FirstOrDefault(carModel => carModel.KnotId == knotDPO.KnotId);
+                    if (knot != null)
+                    {
+                        sparePartsStoreContext.Knots.Remove(knot);
+                        sparePartsStoreContext.SaveChanges(); // сохраняем бд
+
+                        // обновляем список
+                        pageListKnot.UpTable();
+                    }
+                }
+            };
+            // вызываем событие для передачи данных
+            pageListKnot.TransmitData();
         }
 
         #endregion
