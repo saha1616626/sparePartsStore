@@ -75,6 +75,42 @@ namespace sparePartsStore.Helper
 
         #endregion
 
+        // агрегат авто
+        #region Unit
+
+        // событие запуска страницы добавления агрегата авто из MainHeadViewModel
+        public static event EventHandler<EventAggregator> launchPageAddUnit; // подписываемся в MainHeadViewModel
+        public static void LaunchPageAddUnit() // вызываем в PageListUnit
+        {
+            launchPageAddUnit?.Invoke(null, new EventAggregator());
+        }
+
+        // событие запуска страницы редактирования агрегатов авто из MainHeadViewModel
+        public static event EventHandler<EventAggregator> launchpageEditUnit; // подписываемся в MainHeadViewModel
+        public static void LaunchpageEditUnit() // вызываем в PageListUnit
+        {
+            launchpageEditUnit?.Invoke(null, new EventAggregator());
+        }
+
+        // событие изменение БД после добавления или редактирования агрегатов авто
+        public static event EventHandler<EventAggregator> saveDataCreateOrEditUnit; // подписываемся в MainHeadViewModel
+        public static void SaveDataCreateOrEditUnit() // вызываем в PageWorkUnit
+        {
+            saveDataCreateOrEditUnit?.Invoke(null, new EventAggregator());
+        }
+
+        // событие на удаление данных агрегатов авто
+        public static event EventHandler<EventAggregator> saveDataDeleteUnit; // подписываемся в MainHeadViewModel
+        public static void SaveDataDeleteUnit() // вызываем в PageListUnit
+        {
+            saveDataDeleteUnit?.Invoke(null, new EventAggregator());
+        }
+
+
+        #endregion
+
+        // узел авто
+
         // общие события
         #region GeneralEvent
 

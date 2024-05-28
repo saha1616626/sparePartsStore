@@ -13,6 +13,7 @@
         <ViewModel:ListCarModelViewModel x:Key="ListCarModelViewModel"/>
     </Page.Resources>
 
+    <!--модель авто-->
     <Grid Background="White" Margin="50,0,50,0" HorizontalAlignment="Center" MinWidth="1100" DataContext="{StaticResource ListCarModelViewModel}">
 
         <!--стили-->

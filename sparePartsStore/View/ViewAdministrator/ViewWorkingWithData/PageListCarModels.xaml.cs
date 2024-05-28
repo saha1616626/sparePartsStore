@@ -30,7 +30,7 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorkingWithData
         {
             InitializeComponent();
 
-            // получаем экз текущего класса
+            // _получаем экз текущего класса
             _listCarModelViewModel = (ListCarModelViewModel)this.Resources["ListCarModelViewModel"];
         }
 
@@ -41,7 +41,7 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorkingWithData
             WorkingWithData.LaunchinPageAddCarModel();
         }
 
-        // кнопка добавления редактирования модели авто
+        // кнопка редактирования модели авто
         private void EditCarModel(object sender, RoutedEventArgs e)
         {
             // вызваем событие в MainHeadViewModel для запуска страницы редактирования моделей авто
@@ -65,7 +65,7 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorkingWithData
 
         #region Popup
 
-        // кнопка выбора адреса
+        // кнопка удалить
         private void Btn_OpenPopup(object sender, RoutedEventArgs e)
         {
             // отображаем Popup
@@ -77,8 +77,6 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorkingWithData
             carModelDPO = _listCarModelViewModel.TransmitModel();
             string deleteItemName = carModelDPO.NameCarModel.Trim();
             DeleteNameCarBrand.Text = deleteItemName;
-
-
         }
 
         // скрыть фон при запуске popup
