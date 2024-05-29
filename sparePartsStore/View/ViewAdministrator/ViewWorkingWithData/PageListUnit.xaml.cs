@@ -47,7 +47,7 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorkingWithData
             WorkingWithData.LaunchpageEditUnit();
         }
 
-        // событие передачи выбранных данных из таблицы из таблицы агрегаты авто
+        // событие передачи выбранных данных из таблицы агрегаты авто
         public event EventHandler<MyEventArgsObject> EventDataSelectedUnitItem;
         protected virtual void TransmitSelectedData(Unit value)
         {

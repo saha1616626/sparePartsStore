@@ -141,6 +141,39 @@ namespace sparePartsStore.Helper
 
         #endregion
 
+        // страна
+        #region CountryCountry
+
+        // Событие запуска страницы добавления страны из MainHeadViewModel
+        public static event EventHandler<EventAggregator> launchPageAddCountry; // подписываемся в MainHeadViewModel
+        public static void LaunchPageAddCountry() // вызываем в PageListCountry
+        {
+            launchPageAddCountry?.Invoke(null, new EventAggregator());
+        }
+
+        // событие запуска страницы редактирования страны из MainHeadViewModel
+        public static event EventHandler<EventAggregator> launchpageEditCountry; // подписываемся в MainHeadViewModel
+        public static void LaunchpageEditCountry() // вызываем в PageListCountry
+        {
+            launchpageEditCountry?.Invoke(null, new EventAggregator());
+        }
+
+        // событие изменение БД после добавления или редактирования страны
+        public static event EventHandler<EventAggregator> saveDataCreateOrEditCountry; // подписываемся в MainHeadViewModel
+        public static void SaveDataCreateOrEditCountry() // вызываем в PageWorkCountry
+        {
+            saveDataCreateOrEditCountry?.Invoke(null, new EventAggregator());
+        }
+
+        // событие на удаление данных стран
+        public static event EventHandler<EventAggregator> saveDataDeleteCountry; // подписываемся в MainHeadViewModel
+        public static void SaveDataDeleteCountry() // вызываем в PageListCountry
+        {
+            saveDataDeleteCountry?.Invoke(null, new EventAggregator());
+        }
+
+        #endregion
+
         // общие события
         #region GeneralEvent
 

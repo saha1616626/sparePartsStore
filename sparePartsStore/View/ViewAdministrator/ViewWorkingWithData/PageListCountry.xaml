@@ -5,11 +5,16 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:sparePartsStore.View.ViewAdministrator.ViewWorkingWithData"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:ViewModel="clr-namespace:sparePartsStore.ViewModel"
       mc:Ignorable="d" 
       Title="" MinHeight="700" Height="Auto" MinWidth="1200" Width="Auto">
 
+    <Page.Resources>
+        <ViewModel:ListCountryViewModel x:Key="ListCountryViewModel" />
+    </Page.Resources>
+
     <!--страны-->
-    <Grid Background="White" Margin="50,0,50,0">
+    <Grid Background="White" Margin="50,0,50,0" DataContext="{StaticResource ListCountryViewModel}">
 
         <!--стили-->
         <Grid.Resources>
@@ -21,8 +26,8 @@
         </Grid.Resources>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
@@ -34,7 +39,7 @@
         <TextBlock Grid.Row="0" Grid.Column="0" Text="Список стран" FontSize="30" Foreground="Black" FontWeight="DemiBold" Margin="0,40,0,40" VerticalAlignment="Center"/>
 
         <!--кнопки управления-->
-        <Grid Grid.Row="1" Grid.Column="0">
+        <Grid Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -47,34 +52,102 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Button Grid.Row="0" Grid.Column="0" Content="Добавить" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black"/>
-            <Button Grid.Row="0" Grid.Column="1" Content="Редктировать" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0"/>
-            <Button Grid.Row="0" Grid.Column="2" Content="Удалить" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0"/>
+            <Button Grid.Row="0" Grid.Column="0" Content="Добавить" 
+                    MinWidth="100" Height="35" Background="Gray" Click="Btn_AddCountry"
+                    BorderBrush="Black"/>
 
-            <TextBox Grid.Row="1" Grid.ColumnSpan="3" x:Name="SearchParts" Height="50" Margin="0,20,0,0"
-         VerticalAlignment="Center" 
-         Text="{Binding InputLogin, UpdateSourceTrigger=PropertyChanged}"   
-         materialDesign:TextFieldAssist.HasClearButton="True"
-         Style="{StaticResource MaterialDesignOutlinedTextBox}" 
-         materialDesign:HintAssist.Hint="Поиск страны" 
-         materialDesign:TextFieldAssist.CharacterCounterVisibility="Hidden"
-         MaxLength="100" TextWrapping="Wrap" MinWidth="300" />
+            <Button Grid.Row="0" Grid.Column="1" Content="Редктировать" Click="Btn_EditCountry"
+                    MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" 
+                    Margin="10,0,0,0" IsEnabled="{Binding IsWorkButtonEnable}"/>
+            
+            <Button Grid.Row="0" Grid.Column="2" Content="Удалить" MinWidth="100" 
+                    Height="35" Background="Gray" BorderBrush="Black" Click="Btn_OpenPopup" 
+                    Margin="10,0,0,0" IsEnabled="{Binding IsWorkButtonEnable}"/>
+
+            <TextBox Grid.Row="1" Grid.ColumnSpan="3" x:Name="SearchParts" 
+                 Height="50" Margin="0,20,0,0"
+                 VerticalAlignment="Center" 
+                 Text="{Binding NameCountry, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                 TextChanged="TextBoxNameCountry"
+                 materialDesign:TextFieldAssist.HasClearButton="True"
+                 Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                 materialDesign:HintAssist.Hint="Поиск страны" 
+                 materialDesign:TextFieldAssist.CharacterCounterVisibility="Hidden"
+                 MaxLength="100" TextWrapping="Wrap" MinWidth="300" />
 
         </Grid>
 
         <!--таблица-->
-        <Grid Grid.Row="1" Grid.Column="1" MinWidth="600">
-            <DataGrid
-HorizontalAlignment="Center"
-AutoGenerateColumns="False"
-Style="{StaticResource MaterialDesignDataGrid}"
-ColumnHeaderStyle="{StaticResource columnTable}">
+        <Grid Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" DataContext="{StaticResource ListCountryViewModel}">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <DataGrid IsReadOnly="True" Height="400"
+                   HorizontalAlignment="Center" RowHeight="50" FontSize="18"
+                   AutoGenerateColumns="False"
+                   CellStyle="{StaticResource DataGridCellStyle}"
+                   ItemsSource="{Binding ListCountry}"
+                   SelectedItem="{Binding SelectedCountry}"
+                   Style="{StaticResource MaterialDesignDataGrid}"
+                   ColumnHeaderStyle="{StaticResource columnTableHeader}">
 
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Страна" Binding="{Binding numberParts}" MinWidth="500"/>
-                </DataGrid.Columns>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Страна" Binding="{Binding NameCountry}"  Width="*" IsReadOnly="True"/>
+                    </DataGrid.Columns>
 
-            </DataGrid>
+                    </DataGrid>
+            </ScrollViewer>
+        </Grid>
+
+        <!--фон для Popup-->
+        <Border Grid.ColumnSpan="4" Grid.RowSpan="5" x:Name="DarkBackground" Background="#80000000" Visibility="Collapsed" MouseLeftButtonDown="DarkBackground_MouseDown" Panel.ZIndex="1" Margin="-500,-900,-900,-500"></Border>
+
+        <!-- размещение Popup относительно данного grid-->
+        <Grid x:Name="positionPopup" Grid.RowSpan="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <!--Popup-->
+
+        <Grid>
+            <Popup x:Name="DeletePopup" PlacementTarget="{Binding ElementName=positionPopup}" Placement="Center" Grid.ColumnSpan="3" Grid.RowSpan="3" HorizontalOffset="0" VerticalOffset="60" StaysOpen="False" Closed="MyPopup_Closed" AllowsTransparency="False" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Grid Background="Gray">
+                    <!--фон-->
+                    <Border Background="AliceBlue" Style="{StaticResource OutlineOfPopup}" >
+                        <Grid Width="400" Height="250">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Text="Удаление данных" Margin="0, 10, 0, 0" FontSize="30" FontWeight="Bold"/>
+
+                                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center" Height="130" Margin="10,20,10,0">
+                                    <TextBlock Text="Вы действительно хоти удалить?" FontSize="20" FontWeight="DemiBold" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{Binding DeleteNameCountry}" TextWrapping="Wrap" x:Name="DeleteNameCountry" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,30,0,0"  FontSize="20" FontWeight="DemiBold"/>
+                                </StackPanel>
+
+                                <Grid Grid.Row="2" Grid.Column="0" Margin="0,0,0,0" VerticalAlignment="Bottom">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Button Grid.Row="0" Grid.Column="0" Content="Отмена" Width="150" Height="35" Background="Gray" BorderBrush="Black" Click="closePopup"/>
+                                    <Button Grid.Row="0" Grid.Column="1" Content="Удалить" Width="150" Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0" Click="Btn_DeleteData"/>
+
+                                </Grid>
+
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Popup>
         </Grid>
 
     </Grid>

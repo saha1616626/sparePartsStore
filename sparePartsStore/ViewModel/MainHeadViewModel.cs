@@ -134,6 +134,16 @@ namespace sparePartsStore.ViewModel
             WorkingWithData.saveDataCreateOrEditKnot += WorkDataKnot;
             // подписываемся на событие удаления данных узла авто
             WorkingWithData.saveDataDeleteKnot += DeleteDataKnot;
+
+
+            // подписываемся на событие запуска страницы добавления страны
+            WorkingWithData.launchPageAddCountry += LaunchPageAddCountry;
+            // подписываемся на событие запуска страницы редактирования страны
+            WorkingWithData.launchpageEditCountry += LaunchpageEditCountry;
+            // подписываемся на событие сохранения данных страны после редактирования или добваления данных
+            WorkingWithData.saveDataCreateOrEditCountry += WorkDataCountry;
+            // подписываемся на событие удаления данных страны
+            WorkingWithData.saveDataDeleteCountry += DeleteDataCountry;
         }
 
         // запуск страницы - поиск запчастей
@@ -638,7 +648,7 @@ namespace sparePartsStore.ViewModel
 
         #endregion
 
-        // запуск страницы - узел авто
+        // страница - узел авто
         #region Knot
 
         PageListKnot pageListKnot; // объект класса отображения списка узлов авто
@@ -793,6 +803,156 @@ namespace sparePartsStore.ViewModel
             };
             // вызываем событие для передачи данных
             pageListKnot.TransmitData();
+        }
+
+        #endregion
+
+        // страница - страна
+        #region country
+
+        // кнопка запуска страницы - страны
+        PageListCountry pageListCountry; // объект класса отображения списка стран
+
+        private RelayCommand _btn_Country { get; set; }
+        public RelayCommand Btn_Country
+        {
+            get
+            {
+                return _btn_Country ??
+                    (_btn_Country = new RelayCommand(obj =>
+                    {
+                        // событие для очистка фреймов из памяти в PageMainHead
+                        WorkingWithData.ClearMemoryAfterFrame();
+                        pageListCountry = new PageListCountry();
+                        MainFrame.NavigationService.Navigate(pageListCountry);
+                    }, (obj) => true));
+            }
+        }
+
+        // объект страницы для редактирования и добавления данных стран
+        PageWorkCountry pageWorkCountry;
+        // флаг, который нам сообщает, редактирует пользователь таблицу или добавлят новые данные
+        bool addOrEditCountry; // если true - значит добавлять, если false - значит редактировать
+
+        // запуск страницы добавления страны
+        private void LaunchPageAddCountry(object sender, EventAggregator e)
+        {
+            pageWorkCountry = new PageWorkCountry(); // экз страницы для добавления
+
+            MainFrame.NavigationService.Navigate(pageWorkCountry);
+            pageWorkCountry.RenameButtonBrand.Content = "Добавить"; // измененяем кнопку
+            // поднимаем флаг, что мы добавляем данные
+            addOrEditCountry = true;
+            // показываем, что было открыто основное меню перед его скрытием
+            typeMenu = true;
+            // скрываем шестерёнку и основное меню, чтобы нельзя было перемещаться между страницами
+            selectedMenu();
+        }
+
+        // запуск страницы редактирования страны
+        private void LaunchpageEditCountry(object sender, EventAggregator e)
+        {
+            pageWorkCountry = new PageWorkCountry(); // экз страницы для редактирования
+
+            MainFrame.NavigationService.Navigate(pageWorkCountry); // запуск страницы
+            pageWorkCountry.RenameButtonBrand.Content = "Редактировать"; // измененяем кнопку
+            // поднимаем флаг, что мы редактируем данные
+            addOrEditCountry = false;
+            // показываем, что было открыто основное меню перед его скрытием
+            typeMenu = true;
+            // скрываем шестерёнку и основное меню, чтобы нельзя было перемещаться между страницами
+            selectedMenu();
+
+            // получаем выбранный данные для редактирования
+            pageListCountry.EventDataSelectedUnitItem += (sender, args) =>
+            {
+                Country unit = (Country)args.Value; // получаем данные
+
+                // передаём данные в поля ввода
+                pageWorkCountry.DataReception(unit);
+            };
+            // вызываем событие для передачи данных
+            pageListCountry.TransmitData();
+        }
+
+        // редактируем или добавляем данные в таблицу
+        private void WorkDataCountry(object sender, EventAggregator e)
+        {
+            if (addOrEditCountry) // если добавляем данные в таблицу стран
+            {
+                // подключаем БД
+                using (SparePartsStoreContext sparePartsStoreContext = new SparePartsStoreContext())
+                {
+                    // создаём экз Unit для добавления данных
+                    Country сountry = new Country();
+                    pageWorkCountry.EventArgsCountry += (sender, args) =>
+                    {
+                        Country countries = (Country)args.Value;
+                        сountry.NameCountry = countries.NameCountry;
+                        sparePartsStoreContext.Add(сountry); // вносим данные в бд
+                        sparePartsStoreContext.SaveChanges(); // сохраняем бд
+                    };
+                    pageWorkCountry.Transmit(); // вызываем событие, чтобы полчить данные для записи в БД
+                }
+            }
+            else // если редактируем данные в таблице стран
+            {
+                // подключаем БД
+                using (SparePartsStoreContext sparePartsStoreContext = new SparePartsStoreContext())
+                {
+                    List<Country> countryList = sparePartsStoreContext.Countries.ToList();
+
+                    pageWorkCountry.EventArgsCountry += (sender, args) =>
+                    {
+                        Country countryInput = (Country)args.Value; // получаем отредактированные данные
+
+                        // получаем id объекта для редактирования
+                        // получаем объект из БД, чтобы внести в него изменения. Id берем из GetCountry
+                        Country сountry = countryList.FirstOrDefault(units => units.CountryId == countryInput.CountryId);
+                        if (сountry != null)
+                        {
+                            // обновляем список БД
+                            сountry.NameCountry = countryInput.NameCountry;
+                            sparePartsStoreContext.Update(сountry);
+                            sparePartsStoreContext.SaveChanges(); // сохраняем бд
+                        }
+                    };
+                    pageWorkCountry.Transmit(); // вызываем событие, чтобы полчить данные для записи в БД
+                }
+            }
+
+            // событие для очистка фреймов из памяти в PageMainHead
+            WorkingWithData.ClearMemoryAfterFrame();
+            pageListCountry = new PageListCountry(); // обновляем экз. класса
+            MainFrame.NavigationService.Navigate(pageListCountry);
+            selectedMenu(); // отображаем меню
+        }
+
+        // удаляем данные из таблицы
+        private void DeleteDataCountry(object sender, EventAggregator e)
+        {
+            // получаем выбранные данные для удаления
+            pageListCountry.EventDataSelectedUnitItem += (sender, args) =>
+            {
+                // подключаем БД
+                using (SparePartsStoreContext sparePartsStoreContext = new SparePartsStoreContext())
+                {
+                    List<Country> countries = sparePartsStoreContext.Countries.ToList(); // получаем список стран
+                    Country сountryInput = (Country)args.Value; // получаем выбранные данные для удаления
+                    // удаляем данные из БД
+                    Country countryDelete = countries.FirstOrDefault(unit => unit.CountryId == сountryInput.CountryId);
+                    if (countryDelete != null)
+                    {
+                        sparePartsStoreContext.Countries.Remove(countryDelete); // удаляем объект
+                        sparePartsStoreContext.SaveChanges(); // сохраняем бд
+
+                        // обновляем список
+                        pageListCountry.UpTable();
+                    }
+                }
+            };
+            // вызываем событие для передачи данных
+            pageListCountry.TransmitData();
         }
 
         #endregion

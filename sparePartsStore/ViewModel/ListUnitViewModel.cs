@@ -26,7 +26,7 @@ namespace sparePartsStore.ViewModel
             ListUnit = LoadUnit();
         }
 
-        // выбранные данныиз таблицы
+        // выбранные данные таблицы
         private Unit _selectedUnit { get; set; }
         public Unit SelectedUnit
         {
