@@ -11,7 +11,7 @@ public partial class Account
 
     public string AccountPassword { get; set; } = null!;
 
-    public int AccountRoleId { get; set; }
+    public string AccountRoleName { get; set; } = null!;
 
     public int NameOrganization { get; set; }
 
@@ -22,8 +22,6 @@ public partial class Account
     public string? Ogrnip { get; set; }
 
     public string? Kpp { get; set; }
-
-    public virtual AccountRole AccountRole { get; set; } = null!;
 
     public virtual ICollection<Autopart> Autoparts { get; set; } = new List<Autopart>();
 }

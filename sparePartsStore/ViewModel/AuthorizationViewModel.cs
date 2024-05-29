@@ -11,6 +11,8 @@ using System.Windows.Controls;
 using System.Windows.Media.Animation;
 using System.Windows;
 using Microsoft.IdentityModel.Tokens;
+using sparePartsStore.Model;
+using sparePartsStore.Helper.Authorization;
 
 namespace sparePartsStore.ViewModel
 {
@@ -123,6 +125,33 @@ namespace sparePartsStore.ViewModel
                             String? inputLogin = InputLogin.Trim(); // логин пользователя
                             String? inputPassword = InputPassword.Trim(); // пароль пользователя   
 
+                            // подключаем БД
+                            using(SparePartsStoreContext dataContext = new SparePartsStoreContext())
+                            {
+                                List<Account> accounts = dataContext.Accounts.ToList();
+
+                                // находим логин в БД, совпадающий с веденным пользователем (Идентификация)
+                                Account account = accounts.FirstOrDefault(a => a.AccountLogin == inputLogin);
+                                // если данные нашли
+                                if (account != null)
+                                {
+                                    // проверяем введенный пароль (Аутентификация)
+                                    bool passwordCheck = PasswordHasher.VerifyPassword(InputPassword, account.AccountPassword);
+
+                                    // если пароль совпал
+                                    if(passwordCheck)
+                                    {
+                                        MessageBox.Show("Добро пожаловать: " + account.NameOrganization);
+                                        // передаём в JSON состояние, что мы вошли в аккаунт
+                                        AuthorizationEntrance authorizationEntrance = new AuthorizationEntrance(); // класс авторизации
+                                        authorizationEntrance.Entrance = true; // пользователь вошёл в аккаунт
+                                        authorizationEntrance.UserId = account.AccountId;
+                                        authorizationEntrance.UserRole = account.AccountRoleName;
+
+
+                                    }
+                                }
+                            }
 
                         }
                         else // если какое либо поле пустое

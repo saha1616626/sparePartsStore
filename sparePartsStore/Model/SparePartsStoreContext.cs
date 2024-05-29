@@ -17,8 +17,6 @@ public partial class SparePartsStoreContext : DbContext
 
     public virtual DbSet<Account> Accounts { get; set; }
 
-    public virtual DbSet<AccountRole> AccountRoles { get; set; }
-
     public virtual DbSet<Autopart> Autoparts { get; set; }
 
     public virtual DbSet<CarBrand> CarBrands { get; set; }
@@ -54,7 +52,7 @@ public partial class SparePartsStoreContext : DbContext
             entity.Property(e => e.AccountPassword)
                 .HasMaxLength(150)
                 .HasColumnName("accountPassword");
-            entity.Property(e => e.AccountRoleId).HasColumnName("accountRoleId");
+            entity.Property(e => e.AccountRoleName).HasMaxLength(50).HasColumnName("accountRoleName");
             entity.Property(e => e.Inn)
                 .HasMaxLength(12)
                 .HasColumnName("INN");
@@ -68,23 +66,8 @@ public partial class SparePartsStoreContext : DbContext
             entity.Property(e => e.Ogrnip)
                 .HasMaxLength(15)
                 .HasColumnName("OGRNIP");
-
-            entity.HasOne(d => d.AccountRole).WithMany(p => p.Accounts)
-                .HasForeignKey(d => d.AccountRoleId)
-                .HasConstraintName("fk_accountRoleId_account");
         });
 
-        modelBuilder.Entity<AccountRole>(entity =>
-        {
-            entity.HasKey(e => e.AccountRoleId).HasName("PK__accountR__8564E1000DBF556C");
-
-            entity.ToTable("accountRole");
-
-            entity.Property(e => e.AccountRoleId).HasColumnName("accountRoleId");
-            entity.Property(e => e.AccountNameRole)
-                .HasMaxLength(50)
-                .HasColumnName("accountNameRole");
-        });
 
         modelBuilder.Entity<Autopart>(entity =>
         {
