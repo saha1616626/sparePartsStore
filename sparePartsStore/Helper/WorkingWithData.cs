@@ -174,6 +174,39 @@ namespace sparePartsStore.Helper
 
         #endregion
 
+        // Производитель
+        #region Manufacture
+
+        // Событие запуска страницы добавления прозиводителя из MainHeadViewModel
+        public static event EventHandler<EventAggregator> launchPageAddManufacture; // подписываемся в MainHeadViewModel
+        public static void LaunchPageAddManufacture() // вызываем в PageListManufacture
+        {
+            launchPageAddManufacture?.Invoke(null, new EventAggregator());
+        }
+
+        // событие запуска страницы редактирования прозиводителя из MainHeadViewModel
+        public static event EventHandler<EventAggregator> launchPageEditManufacture; // подписываемся в MainHeadViewModel
+        public static void LaunchPageEditManufacture() // вызываем в PageListManufacture
+        {
+            launchPageEditManufacture?.Invoke(null, new EventAggregator());
+        }
+
+        // событие изменение БД после добавления или редактирования производителя
+        public static event EventHandler<EventAggregator> saveDataCreateOrEditManufacture; // подписываемся в MainHeadViewModel
+        public static void SaveDataCreateOrEditManufacture() // вызываем в PageWorkManufacture
+        {
+            saveDataCreateOrEditManufacture?.Invoke(null, new EventAggregator());
+        }
+
+        // событие на удаление производителя
+        public static event EventHandler<EventAggregator> saveDataDeleteManufacture; // подписываемся в MainHeadViewModel
+        public static void SaveDataDeleteManufacture() // вызываем в PageListCountry
+        {
+            saveDataDeleteManufacture?.Invoke(null, new EventAggregator());
+        }
+
+        #endregion
+
         // общие события
         #region GeneralEvent
 

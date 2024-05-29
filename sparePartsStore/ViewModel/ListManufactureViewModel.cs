@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace sparePartsStore.ViewModel
 {
@@ -145,10 +146,26 @@ namespace sparePartsStore.ViewModel
         {
             bool noCoincidence = true; // по умолчанию нет совпадения
 
+            // один производитель может иметь фабрики в разных странах
+            Country countryNew = new Country();
+            countryNew.CountryId = SelectedCountry.CountryId; // получаем ID старны, которую выбрал пользователь
+
+            // проводим проверку на уникальность производителя в выбранной стране.
             using (SparePartsStoreContext context = new SparePartsStoreContext())
             {
-                List<Manufacture> country = context.Manufactures.ToList(); // получаем список агрегатов
-                noCoincidence = !country.Any(num => num.NameManufacture.ToLower().Contains(NameManufactureInput.Text.ToLower()));
+                List<Manufacture> manufacture = context.Manufactures.ToList(); // получаем список производителей авто
+                List<Manufacture> newManufacture = new List<Manufacture>();
+
+                if (manufacture != null)
+                {
+                    newManufacture = manufacture.Where(k => k.CountryId == countryNew.CountryId).ToList(); // получаем список производителей по выбранной стране в ComBox
+                }
+
+                // проверка наличия производителя в определенной стране
+                if (newManufacture != null)
+                {
+                    noCoincidence = !newManufacture.Any(num => num.NameManufacture.ToLower().Contains(NameManufactureInput.Text.ToLower()));
+                } 
             }
 
             return noCoincidence;
@@ -159,19 +176,32 @@ namespace sparePartsStore.ViewModel
         {
             bool noCoincidence = false; // по умолчанию совпадение не найдено
 
+            // один производитель может иметь фабрики в разных странах
+            Country countryNew = new Country();
+            countryNew.CountryId = SelectedCountry.CountryId; // получаем ID старны, которую выбрал пользователь
+
             using (SparePartsStoreContext context = new SparePartsStoreContext())
             {
                 List<Manufacture> manufacturies = context.Manufactures.ToList(); // получаем список производителей
-                foreach (Manufacture c in manufacturies)
+                List<Manufacture> newManufacture = new List<Manufacture>();
+                if (manufacturies != null)
                 {
-                    if (c.ManufactureId == manufactureDPO.ManufactureId) // если находим данные в списке БД, которые в текущий момент редактируем, то пропускаем
-                    {
-                        continue;
-                    }
+                    newManufacture = manufacturies.Where(k => k.CountryId == countryNew.CountryId).ToList(); // получаем список производителей по выбранной стране в ComBox
+                }
 
-                    if (c.NameManufacture.ToLower().Trim() == NameManufactureInput.Text.ToLower().Trim()) // если нашли совпадение в таблице
+                if (newManufacture != null)
+                {
+                    foreach (Manufacture c in manufacturies)
                     {
-                        noCoincidence = true;
+                        if (c.ManufactureId == manufactureDPO.ManufactureId) // если находим данные в списке БД, которые в текущий момент редактируем, то пропускаем
+                        {
+                            continue;
+                        }
+
+                        if (c.NameManufacture.ToLower().Trim() == NameManufactureInput.Text.ToLower().Trim()) // если нашли совпадение в таблице
+                        {
+                            noCoincidence = true;
+                        }
                     }
                 }
             }

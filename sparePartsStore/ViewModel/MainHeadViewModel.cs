@@ -144,6 +144,16 @@ namespace sparePartsStore.ViewModel
             WorkingWithData.saveDataCreateOrEditCountry += WorkDataCountry;
             // подписываемся на событие удаления данных страны
             WorkingWithData.saveDataDeleteCountry += DeleteDataCountry;
+
+
+            // подписываемся на событие запуска страницы добавления производителя
+            WorkingWithData.launchPageAddManufacture += LaunchPageAddManufacture;
+            // подписываемся на событие запуска страницы редактирования производителя
+            WorkingWithData.launchPageEditManufacture += LaunchPageEditManufacture;
+            // подписываемся на событие сохранения данных производителя после редактирования или добваления
+            WorkingWithData.saveDataCreateOrEditManufacture += WorkDataManufacture;
+            // подписываемся на событие удаления данных производителя
+            WorkingWithData.saveDataDeleteManufacture += DeleteDataManufacture;
         }
 
         // запуск страницы - поиск запчастей
@@ -953,6 +963,165 @@ namespace sparePartsStore.ViewModel
             };
             // вызываем событие для передачи данных
             pageListCountry.TransmitData();
+        }
+
+        #endregion
+
+        // страница - производителей
+        #region Manufacture
+
+        PageListManufacture pageListManufacture; // объект класса отображения списка произоводителей
+        private RelayCommand _btn_Manufacture { get; set; }
+        public RelayCommand Btn_Manufacture
+        {
+            get
+            {
+                return _btn_Manufacture ??
+                    (_btn_Manufacture = new RelayCommand(obj =>
+                    {
+                        // событие для очистка фреймов из памяти в PageMainHead
+                        WorkingWithData.ClearMemoryAfterFrame();
+                        pageListManufacture = new PageListManufacture();
+                        MainFrame.NavigationService.Navigate(pageListManufacture);
+                    }, (obj) => true));
+            }
+        }
+
+        // объект страницы для редактирования и добавления данных производителей
+        PageWorkListManufacture pageWorkListManufacture;
+        // флаг, который нам сообщает, редактирует пользователь таблицу или добавлят новые данные
+        bool addOrEditManufacture; // если true - значит добавлять, если false - значит редактировать
+
+        // запуск страницы добавления производителя
+        private void LaunchPageAddManufacture(object sender, EventAggregator e)
+        {
+            pageWorkListManufacture = new PageWorkListManufacture(); // экз страницы для добавления
+
+            MainFrame.NavigationService.Navigate(pageWorkListManufacture);
+            pageWorkListManufacture.RenameButtonManufacture.Content = "Добавить"; // измененяем кнопку
+            // поднимаем флаг, что мы добавляем данные
+            addOrEditManufacture = true;
+            // показываем, что было открыто основное меню перед его скрытием
+            typeMenu = true;
+            // скрываем шестерёнку и основное меню, чтобы нельзя было перемещаться между страницами
+            selectedMenu();
+            // добавлем данные в ComBox
+            pageWorkListManufacture.DataReceptionAdd();
+        }
+
+        // запуск страницы редактирования производителя
+        private void LaunchPageEditManufacture(object sender, EventAggregator e)
+        {
+            pageWorkListManufacture = new PageWorkListManufacture(); // экз страницы для редактирования
+
+            MainFrame.NavigationService.Navigate(pageWorkListManufacture); // запуск страницы
+            pageWorkListManufacture.RenameButtonManufacture.Content = "Редактировать"; // измененяем кнопку
+            // поднимаем флаг, что мы редактируем данные
+            addOrEditManufacture = false;
+            // показываем, что было открыто основное меню перед его скрытием
+            typeMenu = true;
+            // скрываем шестерёнку и основное меню, чтобы нельзя было перемещаться между страницами
+            selectedMenu();
+
+            // получаем выбранный данные для редактирования
+            pageListManufacture.EventDataSelectedManufactureItem += (sender, args) =>
+            {
+                ManufactureDPO manufactureDPO = (ManufactureDPO)args.Value; // получаем выбранные данные
+
+                // передаём данные для редактирования (отображаем)
+                pageWorkListManufacture.DataReception(manufactureDPO);
+            };
+            // вызываем событие для передачи данных
+            pageListManufacture.TransmitData();
+        }
+
+        // редактируем или добавляем данные в таблицу
+        private void WorkDataManufacture(object sender, EventAggregator e)
+        {
+            if (addOrEditManufacture) // если добавляем данные
+            {
+                // подключаем БД
+                using (SparePartsStoreContext sparePartsStoreContext = new SparePartsStoreContext())
+                {
+                    List<Manufacture> manufacturies = sparePartsStoreContext.Manufactures.ToList(); // получаем список узлов авто
+
+                    // создаём экз для добавления данных
+                    Manufacture manufacture = new Manufacture();
+                    pageWorkListManufacture.EventArgsManufacture += (sender, args) =>
+                    {
+                        ManufactureDPO manufactureDPO = (ManufactureDPO)args.Value;
+                        // преобразовываем KnotDPO в Knot
+                        Manufacture manuf = manufacture.CopyFromCountryDPO(manufactureDPO);
+
+                        // переносим данные
+                        manufacture.NameManufacture = manuf.NameManufacture;
+                        manufacture.CountryId = manuf.CountryId;
+
+                        sparePartsStoreContext.Add(manufacture); // вносим данные в бд
+                        sparePartsStoreContext.SaveChanges(); // сохраняем бд
+                    };
+                    pageWorkListManufacture.Transmit();
+                }
+            }
+            else // если редактируем данные
+            {
+                // подключаем БД
+                using (SparePartsStoreContext sparePartsStoreContext = new SparePartsStoreContext())
+                {
+                    List<Manufacture> manufacturies = sparePartsStoreContext.Manufactures.ToList(); // получаем список узлов авто
+
+                    pageWorkListManufacture.EventArgsManufacture += (sender, args) =>
+                    {
+                        ManufactureDPO manufactureDPO = (ManufactureDPO)args.Value;
+
+                        // получаем объект из БД, чтобы внести в него изменения. Id берем из getKnotDPOs
+                        Manufacture manufacture = manufacturies.FirstOrDefault(knot => knot.ManufactureId == manufactureDPO.ManufactureId);
+                        if (manufacture != null)
+                        {
+                            // обновляем БД
+                            Manufacture manufactureUp = new Manufacture();
+                            manufactureUp = manufactureUp.CopyFromCountryDPO(manufactureDPO);
+                            manufacture.NameManufacture = manufactureUp.NameManufacture;
+                            manufacture.CountryId = manufactureUp.CountryId;
+                            sparePartsStoreContext.Update(manufacture);// вносим данные в бд
+                            sparePartsStoreContext.SaveChanges(); // сохраняем бд
+                        }
+                    };
+                    pageWorkListManufacture.Transmit(); // вызываем событие, чтобы полчить данные для изменения в БД
+                }
+            }
+
+            WorkingWithData.ClearMemoryAfterFrame();
+            pageListManufacture = new PageListManufacture(); // обновляем экз. класса
+            MainFrame.NavigationService.Navigate(pageListManufacture);
+            selectedMenu(); // отображаем меню
+        }
+
+        // удаляем данные из таблицы
+        private void DeleteDataManufacture(object sender, EventAggregator e)
+        {
+            // получаем данные для удаления
+            pageListManufacture.EventDataSelectedManufactureItem += (sender, args) =>
+            {
+                // подключаем БД
+                using (SparePartsStoreContext sparePartsStoreContext = new SparePartsStoreContext())
+                {
+                    List<Manufacture> manufacturies = sparePartsStoreContext.Manufactures.ToList(); // получаем список из БД
+                    ManufactureDPO manufactureDPO = (ManufactureDPO)args.Value; // получили выбранные данные из таблицы
+                    // находим в списке БД элемент для удаления
+                    Manufacture manufacture = manufacturies.FirstOrDefault(carModel => carModel.ManufactureId == manufactureDPO.ManufactureId);
+                    if (manufacture != null)
+                    {
+                        sparePartsStoreContext.Manufactures.Remove(manufacture);
+                        sparePartsStoreContext.SaveChanges(); // сохраняем бд
+
+                        // обновляем список
+                        pageListManufacture.UpTable();
+                    }
+                }
+            };
+            // вызываем событие для передачи данных
+            pageListManufacture.TransmitData();
         }
 
         #endregion

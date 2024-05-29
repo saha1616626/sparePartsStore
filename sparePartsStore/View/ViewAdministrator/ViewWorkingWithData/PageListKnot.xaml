@@ -57,15 +57,25 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Row="0" Grid.Column="0" Content="Добавить" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" Click="Btn_AddKnot"/>
-                <Button Grid.Row="0" Grid.Column="1" Content="Редктировать" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0" Command="{Binding EditKnot}" Click="Btn_EditKnot" IsEnabled="{Binding IsWorkButtonEnable}"/>
-                <Button Grid.Row="0" Grid.Column="2" Content="Удалить" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0" Command="{Binding DeleteKnot}" Click="Btn_OpenPopup" IsEnabled="{Binding IsWorkButtonEnable}"/>
+                <Button Grid.Row="0" Grid.Column="0" Content="Добавить" MinWidth="100" 
+                        Height="35" Background="Gray" BorderBrush="Black" Click="Btn_AddKnot"/>
+                
+                <Button Grid.Row="0" Grid.Column="1" Content="Редктировать" MinWidth="100" 
+                        Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0" 
+                        Command="{Binding EditKnot}" Click="Btn_EditKnot" 
+                        IsEnabled="{Binding IsWorkButtonEnable}"/>
+                
+                <Button Grid.Row="0" Grid.Column="2" Content="Удалить" MinWidth="100" 
+                        Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0" 
+                        Command="{Binding DeleteKnot}" Click="Btn_OpenPopup" 
+                        IsEnabled="{Binding IsWorkButtonEnable}"/>
 
             </Grid>
 
             <!--поле для поиска-->
             <Grid Grid.Row="0" Grid.Column="1">
-                <TextBox Grid.Row="1" Grid.ColumnSpan="3" x:Name="SearchParts" Height="50" Margin="0,0,0,0"
+                <TextBox Grid.Row="1" Grid.ColumnSpan="3" x:Name="SearchParts" Height="50" 
+                        Margin="0,0,0,0"
                         VerticalAlignment="Center"  HorizontalAlignment="Right"
                         Text="{Binding NameKnot, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         TextChanged="TextBoxNameKnot"

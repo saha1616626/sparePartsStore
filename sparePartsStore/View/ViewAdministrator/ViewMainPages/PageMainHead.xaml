@@ -115,9 +115,9 @@
                 <Button Content="Модель" Grid.Column="2" Style="{StaticResource BtnMenuHead}" Click="Btn_carModel" Command="{Binding Btn_carModel, Source={StaticResource MainHeadViewModel}}"/>
                 <Button Content="Агрегат" Grid.Column="3" Style="{StaticResource BtnMenuHead}" Click="Btn_Unit" Command="{Binding Btn_unit, Source={StaticResource MainHeadViewModel}}"/>
                 <Button Content="Узел" Grid.Column="4" Style="{StaticResource BtnMenuHead}" Click="Btn_Knot" Command="{Binding Btn_Knot, Source={StaticResource MainHeadViewModel}}"/>
-                <Button Content="Запчасть" Grid.Column="5" Style="{StaticResource BtnMenuHead}" Click="Btn_Details"/>
+                <Button Content="Запчасть" Grid.Column="5" Style="{StaticResource BtnMenuHead}" Click="Btn_Details" />
                 <Button Content="Страна" Grid.Column="6" Style="{StaticResource BtnMenuHead}" Click="Btn_Country" Command="{Binding Btn_Country, Source={StaticResource MainHeadViewModel}}"/>
-                <Button Content="Производитель" Grid.Column="7" Style="{StaticResource BtnMenuHead}" Click="Btn_Manufacture"/>
+                <Button Content="Производитель" Grid.Column="7" Style="{StaticResource BtnMenuHead}" Click="Btn_Manufacture" Command="{Binding Btn_Manufacture, Source={StaticResource MainHeadViewModel}}"/>
             </Grid>
 
             <!--меню настроек-->
