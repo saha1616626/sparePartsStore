@@ -225,6 +225,13 @@ namespace sparePartsStore.Helper
             clearMemoryAfterFrame?.Invoke(null, new EventAggregator());
         }
 
+        // передача из ViewAuthorization объектов текстового поля
+        public static event EventHandler<EventAggregator> updatePropertyViewAuthorization; // подписываемся в ViewAuthorizationViewAuthorization
+        public static void UpdatePropertyViewAuthorization() // вызываем в AuthorizationViewModel
+        {
+            updatePropertyViewAuthorization?.Invoke(null, new EventAggregator());
+        }
+
         // событие на 
 
         #endregion        

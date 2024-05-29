@@ -1,4 +1,5 @@
 ﻿using sparePartsStore.Helper;
+using sparePartsStore.View;
 using sparePartsStore.View.ViewAdministrator.ViewMainPages;
 using sparePartsStore.View.ViewAdministrator.ViewWorking;
 using sparePartsStore.ViewModel;
@@ -27,8 +28,10 @@ namespace sparePartsStore
             // запуск страницы администратора
             PageMainHead pageMainHead = new PageMainHead();
 
+            ViewAuthorization viewAuthorization = new ViewAuthorization();
+
             NavigationManager.StartFrame = mainFrame;
-            mainFrame.Navigate(pageMainHead);
+            mainFrame.Navigate(viewAuthorization);
         }
     }
 }

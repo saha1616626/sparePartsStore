@@ -1,0 +1,71 @@
+﻿<Page x:Class="sparePartsStore.View.ViewAuthorization"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:sparePartsStore.View"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:ViewModel="clr-namespace:sparePartsStore.ViewModel"
+      mc:Ignorable="d"
+      Title="" MinHeight="700" Height="Auto" MinWidth="1200" Width="Auto">
+
+    <Page.Resources>
+        <ViewModel:AuthorizationViewModel x:Key="AuthorizationViewModel"/>
+
+        <!--анимация при некорректом вводе-->
+        <Storyboard x:Key="FocusAnimation">
+            <ColorAnimation Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
+            From="#de6d6d" To="Transparent" Duration="0:0:3" AutoReverse="False"/>
+        </Storyboard>
+        <!--переопределяем анимацию подсветки textBox при наведении-->
+        <Style x:Key="CustomFilledTextBox" BasedOn="{StaticResource MaterialDesignFilledTextBox}" TargetType="TextBox">
+            <Style.Triggers>
+                <Trigger Property="IsFocused" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard Storyboard="{StaticResource FocusAnimation}"/>
+                    </Trigger.EnterActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Page.Resources>
+    
+    <Grid Background="AliceBlue" DataContext="{StaticResource AuthorizationViewModel}">
+
+        <!--поле для вывода ошибок-->
+        <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" Text="{Binding ErrorInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                   Margin="0,50,220,0" x:Name="errorInput"  FontWeight="DemiBold" FontSize="24"/>
+
+        <Grid VerticalAlignment="Center" Margin="420,0,420,0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">
+                <TextBlock Text="Авторизация" FontSize="30" Foreground="Black" FontWeight="Bold"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical" Margin="0,20,0,0">
+
+                <!--поле для ввода Login-->
+                <TextBox x:Name="TbLogin" Height="50" VerticalAlignment="Center" 
+                         Text="{Binding InputLogin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                         materialDesign:HintAssist.Hint="Введите логин" 
+                         materialDesign:TextFieldAssist.CharacterCounterVisibility="Hidden"
+                         MaxLength="100" TextWrapping="Wrap" Width="300" Margin="0,50,0,0" />
+
+                <!--поле для ввода Password-->
+                <PasswordBox x:Name="TbPassword" Height="50" VerticalAlignment="Center" 
+                         materialDesign:HintAssist.Hint="Введите пароль"
+                         Style="{StaticResource MaterialDesignOutlinedRevealPasswordBox}" 
+                         PasswordChanged="PasswordBox_PasswordChanged"
+                         VerticalContentAlignment="Bottom" MaxLength="100"  
+                         Width="300" Margin="0,40,0,0" />
+
+                <!--авторизация или регистрация-->
+                <Button Content="Вход" x:Name="Entrance" Margin="0,45,0,19" 
+                        VerticalAlignment="Center" Command="{Binding Entrance}" 
+                        Width="280" Background="Gray" BorderBrush="Transparent"/>
+
+                </StackPanel>
+
+        </Grid>
+
+    </Grid>
+</Page>
