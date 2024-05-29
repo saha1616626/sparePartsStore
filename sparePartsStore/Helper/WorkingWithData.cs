@@ -232,7 +232,12 @@ namespace sparePartsStore.Helper
             updatePropertyViewAuthorization?.Invoke(null, new EventAggregator());
         }
 
-        // событие на 
+        // вход пользователя (авторизация)
+        public static event EventHandler<EventAggregator> userLogin; // подписываемся в MainWindow
+        public static void UserLogin() // вызываем в AuthorizationViewModel
+        {
+            userLogin?.Invoke(null, new EventAggregator());
+        }
 
         #endregion        
     }

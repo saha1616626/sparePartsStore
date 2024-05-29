@@ -13,9 +13,9 @@ public partial class Account
 
     public string AccountRoleName { get; set; } = null!;
 
-    public int NameOrganization { get; set; }
+    public string NameOrganization { get; set; } = null!;
 
-    public string Inn { get; set; } = null!;
+    public string? Inn { get; set; }
 
     public string? Ogrn { get; set; }
 

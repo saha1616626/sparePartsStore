@@ -52,9 +52,9 @@
                         </Grid.ColumnDefinitions>
                         
                         <!--название роли-->
-                        <TextBlock Grid.Column="0" Text="Администратор: " FontSize="24" VerticalAlignment="Center" FontWeight="Regular"/>
+                        <TextBlock Grid.Column="0" Text="Администратор" FontSize="24" VerticalAlignment="Center" FontWeight="Regular"/>
                         <!--названик компании или ИП-->
-                        <TextBlock Grid.Column="1" Text="ООО 'Рога и Копыта'" FontSize="24"  VerticalAlignment="Center" FontWeight="Regular" Margin="0,0,0,0"/>
+                        <TextBlock Grid.Column="1" Text="" FontSize="24"  VerticalAlignment="Center" FontWeight="Regular" Margin="0,0,0,0"/>
                     </Grid>
                     
                     <!--шестерёнка-->

@@ -47,7 +47,7 @@ public partial class SparePartsStoreContext : DbContext
 
             entity.Property(e => e.AccountId).HasColumnName("accountId");
             entity.Property(e => e.AccountLogin)
-                .HasMaxLength(150)
+                .HasMaxLength(300)
                 .HasColumnName("accountLogin");
             entity.Property(e => e.AccountPassword)
                 .HasMaxLength(150)
@@ -59,7 +59,7 @@ public partial class SparePartsStoreContext : DbContext
             entity.Property(e => e.Kpp)
                 .HasMaxLength(9)
                 .HasColumnName("KPP");
-            entity.Property(e => e.NameOrganization).HasColumnName("nameOrganization");
+            entity.Property(e => e.NameOrganization).HasMaxLength(50).HasColumnName("nameOrganization");
             entity.Property(e => e.Ogrn)
                 .HasMaxLength(13)
                 .HasColumnName("OGRN");

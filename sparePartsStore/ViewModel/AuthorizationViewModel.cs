@@ -10,19 +10,26 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
 using System.Windows;
+using Newtonsoft.Json;
 using Microsoft.IdentityModel.Tokens;
 using sparePartsStore.Model;
 using sparePartsStore.Helper.Authorization;
+using Microsoft.VisualBasic.ApplicationServices;
+using System.IO;
+using System.Data;
 
 namespace sparePartsStore.ViewModel
 {
     public class AuthorizationViewModel : INotifyPropertyChanged // для страницы авторизации
     {
+        // путь к json
+        readonly string path = @"E:\3comm\Documents\Предметы\Курс 3.2\Учебная практика\Приложение\sparePartsStore\sparePartsStore\Helper\Authorization\AuthorizationStatus.json";
+        public string Error { get; set; } // формирование сообщения при генирации ошибки 
+
         // конструктор
         public AuthorizationViewModel()
         {
-
-            
+    
         }
 
         // свойства страницы авторизации
@@ -148,8 +155,31 @@ namespace sparePartsStore.ViewModel
                                         authorizationEntrance.UserId = account.AccountId;
                                         authorizationEntrance.UserRole = account.AccountRoleName;
 
-
+                                        try
+                                        {
+                                            var jsonAuthorization = JsonConvert.SerializeObject(authorizationEntrance); //  перзапись данных в формате json
+                                            // записываем обновленные данные в JSON
+                                            File.WriteAllText(path, jsonAuthorization);
+                                            // события перхода на главную страницу авторизованного пользователя
+                                            WorkingWithData.UserLogin();
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Error = "Ошибка записи в json файла /n" + ex.Message;
+                                        }
                                     }
+                                    else
+                                    {
+                                        StartAnimation(textBoxPassword); // запуск анимации
+                                        textBoxError.Text = "Неверный пароль!";
+                                        BeginFadeAnimation(textBoxError);
+                                    }
+                                }
+                                else
+                                {
+                                    StartAnimation(textBoxLogin); // запуск анимации
+                                    textBoxError.Text = "Пользователь не найден!";
+                                    BeginFadeAnimation(textBoxError);
                                 }
                             }
 
@@ -183,6 +213,43 @@ namespace sparePartsStore.ViewModel
 
                     }, (obj) => true));
             }
+        }
+
+        // проверяем роль, под которой вошел польозватель
+        public string CheckingUserRole()
+        {
+            string role = string.Empty;
+
+            // чтение JSON
+            string JSON = File.ReadAllText(path);
+            // получаем данные из JSON
+            AuthorizationEntrance? account = JsonConvert.DeserializeObject<AuthorizationEntrance>(JSON);
+
+            if(account.UserRole != null)
+            {
+                role = account.UserRole;
+            }
+
+            return role;
+        }
+
+
+        // проверяем, авторизовался пользователь или нет
+        public bool IsCheckAccountUser()
+        {
+            bool IsCheck = false; // по умолчанию не авторизовался
+
+            // чтение JSON
+            string JSON = File.ReadAllText(path);
+            // получаем данные из JSON
+            AuthorizationEntrance? account = JsonConvert.DeserializeObject<AuthorizationEntrance>(JSON);
+
+            if (account.Entrance != null)
+            {
+                IsCheck = account.Entrance;
+            }
+
+            return IsCheck;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -1,4 +1,6 @@
-﻿using sparePartsStore.Helper;
+﻿using Microsoft.VisualBasic.Logging;
+using sparePartsStore.Helper;
+using sparePartsStore.Model;
 using sparePartsStore.View;
 using sparePartsStore.View.ViewAdministrator.ViewMainPages;
 using sparePartsStore.View.ViewAdministrator.ViewWorking;
@@ -21,17 +23,112 @@ namespace sparePartsStore
     /// </summary>
     public partial class MainWindow : Window
     {
+        // объекты нужных страниц
+        PageMainHead pageMainHead;
+        ViewAuthorization viewAuthorization;
+
+        // класс для работы с авторизацией пользователя
+        private AuthorizationViewModel authorizationViewModel;
+
         public MainWindow()
         {
             InitializeComponent();
 
-            // запуск страницы администратора
-            PageMainHead pageMainHead = new PageMainHead();
+            // подгружаем БД, чтобы не ждать запуска при переходе на страницу с БД
+            using (SparePartsStoreContext dataContext = new SparePartsStoreContext())
+            {
+                List<Account> accounts = dataContext.Accounts.ToList();
+            }
 
-            ViewAuthorization viewAuthorization = new ViewAuthorization();
+            // экз класса проверки авторизации
+            authorizationViewModel = new AuthorizationViewModel();
 
-            NavigationManager.StartFrame = mainFrame;
-            mainFrame.Navigate(viewAuthorization);
+            // проверяем, авторизовался пользователь или нет
+            bool loginCheck = authorizationViewModel.IsCheckAccountUser();
+
+            if(loginCheck) // если пользователь авторизован
+            {
+                // получаем роль пользователя
+                authorizationViewModel = new AuthorizationViewModel();
+
+                string role = authorizationViewModel.CheckingUserRole();
+
+                if (role != null)
+                {
+                    if (role == "Администратор")
+                    {
+                        ClearMemoryAfterFrame(); // очистка памяти (от фрейма)
+                                                 // запуск страницы администратора
+                        pageMainHead = new PageMainHead();
+                        mainFrame.Navigate(pageMainHead);
+                    }
+                    else if (role == "Постващик")
+                    {
+                        ClearMemoryAfterFrame(); // очистка памяти (от фрейма)
+                    }
+                    else if (role == "Продавец")
+                    {
+                        ClearMemoryAfterFrame(); // очистка памяти (от фрейма)
+                    }
+                }
+            }
+            else // если пользователь не авторизован
+            {
+                ClearMemoryAfterFrame(); // очистка памяти (от фрейма)
+                // запуск страницы авторизации
+                viewAuthorization = new ViewAuthorization();
+                mainFrame.NavigationService.Navigate(viewAuthorization);
+            }
+
+            // подписываемся на событие входа в аккаунт
+            WorkingWithData.userLogin += EntranceAccount;
         }
+
+        // вход на страницу
+        private void EntranceAccount(object sender, EventAggregator e)
+        {
+            // получаем роль пользователя
+            authorizationViewModel = new AuthorizationViewModel();
+
+            string role = authorizationViewModel.CheckingUserRole();
+
+            if (role != null)
+            {
+                if (role == "Администратор")
+                {
+                    ClearMemoryAfterFrame(); // очистка памяти (от фрейма)
+                    // запуск страницы администратора
+                    pageMainHead = new PageMainHead();
+                    mainFrame.Navigate(pageMainHead);
+                }
+                else if (role == "Постващик")
+                {
+                    ClearMemoryAfterFrame(); // очистка памяти (от фрейма)
+                }
+                else if (role == "Продавец")
+                {
+                    ClearMemoryAfterFrame(); // очистка памяти (от фрейма)
+                }
+            }
+        }
+
+        // очистка памяти
+        private void ClearMemoryAfterFrame()
+        {
+            // закрываем предыдущий фрейм
+            mainFrame.NavigationService?.RemoveBackEntry();
+            mainFrame.Content = null;
+
+            // очистка визуальных элементов
+            this.Resources.Clear();
+
+            // очистка всех привязанных элементов
+            BindingOperations.ClearAllBindings(this);
+
+            // сборка мусора и освобождение неиспользуемых ресурсов
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        }
+
     }
 }

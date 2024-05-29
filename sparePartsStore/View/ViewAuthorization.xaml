@@ -28,42 +28,53 @@
             </Style.Triggers>
         </Style>
     </Page.Resources>
-    
-    <Grid Background="AliceBlue" DataContext="{StaticResource AuthorizationViewModel}">
 
-        <!--поле для вывода ошибок-->
-        <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" Text="{Binding ErrorInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                   Margin="0,50,220,0" x:Name="errorInput"  FontWeight="DemiBold" FontSize="24"/>
+    <Grid Background="AliceBlue">
 
-        <Grid VerticalAlignment="Center" Margin="420,0,420,0">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">
-                <TextBlock Text="Авторизация" FontSize="30" Foreground="Black" FontWeight="Bold"/>
-            </StackPanel>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-            <StackPanel Orientation="Vertical" Margin="0,20,0,0">
+        <TextBlock Grid.Row="0" Text="Автозапчасти" FontSize="30" Foreground="Black" FontWeight="Bold" HorizontalAlignment="Left" Margin="50,30,0,0" VerticalAlignment="Center"/>
 
-                <!--поле для ввода Login-->
-                <TextBox x:Name="TbLogin" Height="50" VerticalAlignment="Center" 
-                         Text="{Binding InputLogin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         Style="{StaticResource MaterialDesignOutlinedTextBox}" 
-                         materialDesign:HintAssist.Hint="Введите логин" 
-                         materialDesign:TextFieldAssist.CharacterCounterVisibility="Hidden"
-                         MaxLength="100" TextWrapping="Wrap" Width="300" Margin="0,50,0,0" />
+        <Grid Grid.Row="1"  DataContext="{StaticResource AuthorizationViewModel}" Margin="0,-40,0,0">
 
-                <!--поле для ввода Password-->
-                <PasswordBox x:Name="TbPassword" Height="50" VerticalAlignment="Center" 
-                         materialDesign:HintAssist.Hint="Введите пароль"
-                         Style="{StaticResource MaterialDesignOutlinedRevealPasswordBox}" 
-                         PasswordChanged="PasswordBox_PasswordChanged"
-                         VerticalContentAlignment="Bottom" MaxLength="100"  
-                         Width="300" Margin="0,40,0,0" />
+            <!--поле для вывода ошибок-->
+            <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" Text="{Binding ErrorInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                       Margin="0,50,220,0" x:Name="errorInput"  FontWeight="DemiBold" FontSize="24"/>
 
-                <!--авторизация или регистрация-->
-                <Button Content="Вход" x:Name="Entrance" Margin="0,45,0,19" 
-                        VerticalAlignment="Center" Command="{Binding Entrance}" 
-                        Width="280" Background="Gray" BorderBrush="Transparent"/>
-
+            <Grid VerticalAlignment="Center" Margin="420,0,420,0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">
+                    <TextBlock Text="Авторизация" FontSize="30" Foreground="Black" FontWeight="Bold"/>
                 </StackPanel>
+
+                <StackPanel Orientation="Vertical" Margin="0,20,0,0">
+
+                    <!--поле для ввода Login-->
+                    <TextBox x:Name="TbLogin" Height="50" VerticalAlignment="Center" 
+                             Text="{Binding InputLogin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                             materialDesign:HintAssist.Hint="Введите логин" 
+                             materialDesign:TextFieldAssist.CharacterCounterVisibility="Hidden"
+                             MaxLength="100" TextWrapping="Wrap" Width="300" Margin="0,50,0,0" />
+
+                    <!--поле для ввода Password-->
+                    <PasswordBox x:Name="TbPassword" Height="50" VerticalAlignment="Center" 
+                             materialDesign:HintAssist.Hint="Введите пароль"
+                             Style="{StaticResource MaterialDesignOutlinedRevealPasswordBox}" 
+                             PasswordChanged="PasswordBox_PasswordChanged"
+                             VerticalContentAlignment="Bottom" MaxLength="100"  
+                             Width="300" Margin="0,40,0,0" />
+
+                    <!--авторизация или регистрация-->
+                    <Button Content="Вход" x:Name="Entrance" Margin="0,45,0,19" 
+                            VerticalAlignment="Center" Command="{Binding Entrance}" 
+                            Width="280" Background="Gray" BorderBrush="Transparent"/>
+
+                    </StackPanel>
+
+            </Grid>
 
         </Grid>
 
