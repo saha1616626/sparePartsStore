@@ -66,7 +66,7 @@ namespace sparePartsStore
                     {
                         ClearMemoryAfterFrame(); // очистка памяти (от фрейма)
                     }
-                    else if (role == "Продавец")
+                    else if (role == "Магазин")
                     {
                         ClearMemoryAfterFrame(); // очистка памяти (от фрейма)
                     }

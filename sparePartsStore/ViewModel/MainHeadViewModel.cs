@@ -1,5 +1,6 @@
 ﻿using MaterialDesignThemes.Wpf;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using sparePartsStore.Helper;
 using sparePartsStore.Model;
 using sparePartsStore.Model.DPO;
@@ -36,6 +37,8 @@ namespace sparePartsStore.ViewModel
                 OnPropertyChanged(nameof(MainFrame));
             }
         }
+
+        AuthorizationViewModel authorizationViewModel = new AuthorizationViewModel(); // работа с авторизацией
 
         // переменная, которая хранит состояние меню. true - значит было открыто основное меню. false - значит настройка пользователей.
         private bool typeMenu = true; // по умолчанию было открыто основное меню
@@ -154,6 +157,16 @@ namespace sparePartsStore.ViewModel
             WorkingWithData.saveDataCreateOrEditManufacture += WorkDataManufacture;
             // подписываемся на событие удаления данных производителя
             WorkingWithData.saveDataDeleteManufacture += DeleteDataManufacture;
+
+
+            // подписываемся на событие запуска страницы добавления запчасти
+            WorkingWithData.launchPageAddAutoparts += LaunchPageAddAutoparts;
+            // подписываемся на событие запуска страницы редактирования запчасти
+            WorkingWithData.launchPageEditAutoparts += LaunchPageEditAutoparts;
+            // подписываемся на событие сохранения данных запчасти после редактирования или добваления
+            WorkingWithData.saveDataCreateOrEditAutoparts += WorkDataAutoparts;
+            // подписываемся на событие удаления данных запчасти
+            WorkingWithData.saveDataDeleteAutoparts += DeleteDataAutoparts;
         }
 
         // запуск страницы - поиск запчастей
@@ -1122,6 +1135,202 @@ namespace sparePartsStore.ViewModel
             };
             // вызываем событие для передачи данных
             pageListManufacture.TransmitData();
+        }
+
+        #endregion
+
+        // страна - запчасти
+        #region
+
+        // кнопка запуска страницы - марки авто
+        PageListAutoparts pageListAutoparts; // объект класса отображения списка запчастей
+        private RelayCommand _btn_Details { get; set; }
+        public RelayCommand Btn_Details
+        {
+            get
+            {
+                return _btn_Details ??
+                    (_btn_Details = new RelayCommand(obj =>
+                    {
+                        // событие для очистка фреймов из памяти в PageMainHead
+                        WorkingWithData.ClearMemoryAfterFrame();
+                        pageListAutoparts = new PageListAutoparts();
+                        MainFrame.NavigationService.Navigate(pageListAutoparts);
+                    }, (obj) => true));
+            }
+        }
+
+        // объект страницы для редактирования и добавления данных запчасти
+        PageWorkDetail pageWorkDetail;
+        // флаг, который нам сообщает, редактирует пользователь таблицу или добавлят новые данные
+        bool addOrEditAutoparts; // если true - значит добавлять, если false - значит редактировать
+        
+        // запуск страницы добавления запчасти
+        private void LaunchPageAddAutoparts(object sender, EventAggregator e)
+        {
+            pageWorkDetail = new PageWorkDetail(); // экз страницы для добавления
+
+            MainFrame.NavigationService.Navigate(pageWorkDetail);
+            pageWorkDetail.RenameButtonAutopart.Content = "Добавить"; // измененяем кнопку
+            // поднимаем флаг, что мы добавляем данные
+            addOrEditAutoparts = true;
+            // показываем, что было открыто основное меню перед его скрытием
+            typeMenu = true;
+            // скрываем шестерёнку и основное меню, чтобы нельзя было перемещаться между страницами
+            selectedMenu();
+            // добавлем данные в ComBox
+            pageWorkDetail.DataReceptionAdd();
+        }
+
+        // запуск страницы редактирования запчасти
+        private void LaunchPageEditAutoparts(object sender, EventAggregator e)
+        {
+            pageWorkDetail = new PageWorkDetail(); // экз страницы для редактирования
+
+            MainFrame.NavigationService.Navigate(pageWorkDetail); // запуск страницы
+            pageWorkDetail.RenameButtonAutopart.Content = "Редактировать"; // измененяем кнопку
+            // поднимаем флаг, что мы редактируем данные
+            addOrEditAutoparts = false;
+            // показываем, что было открыто основное меню перед его скрытием
+            typeMenu = true;
+            // скрываем шестерёнку и основное меню, чтобы нельзя было перемещаться между страницами
+            selectedMenu();
+
+            // получаем выбранный данные для редактирования
+            pageWorkDetail.EventArgsAutopart += (sender, args) =>
+            {
+                AutopartDPO autopartDPO = (AutopartDPO)args.Value; // получаем выбранные данные
+
+                // передаём данные для редактирования (отображаем)
+                pageWorkDetail.DataReception(autopartDPO);
+            };
+            // вызываем событие для передачи данных
+            pageWorkDetail.Transmit();
+        }
+
+        // редактируем или добавляем данные в таблицу
+        private void WorkDataAutoparts(object sender, EventAggregator e)
+        {
+            if (addOrEditAutoparts) // если добавляем данные
+            {
+                // подключаем БД
+                using (SparePartsStoreContext sparePartsStoreContext = new SparePartsStoreContext())
+                {
+                    List<Autopart> autoparts = sparePartsStoreContext.Autoparts.ToList(); // получаем список запчастей
+
+                    // создаём экз для добавления данных
+                    Autopart autopart = new Autopart();
+                    pageWorkDetail.EventArgsAutopart += (sender, args) =>
+                    {
+                        AutopartDPO autopartDPO = (AutopartDPO)args.Value;
+                        // преобразовываем AutopartDPO в Autopart
+                        Autopart autopartCopy = autopart.CopyFromAutopartDPO(autopartDPO);
+
+                        // переносим данные
+                        autopart.NameAutopart = autopartCopy.NameAutopart;
+
+                        // находим макисимальный номер запчасти и на основе него создаём новый номер + 1
+                        int NumberAutopart = autoparts.Max(a => a.NumberAutopart);
+                        if(NumberAutopart == null || NumberAutopart == 0)
+                        {
+                            NumberAutopart = 8000000;
+                        }
+                        else
+                        {
+                            NumberAutopart++;
+                        }
+
+                        autopart.NumberAutopart = NumberAutopart;
+                        autopart.KnotId = autopartCopy.KnotId;
+                        autopart.CarModelId = autopartCopy.CarModelId;
+                        autopart.ManufactureId = autopartCopy.ManufactureId;
+                        autopart.PriceSale = autopartCopy.PriceSale;
+                        autopart.AvailableityStock = autopartCopy.AvailableityStock;
+                        autopart.AccountId = autopartCopy.AccountId;
+
+                        // проверяем под какой ролью вошёл пользователь, если поставщик, то статус заказа автоматически в обработке, а если администратор, то на его усмотрение
+                        string role = authorizationViewModel.CheckingUserRole();
+                        if(role == "Администратор")
+                        {
+                            autopart.ModerationStatus = autopartCopy.ModerationStatus;
+                        }
+                        else
+                        {
+                            autopart.ModerationStatus = "В обработке";
+                        }
+
+                        sparePartsStoreContext.Add(autopart); // вносим данные в бд
+                        sparePartsStoreContext.SaveChanges(); // сохраняем бд
+                    };
+                    pageWorkDetail.Transmit();
+                }
+            }
+            else // если редактируем данные
+            {
+                using (SparePartsStoreContext sparePartsStoreContext = new SparePartsStoreContext())
+                {
+                    List<Autopart> autoparts = sparePartsStoreContext.Autoparts.ToList(); // получаем список запчастей
+
+                    pageWorkDetail.EventArgsAutopart += (sender, args) =>
+                    {
+                        AutopartDPO autopartDPO = (AutopartDPO)args.Value;
+                        // получаем объект из БД, чтобы внести в него изменения.
+                        Autopart autopart = autoparts.FirstOrDefault(knot => knot.AutopartId == autopartDPO.AutopartId);
+                        if(autopart != null)
+                        {
+                            // обновляем БД
+                            Autopart autopartUP = new Autopart();
+                            autopartUP = autopartUP.CopyFromAutopartDPO(autopartDPO);
+
+                            autopart.NameAutopart = autopartUP.NameAutopart;
+                            autopart.NumberAutopart = autopartUP.NumberAutopart;
+                            autopart.KnotId = autopartUP.KnotId;
+                            autopart.CarModelId = autopartUP.CarModelId;
+                            autopart.ManufactureId = autopartUP.ManufactureId;
+                            autopart.PriceSale = autopartUP.PriceSale;
+                            autopart.AvailableityStock = autopartUP.AvailableityStock;
+                            autopart.AccountId = autopartUP.AccountId;
+                            autopart.ModerationStatus = autopartUP.ModerationStatus;
+
+                            sparePartsStoreContext.Update(autopart);// вносим данные в бд
+                            sparePartsStoreContext.SaveChanges(); // сохраняем бд
+                        }
+                    };
+                    pageWorkDetail.Transmit(); // вызываем событие, чтобы полчить данные для изменения в БД
+                }
+            }
+
+            WorkingWithData.ClearMemoryAfterFrame();
+            pageListAutoparts = new PageListAutoparts(); // обновляем экз. класса
+            MainFrame.NavigationService.Navigate(pageListAutoparts);
+            selectedMenu(); // отображаем меню
+        }
+
+        // удаляем данные из таблицы
+        private void DeleteDataAutoparts(object sender, EventAggregator e)
+        {
+            // получаем данные для удаления
+            pageListAutoparts.EventDataSelectedAutopartItem += (sender, args) =>
+            {
+                // подключаем БД
+                using (SparePartsStoreContext sparePartsStoreContext = new SparePartsStoreContext())
+                {
+                    List<Autopart> autoparts = sparePartsStoreContext.Autoparts.ToList(); // получаем список из БД
+                    AutopartDPO autopartDPO = (AutopartDPO)args.Value;
+                    // находим в списке БД элемент для удаления
+                    Autopart autopart = autoparts.FirstOrDefault(carModel => carModel.AutopartId == autopartDPO.AutopartId);
+                    if (autopart != null)
+                    {
+                        sparePartsStoreContext.Autoparts.Remove(autopart);
+                        sparePartsStoreContext.SaveChanges(); // сохраняем бд
+
+                        // обновляем список
+                        pageListAutoparts.UpTable();
+                    }
+                }
+            };
+            // вызываем событие для передачи данных
+            pageListAutoparts.TransmitData();
         }
 
         #endregion

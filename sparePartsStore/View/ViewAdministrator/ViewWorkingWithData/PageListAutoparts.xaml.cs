@@ -64,8 +64,81 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorkingWithData
         public void TransmitData()
         {
             AutopartDPO autopartDPO = new AutopartDPO(); // хранение временных данных
-            autopartDPO = _listAutopartViewModel.();
+            autopartDPO = _listAutopartViewModel.TransmitionAutopart();
             TransmitSelectedData(autopartDPO); // передаём данные в событие
+        }
+
+        #region Popup
+
+        // кнопка удалить
+        private void Btn_OpenPopup(object sender, RoutedEventArgs e)
+        {
+            // отображаем Popup
+            DeletePopup.IsOpen = true;
+            DarkBackground.Visibility = Visibility.Visible; // Показать затемненный фон
+
+            // получаем объект для отображения
+            AutopartDPO autopartDPO = new AutopartDPO();
+            autopartDPO = _listAutopartViewModel.TransmitionAutopart();
+            string deleteItemName = autopartDPO.NameManufacture.Trim();
+            DeleteNameAutopart.Text = deleteItemName;
+        }
+
+        // скрыть фон при запуске popup
+        private void MyPopup_Closed(object sender, EventArgs e)
+        {
+            DarkBackground.Visibility = Visibility.Collapsed;
+        }
+
+        // потеря фокуса popup
+        private void DarkBackground_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            //AddresPopup.IsOpen = false; // Закрыть Popup при щелчке на затемненном фоне
+            //DarkBackground.Visibility = Visibility.Collapsed; // Скрыть затемненный фон
+        }
+
+        // кнопка удаления данных из таблицы (Popup)
+        private void Btn_DeleteData(object sender, RoutedEventArgs e)
+        {
+            // вызываем событие удаления данных из таблицы
+            WorkingWithData.SaveDataDeleteAutoparts();
+
+            DeletePopup.IsOpen = false; // Закрыть Popup при щелчке на затемненном фоне
+            DarkBackground.Visibility = Visibility.Collapsed; // Скрыть затемненный фон
+        }
+
+        // закрываем Popup
+        private void closePopup(object sender, RoutedEventArgs e)
+        {
+            DeletePopup.IsOpen = false; // Закрыть Popup при щелчке на затемненном фоне
+            DarkBackground.Visibility = Visibility.Collapsed; // Скрыть затемненный фон
+        }
+
+        #endregion
+
+        // событие на ввод данных в текстовое поле поиска производителя
+        private void TextBoxNameAutoParts(object sender, TextChangedEventArgs e)
+        {
+            // получаем текст из поля при изменении данных (поиска)
+            var textBox = sender as TextBox;
+            if (textBox != null)
+            {
+                // приводим к формату string
+                string nameAutoParts = textBox.Text;
+
+                // передаем данные во ViewModel
+                //if(this.DataContext is ListCarBrandViewModel listCarBrandViewModel) // получаем достп к экз ViewModel
+                //{
+                //    listCarBrandViewModel.HandlerTextBoxChanged(nameBrand);
+                //}
+                _listAutopartViewModel.HandlerTextBoxChanged(nameAutoParts);
+            }
+        }
+
+        // обновляем список отображения данных в таблице
+        public void UpTable()
+        {
+            _listAutopartViewModel.UpdateTabel();
         }
     }
 }

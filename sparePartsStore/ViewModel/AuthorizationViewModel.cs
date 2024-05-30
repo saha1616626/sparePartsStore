@@ -253,8 +253,23 @@ namespace sparePartsStore.ViewModel
         }
 
         // получаем Id пользователя, который авторизован
+        public int weGetIdUser()
+        {
+            int id = 0;
 
-        
+            // чтение JSON
+            string JSON = File.ReadAllText(path);
+            // получаем данные из JSON
+            AuthorizationEntrance? account = JsonConvert.DeserializeObject<AuthorizationEntrance>(JSON);
+
+            if (account.UserId != null)
+            {
+                id = account.UserId;
+            }
+
+            return id;
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")

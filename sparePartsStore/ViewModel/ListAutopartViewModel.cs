@@ -15,6 +15,7 @@ namespace sparePartsStore.ViewModel
 {
     public class ListAutopartViewModel : INotifyPropertyChanged
     {
+        AuthorizationViewModel _authorizationViewModel = new AuthorizationViewModel(); // работа с авторизацией
         public ListAutopartViewModel()
         {
             //чтение данных из БД
@@ -88,24 +89,60 @@ namespace sparePartsStore.ViewModel
                     List<Autopart> autopartBD = context.Autoparts.ToList(); // получаем список узлов авто
                     if (autopartBD != null)
                     {
-                        // копируем данные в список из БД
-                        foreach (var autopartItem in autopartBD)
+                        // для каждого пользователя можно отображать только свои запчасти
+                        string role = _authorizationViewModel.CheckingUserRole();
+                        if (role == "Администратор"  || role == "Магазин") // получают весь список
                         {
-                            Autopart autopart = new Autopart();
-                            autopart.AutopartId = autopartItem.AutopartId;
-                            autopart.NumberAutopart = autopartItem.NumberAutopart;
-                            autopart.NameAutopart = autopartItem.NameAutopart;
-                            autopart.KnotId = autopartItem.KnotId;
-                            autopart.CarModelId = autopartItem.CarModelId;
-                            autopart.ManufactureId = autopartItem.ManufactureId;
-                            autopart.PriceSale = autopartItem.PriceSale;
-                            autopart.AvailableityStock = autopartItem.AvailableityStock;
-                            autopart.AccountId = autopartItem.AccountId;
-                            autopart.ModerationStatus = autopartItem.ModerationStatus;
+                            // копируем данные в список из БД
+                            foreach (var autopartItem in autopartBD)
+                            {
+                                Autopart autopart = new Autopart();
+                                autopart.AutopartId = autopartItem.AutopartId;
+                                autopart.NumberAutopart = autopartItem.NumberAutopart;
+                                autopart.NameAutopart = autopartItem.NameAutopart;
+                                autopart.KnotId = autopartItem.KnotId;
+                                autopart.CarModelId = autopartItem.CarModelId;
+                                autopart.ManufactureId = autopartItem.ManufactureId;
+                                autopart.PriceSale = autopartItem.PriceSale;
+                                autopart.AvailableityStock = autopartItem.AvailableityStock;
+                                autopart.AccountId = autopartItem.AccountId;
+                                autopart.ModerationStatus = autopartItem.ModerationStatus;
 
-                            // добавляем в список
-                            autoparts.Add(autopart);
+                                // добавляем в список
+                                autoparts.Add(autopart);
+                            }
                         }
+                        else // частично (поставщики)
+                        {
+                            int idUser = _authorizationViewModel.weGetIdUser();
+                            if(idUser != 0)
+                            {
+                                // копируем данные в список из БД
+                                foreach (var autopartItem in autopartBD)
+                                {
+                                    if (idUser == autopartItem.AccountId)
+                                    {
+                                        Autopart autopart = new Autopart();
+                                        autopart.AutopartId = autopartItem.AutopartId;
+                                        autopart.NumberAutopart = autopartItem.NumberAutopart;
+                                        autopart.NameAutopart = autopartItem.NameAutopart;
+                                        autopart.KnotId = autopartItem.KnotId;
+                                        autopart.CarModelId = autopartItem.CarModelId;
+                                        autopart.ManufactureId = autopartItem.ManufactureId;
+                                        autopart.PriceSale = autopartItem.PriceSale;
+                                        autopart.AvailableityStock = autopartItem.AvailableityStock;
+                                        autopart.AccountId = autopartItem.AccountId;
+                                        autopart.ModerationStatus = autopartItem.ModerationStatus;
+
+
+                                        // добавляем в список
+                                        autoparts.Add(autopart);
+                                    }
+
+                                }
+                            }
+                        }
+                        
                     }
                 }
                 return autoparts;
@@ -119,7 +156,7 @@ namespace sparePartsStore.ViewModel
         }
 
         // передаём получаенные выбранные данные из таблицы
-        public AutopartDPO TransmitionKnot()
+        public AutopartDPO TransmitionAutopart()
         {
             AutopartDPO autopartDPO = new AutopartDPO();
             autopartDPO = (AutopartDPO)SelectedAutopart;
@@ -247,6 +284,7 @@ namespace sparePartsStore.ViewModel
             List <string> ModerationStatus = new List<string>();
             ModerationStatus.Add("В обработке");
             ModerationStatus.Add("Отображается");
+            ModerationStatus.Add("Не отображается");
             ModerationStatus.Add("Отклонён");
 
             return ModerationStatus;

@@ -51,6 +51,9 @@
         <!--название-->
         <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="Деталь" FontSize="30" Foreground="Black" FontWeight="DemiBold" Margin="0,40,0,40" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
+        <!--поле для вывода ошибок-->
+        <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" Margin="0,50,20,0" x:Name="errorInput" FontWeight="DemiBold" FontSize="24"/>
+
         <!--возврат на главную-->
         <Grid  Grid.Row="0" Grid.Column="0" Visibility="Visible" x:Name="closeFrame" Margin="0,0,0,40">
             <Grid.RowDefinitions>
@@ -60,7 +63,7 @@
 
             <!-- Верхняя часть экрана -->
             <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
-                <Button Content="Домой" Margin="50, 4, 0, 0" Padding="-20, -3, 0, 0" Width="100" Command="{Binding ClosePageAddOrDeleteCarBrands}"  Background="Gray" BorderBrush="Black"/>
+                <Button Content="Домой" Margin="50, 4, 0, 0" Padding="-20, -3, 0, 0" Width="100" Command="{Binding ClosePageAddOrDeleteCarBrands}" Click="ClosePageAddOrDeleteAutopart"  Background="Gray" BorderBrush="Black"/>
                 <materialDesign:PackIcon Kind="Home" Margin="120, 10, 0, 0" Width="20" Height="20"/>
             </Grid>
 
@@ -153,8 +156,8 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Row="0" Grid.Column="0" Content="Отмена" Width="150" Height="35" Background="Gray" BorderBrush="Black"/>
-            <Button Grid.Row="0" Grid.Column="1" Content="Добавить" x:Name="RenameButtonBrand" Width="150" Height="35" Background="Gray" BorderBrush="Black" Margin="20,0,0,0"/>
+            <Button Grid.Row="0" Grid.Column="0" Content="Отмена" Width="150" Height="35" Background="Gray" BorderBrush="Black" Click="ClosePageAddOrDeleteAutopart"/>
+            <Button Grid.Row="0" Grid.Column="1" Content="Добавить" x:Name="RenameButtonAutopart" Width="150" Height="35" Background="Gray" BorderBrush="Black" Margin="20,0,0,0" Click="SaveData"/>
 
         </Grid>
 
