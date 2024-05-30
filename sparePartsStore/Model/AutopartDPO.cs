@@ -78,6 +78,20 @@ namespace sparePartsStore.Model
             set { _carBrandId = value; OnPropertyChanged(nameof(CarBrandId)); }
         }
 
+        private int _countryId { get; set; }
+        public int CountryId
+        {
+            get { return _countryId; }
+            set { _countryId = value; OnPropertyChanged(nameof(CountryId)); }
+        }
+
+        private string _nameCountry { get; set; }
+        public string NameCountry
+        {
+            get { return _nameCountry; }
+            set { _nameCountry = value; OnPropertyChanged(nameof(NameCountry)); }
+        }
+
         private int _manufactureId { get; set; }
         public int ManufactureId
         {
@@ -120,7 +134,7 @@ namespace sparePartsStore.Model
         }
 
         // замена int AutopartId на string NameAutopart
-        public AutopartDPO CopyFromCountry(Autopart autopart)
+        public AutopartDPO CopyFromAutopart(Autopart autopart)
         {
             AutopartDPO autopartDPO = new AutopartDPO();
 
@@ -169,8 +183,11 @@ namespace sparePartsStore.Model
                 autopartDPO.NumberAutopart = autopart.NumberAutopart;
                 autopartDPO.NameAutopart = autopart.NameAutopart;
 
+                autopartDPO.CarBrandName = nameCarBrand;
                 autopartDPO.NameCarModel = nameCarModel;
+                autopartDPO.NameUnit = nameUnit;
                 autopartDPO.NameKnot = nameKnot;
+                autopartDPO.NameCountry = nameCountry;
                 autopartDPO.NameManufacture = nameManufactureBrand;
 
                 autopartDPO.CarModelId = autopart.CarModelId;

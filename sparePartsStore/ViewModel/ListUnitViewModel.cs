@@ -126,7 +126,7 @@ namespace sparePartsStore.ViewModel
             using (SparePartsStoreContext context = new SparePartsStoreContext())
             {
                 List<Unit> units = context.Units.ToList(); // получаем список агрегатов
-                noCoincidence = !units.Any(num => num.NameUnit.ToLower().Contains(NameUnitInput.Text.ToLower()));
+                noCoincidence = !units.Any(num => num.NameUnit.ToLower() == NameUnitInput.Text.ToLower());
             }
 
             return noCoincidence;

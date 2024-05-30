@@ -148,7 +148,7 @@ namespace sparePartsStore.ViewModel
             using (SparePartsStoreContext context = new SparePartsStoreContext())
             {
                 List<CarModel> carModel = context.CarModels.ToList(); // получаем список моделей авто
-                noCoincidence = !carModel.Any(num => num.NameCarModel.ToLower().Contains(NameModelInput.Text.ToLower()));
+                noCoincidence = !carModel.Any(num => num.NameCarModel.ToLower() == NameModelInput.Text.ToLower());
 
             }
 

@@ -34,7 +34,7 @@ public partial class Autopart
     public virtual Manufacture Manufacture { get; set; } = null!;
 
     // замена string NameAutopart на int AutopartId
-    public Autopart CopyFromCountryDPO(AutopartDPO autopartDPO)
+    public Autopart CopyFromAutopartDPO(AutopartDPO autopartDPO)
     {
         Autopart autopart = new Autopart();
 

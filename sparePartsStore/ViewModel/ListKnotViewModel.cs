@@ -157,7 +157,7 @@ namespace sparePartsStore.ViewModel
                 // проверка наличия узла в определенном агрегате
                 if (newKnot != null)
                 {
-                    noCoincidence = !newKnot.Any(num => num.NameKnot.ToLower().Contains(NameKnotInput.Text.ToLower()));
+                    noCoincidence = !newKnot.Any(num => num.NameKnot.ToLower() == NameKnotInput.Text.ToLower());
                 }
             }
 

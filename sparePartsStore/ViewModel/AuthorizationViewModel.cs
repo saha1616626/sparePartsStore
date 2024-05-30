@@ -252,6 +252,10 @@ namespace sparePartsStore.ViewModel
             return IsCheck;
         }
 
+        // получаем Id пользователя, который авторизован
+
+        
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {

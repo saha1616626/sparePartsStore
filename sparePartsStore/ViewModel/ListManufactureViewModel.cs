@@ -164,7 +164,7 @@ namespace sparePartsStore.ViewModel
                 // проверка наличия производителя в определенной стране
                 if (newManufacture != null)
                 {
-                    noCoincidence = !newManufacture.Any(num => num.NameManufacture.ToLower().Contains(NameManufactureInput.Text.ToLower()));
+                    noCoincidence = !newManufacture.Any(num => num.NameManufacture.ToLower() == NameManufactureInput.Text.ToLower());
                 } 
             }
 

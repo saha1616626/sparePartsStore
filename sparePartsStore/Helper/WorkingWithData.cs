@@ -207,7 +207,47 @@ namespace sparePartsStore.Helper
 
         #endregion
 
-        // общие события
+        // запчасть
+        #region Autopart
+
+        // событие запуск страницы добавления аналогов из MainHeadViewModel
+        public static event EventHandler<EventAggregator> analog; // подписываемся в MainHeadViewModel
+        public static void Analog() // вызываем в PageListAutoparts
+        {
+            analog?.Invoke(null, new EventAggregator());
+        }
+
+        // Событие запуска страницы добавления запчасти из MainHeadViewModel
+        public static event EventHandler<EventAggregator> launchPageAddAutoparts; // подписываемся в MainHeadViewModel
+        public static void LaunchPageAddAutoparts() // вызываем в PageListAutoparts
+        {
+            launchPageAddAutoparts?.Invoke(null, new EventAggregator());
+        }
+
+        // событие запуска страницы редактирования запчасти из MainHeadViewModel
+        public static event EventHandler<EventAggregator> launchPageEditAutoparts; // подписываемся в MainHeadViewModel
+        public static void LaunchPageEditAutoparts() // вызываем в PageListAutoparts
+        {
+            launchPageEditAutoparts?.Invoke(null, new EventAggregator());
+        }
+
+        // событие изменение БД после добавления или редактирования запчасти
+        public static event EventHandler<EventAggregator> saveDataCreateOrEditAutoparts; // подписываемся в MainHeadViewModel
+        public static void SaveDataCreateOrEditAutoparts() // вызываем в PageWorkAutoparts
+        {
+            saveDataCreateOrEditAutoparts?.Invoke(null, new EventAggregator());
+        }
+
+        // событие на удаление запчасти
+        public static event EventHandler<EventAggregator> saveDataDeleteAutoparts; // подписываемся в MainHeadViewModel
+        public static void SaveDataDeleteAutoparts() // вызываем в PageListAutoparts
+        {
+            saveDataDeleteAutoparts?.Invoke(null, new EventAggregator());
+        }
+
+        #endregion
+
+        // общие события 
         #region GeneralEvent
 
         // событие выхода из страницы на предидущую страницу 

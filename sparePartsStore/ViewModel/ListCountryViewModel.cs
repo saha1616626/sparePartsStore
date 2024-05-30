@@ -123,7 +123,7 @@ namespace sparePartsStore.ViewModel
             using (SparePartsStoreContext context = new SparePartsStoreContext())
             {
                 List<Country> country = context.Countries.ToList(); // получаем список агрегатов
-                noCoincidence = !country.Any(num => num.NameCountry.ToLower().Contains(NameCountryInput.Text.ToLower()));
+                noCoincidence = !country.Any(num => num.NameCountry.ToLower() == NameCountryInput.Text.ToLower());
             }
 
             return noCoincidence;
