@@ -51,6 +51,15 @@
         <Setter Property="FontSize" Value="20"/>
     </Style>
 
+    <!--стиль верхних столбцов таблицы-->
+    <Style x:Key="columnTableHeaderAutoParts" BasedOn="{StaticResource columnTable}" TargetType="{x:Type DataGridColumnHeader}">
+        <Setter Property="Height" Value="40" />
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontSize" Value="12"/>
+    </Style>
+
     <Style x:Key="DataGridCellStyle" TargetType="DataGridCell">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />

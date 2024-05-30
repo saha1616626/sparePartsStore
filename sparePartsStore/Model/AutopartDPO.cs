@@ -165,7 +165,7 @@ namespace sparePartsStore.Model
             // заменяем id - модель и марка авто
             CarModelDPO carModelDPO = listCarModelViewModel.ListCarModelDPO.FirstOrDefault(c => c.CarModelId == autopart.CarModelId);
             if(carModelDPO != null)
-            {
+            { // получаем связанные данные, относиетльно модели всегда будет подбираться марка авто, а не наоборот, чтобы не было ошибки связывания
                 nameCarBrand = carModelDPO.CarBrandName;
                 nameCarModel = carModelDPO.NameCarModel;
             }

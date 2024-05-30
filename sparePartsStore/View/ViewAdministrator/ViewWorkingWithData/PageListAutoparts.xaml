@@ -26,7 +26,7 @@
         </Grid.Resources>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         
         <Grid.RowDefinitions>
@@ -45,7 +45,7 @@
                 Background="Gray" BorderBrush="Black" HorizontalAlignment="Right" Click="Btn_AnalogAutoParts"/>
 
         <!--основные кнопки-->
-        <UniformGrid  Grid.Row="2" Margin="0,20,0,0">
+        <Grid  Grid.Row="2" Margin="0,20,0,0">
 
             <Grid>
 
@@ -53,23 +53,23 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 
                 <!--все основные кнопки и поля-->
-                <Button Grid.Column="0" Content="Добавить" MinWidth="100" 
+                <Button Grid.Column="0" Content="Добавить" MinWidth="130"
                         Height="35" Background="Gray" BorderBrush="Black" Click="Btn_AddAutoParts"/>
-                
-                <Button Grid.Column="1" Content="Редктировать" MinWidth="100" 
+
+                <Button Grid.Column="1" Content="Редктировать" MinWidth="130"
                         Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0" Command="{Binding AutoParts}"
                         Click="Btn_EditAutoParts" IsEnabled="{Binding IsWorkButtonEnable}"/>
                 
-                <Button Grid.Column="2" Content="Удалить" MinWidth="100" 
+                <Button Grid.Column="2" Content="Удалить" MinWidth="130"
                         Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0" 
                         Command="{Binding DeleteAutoParts}" IsEnabled="{Binding IsWorkButtonEnable}"/>
 
-                <TextBox Grid.Column="3" x:Name="SearchParts" Height="50" Margin="10,0,0,0"
+                <TextBox Grid.Column="3" x:Name="SearchParts" Height="35" Padding="15,7,0,0" Margin="10,0,0,0"
                     VerticalAlignment="Center"  HorizontalAlignment="Center"
                     Text="{Binding NameAutoParts, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     TextChanged="TextBoxNameAutoParts"    
@@ -77,7 +77,7 @@
                     Style="{StaticResource MaterialDesignOutlinedTextBox}" 
                     materialDesign:HintAssist.Hint="Поиск запчасти" 
                     materialDesign:TextFieldAssist.CharacterCounterVisibility="Hidden"
-                    MaxLength="100" MinWidth="408"/>
+                    MaxLength="100" MinWidth="320"/>
 
                 <!--кнопка запчасти ожидающие подтверждения-->
                 <Button Grid.Column="4" Content="Запчасти ожидающие подтверждения" MinWidth="330" 
@@ -85,42 +85,43 @@
                         HorizontalAlignment="Right"  Margin="10,0,0,0"/>
             </Grid>
             
-        </UniformGrid>
+        </Grid>
 
             <!--кнопка таблицы-->
         <Grid Grid.Row="3" Margin="0,40,0,0">
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                 <DataGrid IsReadOnly="True"
-                    HorizontalAlignment="Center" RowHeight="50" FontSize="18"
+                    RowHeight="50" FontSize="10"
                     AutoGenerateColumns="False"
                     CellStyle="{StaticResource DataGridCellStyle}"
                     ItemsSource="{Binding ListAutopartDPO}"
                     SelectedItem="{Binding SelectedAutopart}"
                     Style="{StaticResource MaterialDesignDataGrid}"
-                    ColumnHeaderStyle="{StaticResource columnTableHeader}">
+                    ColumnHeaderStyle="{StaticResource columnTableHeaderAutoParts}">
+                    
 
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Номер" Binding="{Binding NumberAutopart}" Width="80" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Номер" Binding="{Binding NumberAutopart}" Width="*" IsReadOnly="True"/>
 
-                        <DataGridTextColumn Header="Название" Binding="{Binding NameAutopart}" MinWidth="200" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Название" Binding="{Binding NameAutopart}" Width="*" IsReadOnly="True"/>
 
-                        <DataGridTextColumn Header="Агрегат" Binding="{Binding NameUnit}" MinWidth="100" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Агрегат" Binding="{Binding NameUnit}" Width="*" IsReadOnly="True"/>
 
-                        <DataGridTextColumn Header="Узел" Binding="{Binding NameKnot}"  MinWidth="100" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Узел" Binding="{Binding NameKnot}"  Width="*" IsReadOnly="True"/>
 
-                        <DataGridTextColumn Header="Марка" Binding="{Binding CarBrandName}"  MinWidth="100" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Марка" Binding="{Binding CarBrandName}"  Width="*" IsReadOnly="True"/>
 
-                        <DataGridTextColumn Header="Модель" Binding="{Binding NameCarModel}" MinWidth="100" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Модель" Binding="{Binding NameCarModel}" Width="*" IsReadOnly="True"/>
 
-                        <DataGridTextColumn Header="Цена" Binding="{Binding PriceSale}"  MinWidth="80" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Цена" Binding="{Binding PriceSale}"  Width="*" IsReadOnly="True"/>
 
                         <DataGridTextColumn Header="Доступно         на складе" Binding="{Binding AvailableityStock}"  Width="70" IsReadOnly="True"/>
 
-                        <DataGridTextColumn Header="Статус" Binding="{Binding ModerationStatus}" MinWidth="100" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Статус" Binding="{Binding ModerationStatus}" Width="*" IsReadOnly="True"/>
 
-                        <DataGridTextColumn Header="Производитель" Binding="{Binding NameManufacture}" MinWidth="100" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Производитель" Binding="{Binding NameManufacture}" Width="*" IsReadOnly="True"/>
 
-                        <DataGridTextColumn Header="Поставщик" Binding="{Binding NameOrganization}" MinWidth="100" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Поставщик" Binding="{Binding NameOrganization}" Width="*" IsReadOnly="True"/>
                     </DataGrid.Columns>
 
                 </DataGrid>

@@ -87,8 +87,11 @@
                 SelectedItem="{Binding SelectedCarModel}"
                 Style="{StaticResource MaterialDesignDataGrid}"
                 ColumnHeaderStyle="{StaticResource columnTableHeader}">
+                       
 
-                    <DataGrid.Columns>
+                        
+
+                        <DataGrid.Columns>
                         <DataGridTextColumn Header="Модель" Binding="{Binding NameCarModel}" Width="*" IsReadOnly="True"/>
                         <DataGridTextColumn Header="Марка" Binding="{Binding CarBrandName}" Width="*" IsReadOnly="True"/>
                     </DataGrid.Columns>
