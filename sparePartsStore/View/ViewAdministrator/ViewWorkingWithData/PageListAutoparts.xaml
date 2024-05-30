@@ -64,8 +64,8 @@
                 <Button Grid.Column="1" Content="Редктировать" MinWidth="130"
                         Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0" Command="{Binding AutoParts}"
                         Click="Btn_EditAutoParts" IsEnabled="{Binding IsWorkButtonEnable}"/>
-                
-                <Button Grid.Column="2" Content="Удалить" MinWidth="130"
+
+                <Button Grid.Column="2" Content="Удалить" MinWidth="130" Click="Btn_OpenPopup"
                         Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0" 
                         Command="{Binding DeleteAutoParts}" IsEnabled="{Binding IsWorkButtonEnable}"/>
 
@@ -136,7 +136,7 @@
         <!--Popup-->
 
         <Grid>
-            <Popup x:Name="DeletePopup" PlacementTarget="{Binding ElementName=positionPopup}" Placement="Center" Grid.ColumnSpan="3" Grid.RowSpan="3" HorizontalOffset="0" VerticalOffset="60" StaysOpen="False" Closed="MyPopup_Closed" AllowsTransparency="False" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Popup x:Name="DeletePopup" PlacementTarget="{Binding ElementName=positionPopup}" Placement="Center" Grid.ColumnSpan="3" Grid.RowSpan="3" HorizontalOffset="0" VerticalOffset="160" StaysOpen="False" Closed="MyPopup_Closed" AllowsTransparency="False" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Grid Background="Gray">
                     <!--фон-->
                     <Border Background="AliceBlue" Style="{StaticResource OutlineOfPopup}" >

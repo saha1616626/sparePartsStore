@@ -164,13 +164,13 @@ namespace sparePartsStore.ViewModel
         }
 
         // получаем данные для ComBox CarBrand
-        public List<CarBrand> GetCarBrandOnComboBox()
+        public ObservableCollection<CarBrand> GetCarBrandOnComboBox()
         {
             // список, котроый будет в себе хранить значения comBox
             using (SparePartsStoreContext context = new SparePartsStoreContext())
             {
                 List<CarBrand> carBrands = context.CarBrands.ToList(); // получили список марок из БД
-                List<CarBrand> carBrandList = new List<CarBrand>(); // список для ComBox
+                ObservableCollection<CarBrand> carBrandList = new ObservableCollection<CarBrand>(); // список для ComBox
                 // записываем массив carBrandList
                 foreach (CarBrand carBrandtem in carBrands)
                 {
@@ -183,13 +183,13 @@ namespace sparePartsStore.ViewModel
         }
 
         // получаем данные для ComBox CarModel
-        public List<CarModel> GetCarModelOnComboBox()
+        public ObservableCollection<CarModel> GetCarModelOnComboBox()
         {
             // список, котроый будет в себе хранить значения comBox
             using (SparePartsStoreContext context = new SparePartsStoreContext())
             {
                 List<CarModel> carModels = context.CarModels.ToList(); // получили список моделей из БД
-                List<CarModel> carModelList = new List<CarModel>(); // список для ComBox
+                ObservableCollection<CarModel> carModelList = new ObservableCollection<CarModel>(); // список для ComBox
                 // записываем массив carModelList
                 foreach (CarModel сarModeltem in carModels)
                 {
@@ -202,13 +202,13 @@ namespace sparePartsStore.ViewModel
         }
 
         // получаем данные для ComBox Unit
-        public List<Unit> GetUnitOnComboBox()
+        public ObservableCollection<Unit> GetUnitOnComboBox()
         {
             // список, котроый будет в себе хранить значения comBox
             using (SparePartsStoreContext context = new SparePartsStoreContext())
             {
                 List<Unit> units = context.Units.ToList(); // получили список агрегатов из БД
-                List<Unit> unitList = new List<Unit>(); // список для ComBox
+                ObservableCollection<Unit> unitList = new ObservableCollection<Unit>(); // список для ComBox
                 // записываем массив unitList
                 foreach (Unit unitItem in units)
                 {
@@ -221,13 +221,13 @@ namespace sparePartsStore.ViewModel
         }
 
         // получаем данные для ComBox Knot
-        public List<Knot> GetKnotOnComboBox()
+        public ObservableCollection<Knot> GetKnotOnComboBox()
         {
             // список, котроый будет в себе хранить значения comBox
             using (SparePartsStoreContext context = new SparePartsStoreContext())
             {
                 List<Knot> knots = context.Knots.ToList(); // получили список узлов из БД
-                List<Knot> knotList = new List<Knot>(); // список для ComBox
+                ObservableCollection<Knot> knotList = new ObservableCollection<Knot>(); // список для ComBox
                 // записываем массив knotList
                 foreach (Knot knotItem in knots)
                 {
@@ -253,6 +253,7 @@ namespace sparePartsStore.ViewModel
                     // добавляем данные в список
                     countryList.Add(countryItem);
                 }
+
                 // возвращаем массив обратно
                 return countryList;
             }
@@ -272,6 +273,7 @@ namespace sparePartsStore.ViewModel
                     // добавляем данные в список
                     manufactureList.Add(manufactureItem);
                 }
+
                 // возвращаем массив обратно
                 return manufactureList;
             }
@@ -432,7 +434,9 @@ namespace sparePartsStore.ViewModel
             }
         }
 
-        // comboBox
+        #region PropertyCarBrand
+
+        // выбрання марка авто
         private CarBrand _selectedCarBrand;
         public CarBrand SelectedCarBrand
         {
@@ -441,9 +445,61 @@ namespace sparePartsStore.ViewModel
             {
                 _selectedCarBrand = value;
                 OnPropertyChanged(nameof(SelectedCarBrand));
+                EditCarModel();
             }
         }
 
+        // список марок авто
+        private ObservableCollection<CarBrand> _nameCarBrandComboBoxItems;
+        public ObservableCollection<CarBrand> NameCarBrandComboBoxItems
+        {
+            get { return _nameCarBrandComboBoxItems; }
+            set
+            {
+                _nameCarBrandComboBoxItems = value;
+                OnPropertyChanged(nameof(NameCarBrandComboBoxItems));
+            }
+        }
+
+        public bool editCarModel = false; // true - если мы изминили список моделей авто в тот момент, когда SelectedCarModel == null
+
+        // изменяем список моделей авто, в зависимости от марки авто
+        private void EditCarModel()
+        {
+            // передаём список моделей авто, которые соответствуют данной марки авто
+            using (SparePartsStoreContext context = new SparePartsStoreContext())
+            {
+                List<CarModel> carModels = context.CarModels.ToList();
+
+                // выводим модели, которые соответствуют данной марки авто
+                if(SelectedCarModel == null) // если данные у модели авто не выбранны в ComboBox
+                {
+                    if(SelectedCarBrand != null) // если марка выбрана корректно
+                    {
+                        ObservableCollection<CarModel> carModel = new ObservableCollection<CarModel>(carModels.Where(c => c.CarBrandId == SelectedCarBrand.CarBrandId).ToList());
+                        _nameCarModelComboBoxItems = carModel; // присваиваем новые значения списка ComboBox
+                        OnPropertyChanged(nameof(NameCarModelComboBoxItems)); // оповещаем список моделей авто об изменении данных
+                        editCarModel = true;
+                    }
+                }
+
+                if (editCarModel == true)
+                {
+                    if (SelectedCarBrand != null) // если марка выбрана корректно
+                    {
+                        ObservableCollection<CarModel> carModel = new ObservableCollection<CarModel>(carModels.Where(c => c.CarBrandId == SelectedCarBrand.CarBrandId).ToList());
+                        _nameCarModelComboBoxItems = carModel; // присваиваем новые значения списка ComboBox
+                        OnPropertyChanged(nameof(NameCarModelComboBoxItems)); // оповещаем список моделей авто об изменении данных
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region PropertyCarModel
+
+        // выбранная модель авто
         private CarModel _selectedCarModel;
         public CarModel SelectedCarModel
         {
@@ -452,9 +508,61 @@ namespace sparePartsStore.ViewModel
             {
                 _selectedCarModel = value;
                 OnPropertyChanged(nameof(SelectedCarModel));
+                EditCarBrand();
             }
         }
 
+        // список моделей авто
+        private ObservableCollection<CarModel> _nameCarModelComboBoxItems;
+        public ObservableCollection<CarModel> NameCarModelComboBoxItems
+        {
+            get { return _nameCarModelComboBoxItems; }
+            set
+            {
+                _nameCarModelComboBoxItems = value;
+                OnPropertyChanged(nameof(NameCarModelComboBoxItems));
+            }
+        }
+
+        public bool editCarBrand = false; // true - если мы изминили список марок авто в тот момент, когда SelectedCarBrand == null
+
+        // изменяем список марок авто, в зависимости моделей авто
+        private void EditCarBrand()
+        {
+            // предаём список марок, которые соответствуют данной модели
+            using (SparePartsStoreContext context = new SparePartsStoreContext())
+            {
+                List<CarBrand> carBrands = context.CarBrands.ToList();
+
+                // выводим марки, которые соответствуют выбранной модели авто
+                if(SelectedCarBrand == null) // если агригат пустой
+                {
+                    if(SelectedCarModel != null) // если модель выбрана корректно
+                    {
+                        ObservableCollection<CarBrand> carBrand = new ObservableCollection<CarBrand>(carBrands.Where(c => c.CarBrandId == SelectedCarModel.CarBrandId).ToList());
+                        _nameCarBrandComboBoxItems = carBrand; // присваиваем новые значения списка ComboBox
+                        OnPropertyChanged(nameof(NameCarBrandComboBoxItems)); // оповещаем список марок авто об изменении данных
+                        editCarBrand = true;
+                    }
+                }
+
+                if (editCarBrand == true) 
+                {
+                    if (SelectedCarModel != null) // если марка выбрана корректно
+                    {
+                        ObservableCollection<CarBrand> carBrand = new ObservableCollection<CarBrand>(carBrands.Where(c => c.CarBrandId == SelectedCarModel.CarBrandId).ToList());
+                        _nameCarBrandComboBoxItems = carBrand; // присваиваем новые значения списка ComboBox
+                        OnPropertyChanged(nameof(NameCarBrandComboBoxItems)); // оповещаем список марок авто об изменении данных
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region PropertyUnit
+
+        // выбранный узел
         private Unit _selectedUnit;
         public Unit SelectedUnit
         {
@@ -463,9 +571,66 @@ namespace sparePartsStore.ViewModel
             {
                 _selectedUnit = value;
                 OnPropertyChanged(nameof(SelectedUnit));
+                EditKnot(); // изменяем список узлов
             }
         }
 
+        // список узлов
+        private ObservableCollection<Unit> _nameUnitComboBoxItems;
+        public ObservableCollection<Unit> NameUnitComboBoxItems
+        {
+            get { return _nameUnitComboBoxItems; }
+            set
+            {
+                _nameUnitComboBoxItems = value;
+                OnPropertyChanged(nameof(NameUnitComboBoxItems));
+            }
+        }
+
+        public bool editKnot = false; // true - если мы изминили список узлов в тот момент, когда SelectedKnot == null
+
+        // изменяем список узлов, относительно выбранного агрегата
+        private void EditKnot()
+        {
+            // передаём список узлов, которые соответствуют данному агрегату
+            using (SparePartsStoreContext context = new SparePartsStoreContext())
+            {
+                List<Knot> knots = context.Knots.ToList();
+
+                // выводим узлы, которые соответствуют выбранному агрегату
+                if(SelectedKnot == null) // если узел пустой
+                {
+                    if(SelectedUnit != null) // если выбранный агрегат не пустой
+                    {
+                        ObservableCollection<Knot> knot = new ObservableCollection<Knot>(knots.Where(k => k.UnitId == SelectedUnit.UnitId)); // находим узлы, которые соответсвтуют выбранному агрегату
+                        _nameKnotComboBoxItems = knot;
+
+                        OnPropertyChanged(nameof(NameKnotComboBoxItems)); // оповещаем систему об изменении
+
+                        editKnot = true; // если отредактировали узел, то теперь из узла нельзя получить агрегат, для этого необходимо сделать сборос
+                    }
+                }
+
+                if(editKnot == true)
+                {
+                    if (SelectedUnit != null) // если выбранный агрегат не пустой
+                    {
+                        ObservableCollection<Knot> knot = new ObservableCollection<Knot>(knots.Where(k => k.UnitId == SelectedUnit.UnitId)); // находим узлы, которые соответсвтуют выбранному агрегату
+                        _nameKnotComboBoxItems = knot;
+
+                        OnPropertyChanged(nameof(NameKnotComboBoxItems)); // оповещаем систему об изменении
+                    }
+                }
+            }
+        }
+
+        // изменяем список узлов в зависимости от агрегата
+
+        #endregion
+
+        #region PropertyKnot
+
+        // выбранный узел
         private Knot _selectedKnot;
         public Knot SelectedKnot
         {
@@ -474,8 +639,60 @@ namespace sparePartsStore.ViewModel
             {
                 _selectedKnot = value;
                 OnPropertyChanged(nameof(SelectedKnot));
+                EditUnit(); // изменяем список агрегатов
             }
         }
+
+        // список узлов
+        private ObservableCollection<Knot> _nameKnotComboBoxItems;
+        public ObservableCollection<Knot> NameKnotComboBoxItems
+        {
+            get { return _nameKnotComboBoxItems; }
+            set
+            {
+                _nameKnotComboBoxItems = value;
+                OnPropertyChanged(nameof(NameKnotComboBoxItems));
+            }
+        }
+
+        public bool editUnit = false; // true - если мы изминили список агрегатов в тот момент, когда SelectedUnit == null
+
+        // изменяем список агрегатов, в зависимости от узла
+        private void EditUnit()
+        {
+            // передаём список агрегатов, которые соответствуют данному узлу
+            using (SparePartsStoreContext context = new SparePartsStoreContext())
+            {
+                List<Unit> units = context.Units.ToList();
+
+                // выводим агрегаты, которые соответствуют выбранному узлу
+                if (SelectedUnit == null) // если агрегат пустой
+                {
+                    if (SelectedKnot != null)
+                    {
+                        ObservableCollection<Unit> unit = new ObservableCollection<Unit>(units.Where(m => m.UnitId == SelectedKnot.UnitId).ToList());
+                        _nameUnitComboBoxItems = unit;
+
+                        OnPropertyChanged(nameof(NameUnitComboBoxItems)); // оповещаем систему об изменении
+
+                        editUnit = true;
+                    }
+                }
+
+                if (editUnit == true)
+                {
+                    if (SelectedKnot != null)
+                    {
+                        ObservableCollection<Unit> knot = new ObservableCollection<Unit>(units.Where(m => m.UnitId == SelectedKnot.UnitId).ToList());
+                        _nameUnitComboBoxItems = knot;
+
+                        OnPropertyChanged(nameof(NameUnitComboBoxItems)); // оповещаем систему об изменении
+                    }
+                }
+            }
+        }
+
+        #endregion
 
         #region PropertyComboBoxCountry
 
@@ -502,7 +719,6 @@ namespace sparePartsStore.ViewModel
                 _selectedCountry = value;
                 OnPropertyChanged(nameof(SelectedCountry));
 
-                // при выборе страны, меняем список фабрики
                 EditManufactureOfCountry();
             }
         }
@@ -511,7 +727,7 @@ namespace sparePartsStore.ViewModel
         private ObservableCollection<Country> _nameCountryComboBoxItems;
         public ObservableCollection<Country> NameCountryComboBoxItems
         {
-            get { return _nameCountryComboBoxItems = GetCountryOnComboBox(); }
+            get { return _nameCountryComboBoxItems; }
             set
             {
                 _nameCountryComboBoxItems = value;
@@ -519,12 +735,42 @@ namespace sparePartsStore.ViewModel
             }
         }
 
+        public bool editManufacture = false; // true - если мы изминили список производителей в тот момент, когда SelectedManufacture == null
+
         // метод изменения списка comboBox производителя, при выборе comboBox элемента страны
         private void EditManufactureOfCountry()
         {
-            ObservableCollection<Manufacture> manufacture = new ObservableCollection<Manufacture>();
+            // передаём список фабрик, которые соответствуют данной стране
+            using (SparePartsStoreContext context = new SparePartsStoreContext())
+            {
+                List<Manufacture> manufactures = context.Manufactures.ToList();
+                List<Country> countryList = context.Countries.ToList();
 
-            NameManufactureComboBoxItems = manufacture;
+                // выводим производителей, который соответствуют выбранной стране
+                if(SelectedManufacture == null) // если производитель пустой
+                {
+                    if(SelectedCountry != null)
+                    {
+                        ObservableCollection<Manufacture> manufacture = new ObservableCollection<Manufacture>(manufactures.Where(m => m.CountryId == SelectedCountry.CountryId).ToList());
+                        _nameManufactureComboBoxItems = manufacture;
+
+                        OnPropertyChanged(nameof(NameManufactureComboBoxItems)); // оповещаем систему об изменении
+
+                        editManufacture = true;
+                    }
+                }
+
+                if(editManufacture == true)
+                {
+                    if (SelectedCountry != null)
+                    {
+                        ObservableCollection<Manufacture> manufacture = new ObservableCollection<Manufacture>(manufactures.Where(m => m.CountryId == SelectedCountry.CountryId).ToList());
+                        _nameManufactureComboBoxItems = manufacture;
+
+                        OnPropertyChanged(nameof(NameManufactureComboBoxItems)); // оповещаем систему об изменении
+                    }
+                }
+            }
         }
 
         #endregion
@@ -535,7 +781,7 @@ namespace sparePartsStore.ViewModel
         private ObservableCollection<Manufacture> _nameManufactureComboBoxItems;
         public ObservableCollection<Manufacture> NameManufactureComboBoxItems
         {
-            get { return _nameManufactureComboBoxItems = GetManufactureOnComboBox(); }
+            get { return _nameManufactureComboBoxItems; }
             set
             {
                 _nameManufactureComboBoxItems = value;
@@ -551,12 +797,14 @@ namespace sparePartsStore.ViewModel
             set
             {
                 _selectedManufacture = value;
-                OnPropertyChanged(nameof(SelectedManufacture));
 
-                // вызываем метод который автоматически подставляет нужную страну, относительно выбранной фабрики
+                // обновляем список стран при выборе фабрики
                 EditCountry();
+
             }
         }
+
+        public bool editCountry = false; // true - если мы изминили список стран в тот момент, когда SelectedCountry == null
 
         // метод подстановки сраны относительно фабрики
         private void EditCountry()
@@ -566,18 +814,42 @@ namespace sparePartsStore.ViewModel
             {
                 List<Country> countries = context.Countries.ToList();
                 // список стран
-                ObservableCollection<Country> countriesUP = new ObservableCollection<Country>(countries);
-                //отображаем список в comboBox
-                NameCountryComboBoxItems = countriesUP;
 
-                // находим элемент страны, который соответствует заданной фабрики
-                Country country = countries.FirstOrDefault(c => c.CountryId == SelectedManufacture.CountryId);
-                // выводим найденную страну в заголовок comboBox
-                SelectedCountryName = country;
+                if (SelectedCountry == null) // если страна пустая
+                {
+                    if(SelectedManufacture != null)
+                    {
+                        ObservableCollection<Country> countriesUP = new ObservableCollection<Country>(countries.Where(c => c.CountryId == SelectedManufacture.CountryId).ToList());
+
+                        if (countriesUP.Count > 0 && countriesUP != null)
+                        {
+                            _nameCountryComboBoxItems = countriesUP; // обновляем список стран
+                            OnPropertyChanged(nameof(NameCountryComboBoxItems)); // оповещаем систему
+
+                            editCountry = true;
+                        }
+                    }
+                }
+
+                if(editCountry == true) // если мы изминили список стран в тот момент, когда SelectedCountry == null
+                {
+                    if (SelectedManufacture != null)
+                    {
+                        ObservableCollection<Country> countriesUP = new ObservableCollection<Country>(countries.Where(c => c.CountryId == SelectedManufacture.CountryId).ToList());
+
+                        if (countriesUP.Count > 0 && countriesUP != null)
+                        {
+                            _nameCountryComboBoxItems = countriesUP; // обновляем список стран
+                            OnPropertyChanged(nameof(NameCountryComboBoxItems)); // оповещаем систему
+                        }
+                    }
+                }
             }
         }
 
         #endregion
+
+        #region PropertyModerationStatus
 
         // выбранный элемент списка "статус отображения товара"
         private string _selectedModerationStatus;
@@ -602,6 +874,8 @@ namespace sparePartsStore.ViewModel
                 OnPropertyChanged(nameof(ModerationStatusComboBoxItems));
             }
         }
+
+        #endregion
 
 
         public event PropertyChangedEventHandler PropertyChanged;

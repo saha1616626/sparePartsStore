@@ -88,14 +88,41 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
         // вывод данных в ComBox при добавлении
         public void DataReceptionAdd()
         {
-            // передаём данные в поля                                          
-            //this.CbCountry.ItemsSource = _listAutopartViewModel.GetCountryOnComboBox().ToList(); ; // получаем список для ComBox
-            //this.CbManufacture.ItemsSource = _listAutopartViewModel.GetManufactureOnComboBox().ToList();
-            this.CbCarBrand.ItemsSource = _listAutopartViewModel.GetCarBrandOnComboBox().ToList();
-            this.CbCarModel.ItemsSource = _listAutopartViewModel.GetCarModelOnComboBox().ToList();
-            this.CbUnit.ItemsSource = _listAutopartViewModel.GetUnitOnComboBox().ToList();
-            this.CbKnot.ItemsSource = _listAutopartViewModel.GetKnotOnComboBox().ToList();
+            // начальные данные для ComBox                                         
+            _listAutopartViewModel.NameCountryComboBoxItems = _listAutopartViewModel.GetCountryOnComboBox();
+            _listAutopartViewModel.NameManufactureComboBoxItems = _listAutopartViewModel.GetManufactureOnComboBox(); 
+            _listAutopartViewModel.NameCarBrandComboBoxItems = _listAutopartViewModel.GetCarBrandOnComboBox();
+            _listAutopartViewModel.NameCarModelComboBoxItems = _listAutopartViewModel.GetCarModelOnComboBox();
+            _listAutopartViewModel.NameUnitComboBoxItems = _listAutopartViewModel.GetUnitOnComboBox();
+            _listAutopartViewModel.NameKnotComboBoxItems = _listAutopartViewModel.GetKnotOnComboBox();
             //this.CbModerationStatus.ItemsSource = _listAutopartViewModel.GetModerationStatusOnComboBox().ToList();
+        }
+
+        // кнопка сброса данных в ComboBox (очищаем поле бренд и марка авто)
+        private void clearCarBrandAndCarModel(object sender, RoutedEventArgs e)
+        {
+            _listAutopartViewModel.editCarBrand = false;
+            _listAutopartViewModel.editCarModel = false;
+            _listAutopartViewModel.NameCarBrandComboBoxItems = _listAutopartViewModel.GetCarBrandOnComboBox();
+            _listAutopartViewModel.NameCarModelComboBoxItems = _listAutopartViewModel.GetCarModelOnComboBox();
+        }
+
+        // кнопка сброса данных в ComboBox (очищаем поле узел и агрегат)
+        private void clearKnotAndUnit(object sender, RoutedEventArgs e)
+        {
+            _listAutopartViewModel.editUnit = false;
+            _listAutopartViewModel.editKnot = false;
+            _listAutopartViewModel.NameUnitComboBoxItems = _listAutopartViewModel.GetUnitOnComboBox();
+            _listAutopartViewModel.NameKnotComboBoxItems = _listAutopartViewModel.GetKnotOnComboBox();
+        }
+
+        // кнопка сброса данных в ComboBox (очищаем поле производитель и фабрика)
+        private void clearManufactureAndCountry(object sender, RoutedEventArgs e)
+        {
+            _listAutopartViewModel.editCountry = false;
+            _listAutopartViewModel.editManufacture = false;
+            _listAutopartViewModel.NameCountryComboBoxItems = _listAutopartViewModel.GetCountryOnComboBox(); // получаем список для ComBox
+            _listAutopartViewModel.NameManufactureComboBoxItems = _listAutopartViewModel.GetManufactureOnComboBox(); // начальные данные для ComBox
         }
 
         // событие передачи данных из текстового поля
@@ -106,60 +133,60 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
         }
 
         // метод передачи данных из TextBox в MainHeadViewModel
-        public void Transmit() // передаются данные для редакирования или добавления
-        {
+        //public void Transmit() // передаются данные для редакирования или добавления
+        //{
 
-            AutopartDPO autopartDPO = new AutopartDPO();
+        //    AutopartDPO autopartDPO = new AutopartDPO();
 
-            CarBrand carBrand = new CarBrand();
-            autopartDPO.CarBrandId = getAutopartDPOs.CarBrandId;
-            autopartDPO.CarBrandName = this.CbCarBrand.Text.Trim();
+        //    CarBrand carBrand = new CarBrand();
+        //    autopartDPO.CarBrandId = getAutopartDPOs.CarBrandId;
+        //    autopartDPO.CarBrandName = this.CbCarBrand.Text.Trim();
 
-            CarModel carModel = new CarModel();
-            autopartDPO.CarModelId = getAutopartDPOs.CarModelId;
-            autopartDPO.NameCarModel = this.CbCarModel.Text.Trim();
+        //    CarModel carModel = new CarModel();
+        //    autopartDPO.CarModelId = getAutopartDPOs.CarModelId;
+        //    autopartDPO.NameCarModel = this.CbCarModel.Text.Trim();
 
-            Unit unit = new Unit();
-            autopartDPO.UnitId = getAutopartDPOs.UnitId;
-            autopartDPO.NameUnit = this.CbUnit.Text.Trim();
+        //    Unit unit = new Unit();
+        //    autopartDPO.UnitId = getAutopartDPOs.UnitId;
+        //    autopartDPO.NameUnit = this.CbUnit.Text.Trim();
 
-            Knot knot = new Knot();
-            autopartDPO.KnotId = getAutopartDPOs.KnotId;
-            autopartDPO.NameKnot = this.CbKnot.Text.Trim();
+        //    Knot knot = new Knot();
+        //    autopartDPO.KnotId = getAutopartDPOs.KnotId;
+        //    autopartDPO.NameKnot = this.CbKnot.Text.Trim();
 
-            Country country = new Country();
-            autopartDPO.CountryId = getAutopartDPOs.CountryId;
-            autopartDPO.NameCountry = this.CbCountry.Text.Trim();
+        //    Country country = new Country();
+        //    autopartDPO.CountryId = getAutopartDPOs.CountryId;
+        //    autopartDPO.NameCountry = this.CbCountry.Text.Trim();
 
-            Manufacture manufacture = new Manufacture();
-            autopartDPO.ManufactureId = getAutopartDPOs.ManufactureId;
-            autopartDPO.NameManufacture = this.CbManufacture.Text.Trim();
+        //    Manufacture manufacture = new Manufacture();
+        //    autopartDPO.ManufactureId = getAutopartDPOs.ManufactureId;
+        //    autopartDPO.NameManufacture = this.CbManufacture.Text.Trim();
 
-            string status = (string)CbModerationStatus.SelectedItem;
+        //    string status = (string)CbModerationStatus.SelectedItem;
 
-            autopartDPO.AutopartId = getAutopartDPOs.AutopartId;
+        //    autopartDPO.AutopartId = getAutopartDPOs.AutopartId;
 
-            int resAvailableityStock;
-            int.TryParse(AvailableityStock.Text.Trim(), out resAvailableityStock);
-            if(resAvailableityStock != null)
-            {
-                autopartDPO.AvailableityStock = resAvailableityStock;
-            }
+        //    int resAvailableityStock;
+        //    int.TryParse(AvailableityStock.Text.Trim(), out resAvailableityStock);
+        //    if(resAvailableityStock != null)
+        //    {
+        //        autopartDPO.AvailableityStock = resAvailableityStock;
+        //    }
 
-            decimal resPriceSale;
-            decimal.TryParse(PriceSale.Text.Trim(), out resPriceSale);
-            if(resPriceSale != null)
-            {
-                autopartDPO.PriceSale = resPriceSale;
-            }
+        //    decimal resPriceSale;
+        //    decimal.TryParse(PriceSale.Text.Trim(), out resPriceSale);
+        //    if(resPriceSale != null)
+        //    {
+        //        autopartDPO.PriceSale = resPriceSale;
+        //    }
 
-            autopartDPO.NameAutopart = NameAutopart.Text.Trim();
-            autopartDPO.ModerationStatus = _listAutopartViewModel.SelectedModerationStatus;
-            autopartDPO.NumberAutopart = getAutopartDPOs.NumberAutopart;
-            autopartDPO.AccountId = getAutopartDPOs.AccountId;
+        //    autopartDPO.NameAutopart = NameAutopart.Text.Trim();
+        //    autopartDPO.ModerationStatus = _listAutopartViewModel.SelectedModerationStatus;
+        //    autopartDPO.NumberAutopart = getAutopartDPOs.NumberAutopart;
+        //    autopartDPO.AccountId = getAutopartDPOs.AccountId;
 
-            TransmitSelectedData(autopartDPO);
-        }
+        //    TransmitSelectedData(autopartDPO);
+        //}
 
         public void TransmitAdd() // передаются данные для редакирования или добавления
         {
@@ -235,7 +262,7 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
                 StartAnimation(CbCarModel);
                 BeginFadeAnimation(errorInput);
             }
-            if (CbCountry.Text.Trim().IsNullOrEmpty())
+            if (CbCountry.Text.Trim().IsNullOrEmpty() || CbCountry == null)
             {
                 errorInput.Text = "Заполните все поля!";
                 StartAnimation(CbCountry);
@@ -253,6 +280,31 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
                 StartAnimation(CbManufacture);
                 BeginFadeAnimation(errorInput);
             }
+            if (NameAutopart.Text.Trim().IsNullOrEmpty())
+            {
+                errorInput.Text = "Заполните все поля!";
+                StartAnimation(NameAutopart);
+                BeginFadeAnimation(errorInput);
+            }
+            if (CbModerationStatus.Text.Trim().IsNullOrEmpty())
+            {
+                errorInput.Text = "Заполните все поля!";
+                StartAnimation(CbModerationStatus);
+                BeginFadeAnimation(errorInput);
+            }
+            if (PriceSale.Text.Trim().IsNullOrEmpty())
+            {
+                errorInput.Text = "Заполните все поля!";
+                StartAnimation(PriceSale);
+                BeginFadeAnimation(errorInput);
+            }
+            if (AvailableityStock.Text.Trim().IsNullOrEmpty())
+            {
+                errorInput.Text = "Заполните все поля!";
+                StartAnimation(AvailableityStock);
+                BeginFadeAnimation(errorInput);
+            }
+
             // если добавляет данные поставщик, то нет проверки на поле статуса отображения, так как значение устанавливается по умолчанию
             string role = AuthorizationViewModel.CheckingUserRole();
             if (role != null)
