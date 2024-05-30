@@ -240,13 +240,13 @@ namespace sparePartsStore.ViewModel
         }
 
         // получаем данные для ComBox Country
-        public List<Country> GetCountryOnComboBox()
+        public ObservableCollection<Country> GetCountryOnComboBox()
         {
             // список, котроый будет в себе хранить значения comBox
             using (SparePartsStoreContext context = new SparePartsStoreContext())
             {
                 List<Country> сountries = context.Countries.ToList(); // получили список стран из БД
-                List<Country> countryList = new List<Country>(); // список для ComBox
+                ObservableCollection<Country> countryList = new ObservableCollection<Country>(); // список для ComBox
                 // записываем массив countryList
                 foreach (Country countryItem in сountries)
                 {
@@ -259,13 +259,13 @@ namespace sparePartsStore.ViewModel
         }
 
         // получаем данные для ComBox Manufacture
-        public List<Manufacture> GetManufactureOnComboBox()
+        public ObservableCollection<Manufacture> GetManufactureOnComboBox()
         {
             // список, котроый будет в себе хранить значения comBox
             using (SparePartsStoreContext context = new SparePartsStoreContext())
             {
                 List<Manufacture> manufacturies = context.Manufactures.ToList(); // получили список производителей из БД
-                List<Manufacture> manufactureList = new List<Manufacture>(); // список для ComBox
+                ObservableCollection<Manufacture> manufactureList = new ObservableCollection<Manufacture>(); // список для ComBox
                 // записываем массив manufactureList
                 foreach (Manufacture manufactureItem in manufacturies)
                 {
@@ -477,6 +477,22 @@ namespace sparePartsStore.ViewModel
             }
         }
 
+        #region PropertyComboBoxCountry
+
+        // заголовок страны
+        private Country _selectedCountryName;
+        public Country SelectedCountryName
+        {
+            get { return _selectedCountryName; }
+            set
+            {
+                _selectedCountryName = value;
+                OnPropertyChanged(nameof(SelectedCountryName));
+            }
+        }
+
+
+        // выбранный элемент страна
         private Country _selectedCountry;
         public Country SelectedCountry
         {
@@ -485,9 +501,49 @@ namespace sparePartsStore.ViewModel
             {
                 _selectedCountry = value;
                 OnPropertyChanged(nameof(SelectedCountry));
+
+                // при выборе страны, меняем список фабрики
+                EditManufactureOfCountry();
             }
         }
 
+        // вывод списка списка "страна"
+        private ObservableCollection<Country> _nameCountryComboBoxItems;
+        public ObservableCollection<Country> NameCountryComboBoxItems
+        {
+            get { return _nameCountryComboBoxItems = GetCountryOnComboBox(); }
+            set
+            {
+                _nameCountryComboBoxItems = value;
+                OnPropertyChanged(nameof(NameCountryComboBoxItems));
+            }
+        }
+
+        // метод изменения списка comboBox производителя, при выборе comboBox элемента страны
+        private void EditManufactureOfCountry()
+        {
+            ObservableCollection<Manufacture> manufacture = new ObservableCollection<Manufacture>();
+
+            NameManufactureComboBoxItems = manufacture;
+        }
+
+        #endregion
+
+        #region PropertyComboBoxManufacture
+
+        // вывод списка списка "производитель"
+        private ObservableCollection<Manufacture> _nameManufactureComboBoxItems;
+        public ObservableCollection<Manufacture> NameManufactureComboBoxItems
+        {
+            get { return _nameManufactureComboBoxItems = GetManufactureOnComboBox(); }
+            set
+            {
+                _nameManufactureComboBoxItems = value;
+                OnPropertyChanged(nameof(NameManufactureComboBoxItems));
+            }
+        }
+
+        // выбранный элемент "производители"
         private Manufacture _selectedManufacture;
         public Manufacture SelectedManufacture
         {
@@ -496,10 +552,34 @@ namespace sparePartsStore.ViewModel
             {
                 _selectedManufacture = value;
                 OnPropertyChanged(nameof(SelectedManufacture));
+
+                // вызываем метод который автоматически подставляет нужную страну, относительно выбранной фабрики
+                EditCountry();
             }
         }
 
-        // выбранный элемент списка
+        // метод подстановки сраны относительно фабрики
+        private void EditCountry()
+        {
+            // подбираем страну для заголовка при выборе нужной фабрики
+            using (SparePartsStoreContext context = new SparePartsStoreContext())
+            {
+                List<Country> countries = context.Countries.ToList();
+                // список стран
+                ObservableCollection<Country> countriesUP = new ObservableCollection<Country>(countries);
+                //отображаем список в comboBox
+                NameCountryComboBoxItems = countriesUP;
+
+                // находим элемент страны, который соответствует заданной фабрики
+                Country country = countries.FirstOrDefault(c => c.CountryId == SelectedManufacture.CountryId);
+                // выводим найденную страну в заголовок comboBox
+                SelectedCountryName = country;
+            }
+        }
+
+        #endregion
+
+        // выбранный элемент списка "статус отображения товара"
         private string _selectedModerationStatus;
         public string SelectedModerationStatus
         {
@@ -511,6 +591,7 @@ namespace sparePartsStore.ViewModel
             }
         }
 
+        // вывод списка "статусов заказов"
         private ObservableCollection<string> _moderationStatusComboBoxItems;
         public ObservableCollection<string> ModerationStatusComboBoxItems
         {

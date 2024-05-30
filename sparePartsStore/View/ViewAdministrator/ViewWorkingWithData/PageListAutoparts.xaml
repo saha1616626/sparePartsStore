@@ -69,7 +69,7 @@
                         Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0" 
                         Command="{Binding DeleteAutoParts}" IsEnabled="{Binding IsWorkButtonEnable}"/>
 
-                <TextBox Grid.Column="3" x:Name="SearchParts" Height="35" Padding="15,7,0,0" Margin="10,0,0,0"
+                <TextBox Grid.Column="3" x:Name="SearchParts" Height="35" Padding="15,12,15,0" Margin="10,0,0,0"
                     VerticalAlignment="Center"  HorizontalAlignment="Center"
                     Text="{Binding NameAutoParts, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     TextChanged="TextBoxNameAutoParts"    

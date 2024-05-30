@@ -49,7 +49,7 @@
         </Grid.RowDefinitions>
 
         <!--название-->
-        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="Деталь" FontSize="30" Foreground="Black" FontWeight="DemiBold" Margin="0,40,0,40" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="Деталь" FontSize="30" Foreground="Black" FontWeight="DemiBold" Margin="0, 20,0,40" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
         <!--поле для вывода ошибок-->
         <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" Margin="0,50,20,0" x:Name="errorInput" FontWeight="DemiBold" FontSize="24"/>
@@ -71,48 +71,49 @@
 
         <!--выбор марки авто-->
         <ComboBox Grid.Column="0" Grid.Row="1"
-            Width="320" Margin="0,30,0,0" x:Name="CbCarBrand" DisplayMemberPath="NameCarBrand"
+            Width="320" Margin="0,20,0,0" x:Name="CbCarBrand" DisplayMemberPath="NameCarBrand"
             SelectedItem="{Binding SelectedCarBrand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             materialDesign:HintAssist.Hint="Выберите марку автомобиля" IsEditable="True"
             Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
 
         <!--выбор модели авто-->
         <ComboBox Grid.Column="0" Grid.Row="2"
-            Width="320" Margin="0,30,0,0" x:Name="CbCarModel" DisplayMemberPath="NameCarModel"
+            Width="320" Margin="0,20,0,0" x:Name="CbCarModel" DisplayMemberPath="NameCarModel"
             SelectedItem="{Binding SelectedCarModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             materialDesign:HintAssist.Hint="Выберите модель автомобиля" IsEditable="True"
             Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
 
         <!--выбор агрегат-->
         <ComboBox Grid.Column="0" Grid.Row="3"
-            Width="320" Margin="0,30,0,0" x:Name="CbUnit" DisplayMemberPath="NameUnit"
+            Width="320" Margin="0,20,0,0" x:Name="CbUnit" DisplayMemberPath="NameUnit"
             SelectedItem="{Binding SelectedUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             materialDesign:HintAssist.Hint="Выберите агрегат автомобиля" IsEditable="True"
             Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
 
         <!--выбор узла-->
         <ComboBox Grid.Column="0" Grid.Row="4"
-            Width="320" Margin="0,30,0,0" x:Name="CbKnot" DisplayMemberPath="NameKnot"
+            Width="320" Margin="0,20,0,0" x:Name="CbKnot" DisplayMemberPath="NameKnot"
             SelectedItem="{Binding SelectedKnot, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             materialDesign:HintAssist.Hint="Выберите узел автомобиля" IsEditable="True"
             Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
 
         <!--выберите страна-->
-        <ComboBox Grid.Column="0" Grid.Row="5" x:Name="CbCountry" DisplayMemberPath="NameCountry"
-            SelectedItem="{Binding SelectedCountry, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            Width="320" Margin="0,30,0,0"
+        <ComboBox Grid.Column="0" Grid.Row="5" x:Name="CbCountry" ItemsSource="{Binding NameCountryComboBoxItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedItem="{Binding SelectedCountry, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="NameCountry"
+            Text="{Binding SelectedCountryName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            Width="320" Margin="0,20,0,0"
             materialDesign:HintAssist.Hint="Выберите страну производства" IsEditable="True"
             Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
 
         <!--выберите производителя-->
-        <ComboBox Grid.Column="0" Grid.Row="6" x:Name="CbManufacture" DisplayMemberPath="NameManufacture"
-            SelectedItem="{Binding SelectedManufacture, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            Width="320" Margin="0,30,0,0"
+        <ComboBox Grid.Column="0" Grid.Row="6" x:Name="CbManufacture" ItemsSource="{Binding NameManufactureComboBoxItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedItem="{Binding SelectedManufacture, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  DisplayMemberPath="NameManufacture"
+            Width="320" Margin="0,20,0,0"
             materialDesign:HintAssist.Hint="Выберите производителя" IsEditable="True"
             Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
 
         <!--название детали-->
-        <TextBox Grid.Row="1" Grid.Column="1" x:Name="NameAutopart" Height="50" Margin="0,30,0,0"
+        <TextBox Grid.Row="1" Grid.Column="1" x:Name="NameAutopart" Height="50" Margin="0,20,0,0"
              VerticalAlignment="Center" HorizontalAlignment="Center"
              Text="{Binding OutAutopart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"   
              materialDesign:TextFieldAssist.HasClearButton="True"
@@ -124,12 +125,12 @@
         <!--статус отображения-->
         <ComboBox Grid.Column="1" Grid.Row="4" x:Name="CbModerationStatus" ItemsSource="{Binding ModerationStatusComboBoxItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             SelectedItem="{Binding SelectedModerationStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            Width="320" Margin="0,30,0,0"
+            Width="320" Margin="0,20,0,0"
             materialDesign:HintAssist.Hint="Выберите статус отображения" IsEditable="True"
             Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
 
         <!--цена-->
-        <TextBox Grid.Row="2" Grid.Column="1" x:Name="PriceSale" Height="50" Margin="0,30,0,0"
+        <TextBox Grid.Row="2" Grid.Column="1" x:Name="PriceSale" Height="50" Margin="0,20,0,0"
              VerticalAlignment="Center" HorizontalAlignment="Center"
              Text="{Binding OutPriceSale, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"   
              materialDesign:TextFieldAssist.HasClearButton="True"
@@ -139,7 +140,7 @@
              MaxLength="100" TextWrapping="Wrap" Width="320" />
 
         <!--кол-во на складе-->
-        <TextBox Grid.Row="3" Grid.Column="1" x:Name="AvailableityStock" Height="50" Margin="0,30,0,0"
+        <TextBox Grid.Row="3" Grid.Column="1" x:Name="AvailableityStock" Height="50" Margin="0,20,0,0"
              VerticalAlignment="Center" HorizontalAlignment="Center"
              Text="{Binding OutAvailableityStock, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"   
              materialDesign:TextFieldAssist.HasClearButton="True"
@@ -149,7 +150,7 @@
              MaxLength="100" TextWrapping="Wrap" Width="320" />
 
         <!--кнопки-->
-        <Grid Grid.Row="7" Grid.ColumnSpan="2" Margin="0,40,0,0" HorizontalAlignment="Center">
+        <Grid Grid.Row="5" Grid.Column="1" Margin="0,40,0,0" HorizontalAlignment="Center">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>

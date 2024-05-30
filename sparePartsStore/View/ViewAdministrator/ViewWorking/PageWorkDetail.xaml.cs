@@ -89,8 +89,8 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
         public void DataReceptionAdd()
         {
             // передаём данные в поля                                          
-            this.CbCountry.ItemsSource = _listAutopartViewModel.GetCountryOnComboBox().ToList(); ; // получаем список для ComBox
-            this.CbManufacture.ItemsSource = _listAutopartViewModel.GetManufactureOnComboBox().ToList();
+            //this.CbCountry.ItemsSource = _listAutopartViewModel.GetCountryOnComboBox().ToList(); ; // получаем список для ComBox
+            //this.CbManufacture.ItemsSource = _listAutopartViewModel.GetManufactureOnComboBox().ToList();
             this.CbCarBrand.ItemsSource = _listAutopartViewModel.GetCarBrandOnComboBox().ToList();
             this.CbCarModel.ItemsSource = _listAutopartViewModel.GetCarModelOnComboBox().ToList();
             this.CbUnit.ItemsSource = _listAutopartViewModel.GetUnitOnComboBox().ToList();
