@@ -89,7 +89,7 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
         public void DataReceptionAdd()
         {
             // передаём данные в поля                                          
-            this.CbCountry.ItemsSource = _listAutopartViewModel.GetCountryOnComboBox(); // получаем список для ComBox
+            this.CbCountry.ItemsSource = _listAutopartViewModel.GetCountryOnComboBox().ToList(); ; // получаем список для ComBox
             this.CbManufacture.ItemsSource = _listAutopartViewModel.GetManufactureOnComboBox().ToList();
             this.CbCarBrand.ItemsSource = _listAutopartViewModel.GetCarBrandOnComboBox().ToList();
             this.CbCarModel.ItemsSource = _listAutopartViewModel.GetCarModelOnComboBox().ToList();
@@ -184,11 +184,19 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
                 StartAnimation(CbManufacture);
                 BeginFadeAnimation(errorInput);
             }
-            if (CbModerationStatus.Text.Trim().IsNullOrEmpty())
+            // если добавляет данные поставщик, то нет проверки на поле статуса отображения, так как значение устанавливается по умолчанию
+            string role = AuthorizationViewModel.CheckingUserRole();
+            if (role != null)
             {
-                errorInput.Text = "Заполните все поля!";
-                StartAnimation(CbModerationStatus);
-                BeginFadeAnimation(errorInput);
+                if (role != "Поставщик")
+                {
+                    if (CbModerationStatus.Text.Trim().IsNullOrEmpty())
+                    {
+                        errorInput.Text = "Заполните все поля!";
+                        StartAnimation(CbModerationStatus);
+                        BeginFadeAnimation(errorInput);
+                    }
+                }
             }
             if (PriceSale.Text.Trim().IsNullOrEmpty())
             {

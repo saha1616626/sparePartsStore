@@ -10,7 +10,7 @@
       Title="" MinHeight="700" Height="Auto" MinWidth="1200" Width="Auto">
 
     <Page.Resources>
-        <!--<local1:ListAutopartViewModel x:Key="ListAutopartViewModel"/>-->
+        <local1:ListAutopartViewModel x:Key="ListAutopartViewModel"/>
 
         <!--анимация при некорректом вводе-->
         <Storyboard x:Key="FocusAnimation">
@@ -71,7 +71,7 @@
 
         <!--выбор марки авто-->
         <ComboBox Grid.Column="0" Grid.Row="1"
-            Width="320" Margin="0,30,0,0" x:Name="CbCarBrand" DisplayMemberPath="CarBrandName"
+            Width="320" Margin="0,30,0,0" x:Name="CbCarBrand" DisplayMemberPath="NameCarBrand"
             SelectedItem="{Binding SelectedCarBrand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             materialDesign:HintAssist.Hint="Выберите марку автомобиля" IsEditable="True"
             Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
@@ -94,7 +94,7 @@
         <ComboBox Grid.Column="0" Grid.Row="4"
             Width="320" Margin="0,30,0,0" x:Name="CbKnot" DisplayMemberPath="NameKnot"
             SelectedItem="{Binding SelectedKnot, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            materialDesign:HintAssist.Hint="Выберите агрегат автомобиля" IsEditable="True"
+            materialDesign:HintAssist.Hint="Выберите узел автомобиля" IsEditable="True"
             Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
 
         <!--выберите страна-->
@@ -122,7 +122,7 @@
              MaxLength="100" TextWrapping="Wrap" Width="320" />
 
         <!--статус отображения-->
-        <ComboBox Grid.Column="1" Grid.Row="4" x:Name="CbModerationStatus" DisplayMemberPath="NameModerationStatus"
+        <ComboBox Grid.Column="1" Grid.Row="4" x:Name="CbModerationStatus" DisplayMemberPath="string"
             SelectedItem="{Binding SelectedModerationStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             Width="320" Margin="0,30,0,0"
             materialDesign:HintAssist.Hint="Выберите статус отображения" IsEditable="True"
