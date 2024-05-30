@@ -1197,7 +1197,7 @@ namespace sparePartsStore.ViewModel
             selectedMenu();
 
             // получаем выбранный данные для редактирования
-            pageWorkDetail.EventArgsAutopart += (sender, args) =>
+            pageListAutoparts.EventDataSelectedAutopartItem += (sender, args) =>
             {
                 AutopartDPO autopartDPO = (AutopartDPO)args.Value; // получаем выбранные данные
 
@@ -1205,7 +1205,7 @@ namespace sparePartsStore.ViewModel
                 pageWorkDetail.DataReception(autopartDPO);
             };
             // вызываем событие для передачи данных
-            pageWorkDetail.Transmit();
+            pageListAutoparts.TransmitData();
         }
 
         // редактируем или добавляем данные в таблицу
@@ -1230,15 +1230,24 @@ namespace sparePartsStore.ViewModel
                         autopart.NameAutopart = autopartCopy.NameAutopart;
 
                         // находим макисимальный номер запчасти и на основе него создаём новый номер + 1
-                        int NumberAutopart = autoparts.Max(a => a.NumberAutopart);
-                        if(NumberAutopart == null || NumberAutopart == 0)
+                        int NumberAutopart;
+                        if (autoparts.Any())
                         {
-                            NumberAutopart = 8000000;
+                            NumberAutopart = autoparts.Max(a => a.NumberAutopart);
+                            if (NumberAutopart == null || NumberAutopart == 0)
+                            {
+                                NumberAutopart = 8000000;
+                            }
+                            else
+                            {
+                                NumberAutopart++;
+                            }
                         }
                         else
                         {
-                            NumberAutopart++;
+                            NumberAutopart = 8000000;
                         }
+
 
                         autopart.NumberAutopart = NumberAutopart;
                         autopart.KnotId = autopartCopy.KnotId;
@@ -1252,7 +1261,7 @@ namespace sparePartsStore.ViewModel
                         string role = authorizationViewModel.CheckingUserRole();
                         if(role == "Администратор")
                         {
-                            autopart.ModerationStatus = autopartCopy.ModerationStatus;
+                            autopart.ModerationStatus = autopartDPO.ModerationStatus;
                         }
                         else
                         {
@@ -1262,7 +1271,7 @@ namespace sparePartsStore.ViewModel
                         sparePartsStoreContext.Add(autopart); // вносим данные в бд
                         sparePartsStoreContext.SaveChanges(); // сохраняем бд
                     };
-                    pageWorkDetail.Transmit();
+                    pageWorkDetail.TransmitAdd();
                 }
             }
             else // если редактируем данные
@@ -1290,13 +1299,23 @@ namespace sparePartsStore.ViewModel
                             autopart.PriceSale = autopartUP.PriceSale;
                             autopart.AvailableityStock = autopartUP.AvailableityStock;
                             autopart.AccountId = autopartUP.AccountId;
-                            autopart.ModerationStatus = autopartUP.ModerationStatus;
+
+                            // проверяем под какой ролью вошёл пользователь, если поставщик, то статус заказа автоматически в обработке, а если администратор, то на его усмотрение
+                            string role = authorizationViewModel.CheckingUserRole();
+                            if (role == "Администратор")
+                            {
+                                autopart.ModerationStatus = autopartDPO.ModerationStatus;
+                            }
+                            else
+                            {
+                                autopart.ModerationStatus = "В обработке";
+                            }
 
                             sparePartsStoreContext.Update(autopart);// вносим данные в бд
                             sparePartsStoreContext.SaveChanges(); // сохраняем бд
                         }
                     };
-                    pageWorkDetail.Transmit(); // вызываем событие, чтобы полчить данные для изменения в БД
+                    pageWorkDetail.TransmitAdd(); // вызываем событие, чтобы полчить данные для изменения в БД
                 }
             }
 

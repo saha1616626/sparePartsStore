@@ -126,6 +126,14 @@ namespace sparePartsStore.Model
             set { _accountId = value; OnPropertyChanged(nameof(AccountId)); }
         }
 
+
+        private string _nameOrganization { get; set; }
+        public string NameOrganization
+        {
+            get { return _nameOrganization; }
+            set { _nameOrganization = value; OnPropertyChanged(nameof(NameOrganization)); }
+        }
+
         private string _moderationStatus { get; set; }
         public string ModerationStatus
         {
@@ -152,6 +160,7 @@ namespace sparePartsStore.Model
             string nameKnot = string.Empty;
             string nameCountry = string.Empty;
             string nameManufactureBrand = string.Empty;
+            string nameOrganization = string.Empty;
             
             // заменяем id - модель и марка авто
             CarModelDPO carModelDPO = listCarModelViewModel.ListCarModelDPO.FirstOrDefault(c => c.CarModelId == autopart.CarModelId);
@@ -177,27 +186,39 @@ namespace sparePartsStore.Model
                 nameCountry = manufactureDPO.NameCountry;
             }
 
-            if(nameCarBrand != string.Empty && nameCarModel != string.Empty && nameKnot != string.Empty && nameUnit != string.Empty && nameManufactureBrand != string.Empty && nameCountry != string.Empty)
+            // получам название организации, которая поставляет запчасти
+            using (SparePartsStoreContext context = new SparePartsStoreContext())
             {
-                autopartDPO.AutopartId = autopart.AutopartId;
-                autopartDPO.NumberAutopart = autopart.NumberAutopart;
-                autopartDPO.NameAutopart = autopart.NameAutopart;
+                Account account = context.Accounts.FirstOrDefault(a => a.AccountId == autopart.AccountId);
+                if (account != null)
+                {
+                    nameOrganization = account.NameOrganization;
+                }
+            }
 
-                autopartDPO.CarBrandName = nameCarBrand;
-                autopartDPO.NameCarModel = nameCarModel;
-                autopartDPO.NameUnit = nameUnit;
-                autopartDPO.NameKnot = nameKnot;
-                autopartDPO.NameCountry = nameCountry;
-                autopartDPO.NameManufacture = nameManufactureBrand;
 
-                autopartDPO.CarModelId = autopart.CarModelId;
-                autopartDPO.KnotId = autopart.KnotId;
-                autopart.ManufactureId = autopart.ManufactureId;
+            if (nameCarBrand != string.Empty && nameCarModel != string.Empty && nameKnot != string.Empty && nameUnit != string.Empty && nameManufactureBrand != string.Empty && nameCountry != string.Empty)
+            {
+            autopartDPO.AutopartId = autopart.AutopartId;
+            autopartDPO.NumberAutopart = autopart.NumberAutopart;
+            autopartDPO.NameAutopart = autopart.NameAutopart;
 
-                autopartDPO.PriceSale = autopart.PriceSale;
-                autopartDPO.AvailableityStock = autopart.AvailableityStock;
-                autopartDPO.AccountId = autopart.AccountId;
-                autopartDPO.ModerationStatus = autopart.ModerationStatus;
+            autopartDPO.CarBrandName = nameCarBrand;
+            autopartDPO.NameCarModel = nameCarModel;
+            autopartDPO.NameUnit = nameUnit;
+            autopartDPO.NameKnot = nameKnot;
+            autopartDPO.NameCountry = nameCountry;
+            autopartDPO.NameManufacture = nameManufactureBrand;
+
+            autopartDPO.CarModelId = autopart.CarModelId;
+            autopartDPO.KnotId = autopart.KnotId;
+            autopart.ManufactureId = autopart.ManufactureId;
+
+            autopartDPO.PriceSale = autopart.PriceSale;
+            autopartDPO.AvailableityStock = autopart.AvailableityStock;
+            autopartDPO.AccountId = autopart.AccountId;
+            autopartDPO.NameOrganization = nameOrganization;
+            autopartDPO.ModerationStatus = autopart.ModerationStatus;
             }
 
             return autopartDPO;

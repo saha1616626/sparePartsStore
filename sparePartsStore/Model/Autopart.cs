@@ -49,7 +49,7 @@ public partial class Autopart
             List<CarModel> carModels = context.CarModels.ToList();
             List<Manufacture> manufactures = context.Manufactures.ToList();
 
-            Knot knot = knots.FirstOrDefault(k => k.KnotId == autopartDPO.AutopartId);
+            Knot knot = knots.FirstOrDefault(k => k.KnotId == autopartDPO.KnotId);
             if (knot != null)
             {
                 knotId = knot.KnotId; // присваиваем полученные ID

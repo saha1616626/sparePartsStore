@@ -278,10 +278,10 @@ namespace sparePartsStore.ViewModel
         }
 
         // получаем данные для ComBox Manufacture
-        public List<string> GetModerationStatusOnComboBox()
+        public ObservableCollection<string> GetModerationStatusOnComboBox()
         {
             // список, котроый будет в себе хранить значения comBox
-            List <string> ModerationStatus = new List<string>();
+            ObservableCollection<string> ModerationStatus = new ObservableCollection<string>();
             ModerationStatus.Add("В обработке");
             ModerationStatus.Add("Отображается");
             ModerationStatus.Add("Не отображается");
@@ -294,7 +294,7 @@ namespace sparePartsStore.ViewModel
         public TextBox NameAutopartInput { get; set; }
 
         // проверяем, есть ли совпадение данных перед добавлением
-        public bool CheckingForMatchDB()
+        public bool CheckingForMatchDB(AutopartDPO autopartDPO)
         {
             bool noCoincidence = true; // по умолчанию нет совпадения
 
@@ -304,7 +304,7 @@ namespace sparePartsStore.ViewModel
                 List<Autopart> newAutopart = new List<Autopart>();
 
                 Autopart autopart = new Autopart();
-                autopart = autopart.CopyFromAutopartDPO(SelectedAutopart);
+                autopart = autopart.CopyFromAutopartDPO(autopartDPO);
 
                 if(autoparts != null)
                 {
@@ -333,7 +333,7 @@ namespace sparePartsStore.ViewModel
                 List<Autopart> newAutopart = new List<Autopart>();
 
                 Autopart autopart = new Autopart();
-                autopart = autopart.CopyFromAutopartDPO(SelectedAutopart);
+                autopart = autopart.CopyFromAutopartDPO(autopartDPO);
 
                 if (autoparts != null)
                 {
@@ -499,6 +499,7 @@ namespace sparePartsStore.ViewModel
             }
         }
 
+        // выбранный элемент списка
         private string _selectedModerationStatus;
         public string SelectedModerationStatus
         {
@@ -510,6 +511,16 @@ namespace sparePartsStore.ViewModel
             }
         }
 
+        private ObservableCollection<string> _moderationStatusComboBoxItems;
+        public ObservableCollection<string> ModerationStatusComboBoxItems
+        {
+            get { return _moderationStatusComboBoxItems = GetModerationStatusOnComboBox(); }
+            set
+            {
+                _moderationStatusComboBoxItems = value;
+                OnPropertyChanged(nameof(ModerationStatusComboBoxItems));
+            }
+        }
 
 
         public event PropertyChangedEventHandler PropertyChanged;

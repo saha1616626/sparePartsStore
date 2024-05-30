@@ -94,8 +94,8 @@
                     HorizontalAlignment="Center" RowHeight="50" FontSize="18"
                     AutoGenerateColumns="False"
                     CellStyle="{StaticResource DataGridCellStyle}"
-                    ItemsSource="{Binding ListAutoPartsDPO}"
-                    SelectedItem="{Binding SelectedAutoParts}"
+                    ItemsSource="{Binding ListAutopartDPO}"
+                    SelectedItem="{Binding SelectedAutopart}"
                     Style="{StaticResource MaterialDesignDataGrid}"
                     ColumnHeaderStyle="{StaticResource columnTableHeader}">
 
@@ -119,7 +119,9 @@
                         <DataGridTextColumn Header="Статус" Binding="{Binding ModerationStatus}" MinWidth="100" IsReadOnly="True"/>
 
                         <DataGridTextColumn Header="Производитель" Binding="{Binding NameManufacture}" MinWidth="100" IsReadOnly="True"/>
-                </DataGrid.Columns>
+
+                        <DataGridTextColumn Header="Поставщик" Binding="{Binding NameOrganization}" MinWidth="100" IsReadOnly="True"/>
+                    </DataGrid.Columns>
 
                 </DataGrid>
             </ScrollViewer>
