@@ -2,10 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using sparePartsStore.Helper;
+using sparePartsStore.Helper.Authorization;
 using sparePartsStore.Model;
 using sparePartsStore.Model.DPO;
 using sparePartsStore.View;
 using sparePartsStore.View.ViewAdministrator.ViewMainPages;
+using sparePartsStore.View.ViewAdministrator.ViewSettingRole;
 using sparePartsStore.View.ViewAdministrator.ViewWorking;
 using sparePartsStore.View.ViewAdministrator.ViewWorkingWithData;
 using System;
@@ -167,6 +169,16 @@ namespace sparePartsStore.ViewModel
             WorkingWithData.saveDataCreateOrEditAutoparts += WorkDataAutoparts;
             // подписываемся на событие удаления данных запчасти
             WorkingWithData.saveDataDeleteAutoparts += DeleteDataAutoparts;
+
+
+            // подписываемся на событие запуска страницы добавления пользователя
+            WorkingWithData.launchPageAddUser += LaunchPageAddUser;
+            // подписываемся на событие запуска страницы редактирования пользователя
+            WorkingWithData.launchPageEditUser += LaunchPageEditUser;
+            // подписываемся на событие сохранения данных пользователя после редактирования или добваления
+            WorkingWithData.saveDataCreateOrEditUser += WorkDataUser;
+            // подписываемся на событие удаления данных пользователя
+            WorkingWithData.saveDataDeleteUsers += DeleteDataUser;
         }
 
         // запуск страницы - поиск запчастей
@@ -1140,7 +1152,7 @@ namespace sparePartsStore.ViewModel
         #endregion
 
         // страна - запчасти
-        #region
+        #region AutoParts
 
         // кнопка запуска страницы - марки авто
         PageListAutoparts pageListAutoparts; // объект класса отображения списка запчастей
@@ -1354,6 +1366,218 @@ namespace sparePartsStore.ViewModel
 
         #endregion
 
+        // страница - пользователи
+        #region User
+
+        // кнопка запуска страницы - марки авто
+        PageListUsers pageListUsers; // объект класса отображения списка пользователей
+
+        // переходим в меню настроек пользователей
+        private RelayCommand _btn_UserSetting { get; set; }
+        public RelayCommand Btn_UserSetting
+        {
+            get
+            {
+                return _btn_UserSetting ??
+                    (_btn_UserSetting = new RelayCommand(obj =>
+                    {
+                        // событие для очистка фреймов из памяти в PageMainHead
+                        WorkingWithData.ClearMemoryAfterFrame();
+                        pageListUsers = new PageListUsers();
+                        MainFrame.NavigationService.Navigate(pageListUsers);
+
+                        // работа с меню 
+                        typeMenu = false;
+                        visibilitySetting = true;
+                        selectedMenu();
+
+                    }, (obj) => true));
+            }
+        }
+
+        // переходим в основное меню
+        private RelayCommand _btn_BasicMenu { get; set; }
+        public RelayCommand Btn_BasicMenu
+        {
+            get
+            {
+                return _btn_BasicMenu ??
+                    (_btn_BasicMenu = new RelayCommand(obj =>
+                    {
+                        // событие для очистка фреймов из памяти в PageMainHead
+                        WorkingWithData.ClearMemoryAfterFrame();
+                        pageListAutoparts = new PageListAutoparts();
+                        MainFrame.NavigationService.Navigate(pageListAutoparts);
+
+                        // работа с меню 
+                        typeMenu = true;
+                        visibilityMenu = true;
+                        selectedMenu();
+
+                    }, (obj) => true));
+            }
+        }
+
+        // объект страницы для редактирования и добавления данных пользователя
+        PageWorkUser pageWorkUser;
+        // флаг, который нам сообщает, редактирует пользователь таблицу или добавлят новые данные
+        bool addOrEditUser; // если true - значит добавлять, если false - значит редактировать
+
+        // запуск страницы добавления пользователя
+        private void LaunchPageAddUser(object sender, EventAggregator e)
+        {
+            pageWorkUser = new PageWorkUser(); // экз страницы для добавления
+
+            MainFrame.NavigationService.Navigate(pageWorkUser);
+            pageWorkUser.RenameButtonUser.Content = "Добавить"; // измененяем кнопку
+
+            // поднимаем флаг, что мы добавляем данные
+            addOrEditUser = true;
+            // показываем, что было открыто не основное меню перед его скрытием
+            typeMenu = false;
+            // скрываем шестерёнку и основное меню, чтобы нельзя было перемещаться между страницами
+            selectedMenu();
+            // добавлем данные в ComBox
+            pageWorkUser.DataReceptionAdd();
+        }
+
+        // запуск страницы редактирования пользователя
+        private void LaunchPageEditUser(object sender, EventAggregator e)
+        {
+            pageWorkUser = new PageWorkUser(); // экз страницы для редактирования
+
+            MainFrame.NavigationService.Navigate(pageWorkUser); // запуск страницы
+            pageWorkUser.RenameButtonUser.Content = "Редактировать"; // измененяем кнопку
+            pageWorkUser.Password.Visibility = Visibility.Hidden;
+            // поднимаем флаг, что мы редактируем данные
+            addOrEditUser = false;
+            // показываем, что было открыто не основное меню перед его скрытием
+            typeMenu = false;
+            // скрываем шестерёнку и основное меню, чтобы нельзя было перемещаться между страницами
+            selectedMenu();
+
+            // получаем выбранный данные для редактирования
+            pageListUsers.EventDataSelectedUserItem += (sender, args) =>
+            {
+                Account accountDPO = (Account)args.Value; // получаем выбранные данные
+
+                // передаём данные для редактирования (отображаем)
+                pageWorkUser.DataReception(accountDPO);
+            };
+            // вызываем событие для передачи данных
+            pageListUsers.TransmitData();
+        }
+
+        // редактируем или добавляем данные в таблицу
+        private void WorkDataUser(object sender, EventAggregator e)
+        {
+            if (addOrEditUser) // если добавляем данные
+            {
+                // подключаем БД
+                using (SparePartsStoreContext sparePartsStoreContext = new SparePartsStoreContext())
+                {
+                    List<Account> accounts = sparePartsStoreContext.Accounts.ToList(); // получаем список пользователей
+
+                    // создаём экз для добавления данных
+                    Account account = new Account();
+                    pageWorkUser.EventArgsAccount += (sender, args) =>
+                    {
+                        Account accountNew = (Account)args.Value;
+
+                        account.AccountLogin = accountNew.AccountLogin;
+                        // зашифровываем полученный пароль
+                        account.AccountPassword = PasswordHasher.HashPassword(accountNew.AccountPassword);
+                        account.AccountRoleName = accountNew.AccountRoleName;
+                        account.NameOrganization = accountNew.NameOrganization;
+                        account.Inn = accountNew.Inn;
+                        account.Ogrn = accountNew.Ogrn;
+                        account.Ogrnip = accountNew.Ogrnip;
+                        account.Kpp = accountNew.Kpp;
+
+                        sparePartsStoreContext.Add(account); // вносим данные в бд
+                        sparePartsStoreContext.SaveChanges(); // сохраняем бд
+                    };
+                    pageWorkUser.Transmit();
+                }
+            }
+            else // если редактируем данные
+            {
+                // подключаем БД
+                using (SparePartsStoreContext sparePartsStoreContext = new SparePartsStoreContext())
+                {
+                    List<Account> accounts = sparePartsStoreContext.Accounts.ToList(); // получаем список пользователей
+
+                    // создаём экз для добавления данных
+                    Account account = new Account();
+                    pageWorkUser.EventArgsAccount += (sender, args) =>
+                    {
+                        Account accountUP = (Account)args.Value;
+                        Account accountNew = accounts.FirstOrDefault(a => a.AccountId == accountUP.AccountId);
+
+                        if(accountNew != null)
+                        {
+                            accountNew.AccountLogin = accountUP.AccountLogin;
+                            // зашифровываем полученный пароль
+                            accountNew.AccountPassword = PasswordHasher.HashPassword(accountUP.AccountPassword);
+                            accountNew.AccountRoleName = accountUP.AccountRoleName;
+                            accountNew.NameOrganization = accountUP.NameOrganization;
+                            accountNew.Inn = accountUP.Inn;
+                            accountNew.Ogrn = accountUP.Ogrn;
+                            accountNew.Ogrnip = accountUP.Ogrnip;
+                            accountNew.Kpp = accountUP.Kpp;
+
+                            sparePartsStoreContext.Update(accountNew); // вносим данные в бд
+                            sparePartsStoreContext.SaveChanges(); // сохраняем бд
+                        }
+                    };
+                    pageWorkUser.Transmit();
+                }
+            }
+
+            WorkingWithData.ClearMemoryAfterFrame();
+            pageListUsers = new PageListUsers();// обновляем экз. класса
+            MainFrame.NavigationService.Navigate(pageListUsers);
+            selectedMenu(); // отображаем меню
+        }
+
+        // удаляем данные из таблицы
+        private void DeleteDataUser(object sender, EventAggregator e)
+        {
+            // получаем данные для удаления
+            pageListUsers.EventDataSelectedUserItem += (sender, args) =>
+            {
+                using (SparePartsStoreContext sparePartsStoreContext = new SparePartsStoreContext())
+                {
+                    List<Account> accounts = sparePartsStoreContext.Accounts.ToList(); // получаем список пользователей
+
+                    Account account = (Account)args.Value;
+                    // получили выбранные данные из таблицы
+                    // находим в списке БД элемент для удаления
+                    Account accNew = accounts.FirstOrDefault(a => a.AccountId == account.AccountId);
+                    if(accNew != null)
+                    {
+                        sparePartsStoreContext.Accounts.Remove(accNew);
+                        sparePartsStoreContext.SaveChanges(); // сохраняем бд
+
+                        // обновляем список
+                        pageListUsers.UpTable();
+                    }
+                }
+
+            };
+            // вызываем событие для передачи данных
+            pageListUsers.TransmitData();
+        }
+
+        // переход на страницу "пользователи"
+
+
+
+        // перереход на страницу "настройки"
+
+
+        #endregion
+
         // методы PageMainHead
         #region methodsPageMainHead
 
@@ -1388,6 +1612,9 @@ namespace sparePartsStore.ViewModel
         // переменная, которая показывает, было скрыто меню или нет
         private bool visibilityMenu = false; // меню скрыто
 
+        // переменная, которая показывает, было открыто меню настроек польлзователей или нет
+        private bool visibilitySetting = false; // меню скрыто
+
         // метод для скрытия или отображения меню, иконок при редактировании данных
         private void selectedMenu()
         {
@@ -1395,8 +1622,12 @@ namespace sparePartsStore.ViewModel
             {
                 if (visibilityMenu) // основное меню скрыто
                 {
+                    IsSettingMenu = Visibility.Hidden; // выкл меню настроек
+                    IsBasicMenu = Visibility.Visible; // вкл основное меню
+
                     IsMenu = Visibility.Visible; // включаем меню (любое)
                     IsSettingVisible = Visibility.Visible; // включаем шестерёнку
+                    IsOutMenu = Visibility.Collapsed; // иконка переход на основное меню
 
                     visibilityMenu = false; // меню не скрыто
                 }
@@ -1410,7 +1641,26 @@ namespace sparePartsStore.ViewModel
             }
             else // если настройки
             {
+                if (visibilitySetting) // открываем меню
+                {
+                    IsBasicMenu = Visibility.Hidden; // выкл основное меню
+                    IsSettingMenu = Visibility.Visible; // вкл меню настроек
 
+                    IsMenu = Visibility.Visible; // включаем меню (любое)
+                    
+                    IsOutMenu = Visibility.Visible; // иконка переход на основное меню
+                    IsSettingVisible = Visibility.Collapsed; // скрываем шестерёнку
+
+                    visibilitySetting = false; // меню было скрыто
+                }
+                else // закрываем меню
+                {
+                    IsMenu = Visibility.Collapsed; // выключаем меню (любое)
+                    // иконка переход на основное меню
+                    IsOutMenu = Visibility.Collapsed;
+
+                    visibilitySetting = true; // меню было открыто
+                }
             }
         }
 

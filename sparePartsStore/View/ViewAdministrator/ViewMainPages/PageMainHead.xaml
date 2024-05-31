@@ -69,7 +69,7 @@
 
                         <materialDesign:PackIcon Grid.Column="0" Grid.Row="0" Kind="Cog" Width="45" Height="45"/>
 
-                        <Button Grid.Column="0" Grid.Row="0" Height="45" Width="45" Style="{StaticResource TransparentButton}" Click="Btn_UserSetting"/>
+                        <Button Grid.Column="0" Grid.Row="0" Height="45" Width="45" Style="{StaticResource TransparentButton}" Click="Btn_UserSetting" Command="{Binding Btn_UserSetting, Source={StaticResource MainHeadViewModel}}"/>
                     </Grid>
 
                     <!--возврат в меню-->
@@ -85,7 +85,7 @@
 
                         <materialDesign:PackIcon Kind="Backburger" Grid.Column="0" Grid.Row="0" Width="45" Height="45"/>
 
-                        <Button Grid.Column="0" Grid.Row="0" Height="45" Width="45" Style="{StaticResource TransparentButton}" Click="Btn_BasicMenu"/>
+                        <Button Grid.Column="0" Grid.Row="0" Height="45" Width="45" Style="{StaticResource TransparentButton}" Click="Btn_BasicMenu" Command="{Binding Btn_BasicMenu, Source={StaticResource MainHeadViewModel}}"/>
                     </Grid>
 
                 </StackPanel>
@@ -130,9 +130,9 @@
                     <!--настройки аккаунта (выход из аккаунта)-->
                 </Grid.ColumnDefinitions>
 
-                <Button Content="Пользователм" Grid.Column="0" Style="{StaticResource BtnMenuHead}" Click="Btn_User" />
-                <Button Content="Роли" Grid.Column="1" Style="{StaticResource BtnMenuHead}" Click="Btn_Role"/>
-                <Button Content="Настройки" Grid.Column="2" Style="{StaticResource BtnMenuHead}" Click="Btn_Setting"/>
+                <Button Content="Пользователи" Grid.Column="0" Style="{StaticResource BtnMenuHead}" Click="Btn_User" Command="{Binding Btn_User}"/>
+                <!--<Button Content="Роли" Grid.Column="1" Style="{StaticResource BtnMenuHead}" Click="Btn_Role"/>-->
+                <Button Content="Настройки" Grid.Column="1" Style="{StaticResource BtnMenuHead}" Click="Btn_Setting" Command="{Binding Btn_Setting}"/>
 
             </Grid>
 

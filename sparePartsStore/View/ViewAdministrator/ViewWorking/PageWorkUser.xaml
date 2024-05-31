@@ -10,11 +10,27 @@
       Title="" MinHeight="700" Height="Auto" MinWidth="1200" Width="Auto">
 
     <Page.Resources>
-        <local1:ListCarBrandViewModel x:Key="ListCarBrandViewModel"/>
+        <local1:ListAccountViewModel x:Key="ListAccountViewModel"/>
+
+        <!--анимация при некорректом вводе-->
+        <Storyboard x:Key="FocusAnimation">
+            <ColorAnimation Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
+           From="#de6d6d" To="Transparent" Duration="0:0:3" AutoReverse="False"/>
+        </Storyboard>
+        <!--переопределяем анимацию подсветки textBox при наведении-->
+        <Style x:Key="CustomFilledTextBox" BasedOn="{StaticResource MaterialDesignFilledTextBox}" TargetType="TextBox">
+            <Style.Triggers>
+                <Trigger Property="IsFocused" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard Storyboard="{StaticResource FocusAnimation}"/>
+                    </Trigger.EnterActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Page.Resources>
 
     <!--пользователи-->
-    <Grid Background="White" Margin="50,0,50,0" DataContext="{StaticResource ListCarBrandViewModel}">
+    <Grid Background="White" Margin="50,0,50,0" DataContext="{StaticResource ListAccountViewModel}">
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -33,7 +49,10 @@
         </Grid.RowDefinitions>
 
         <!--название-->
-        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Пользователь" FontSize="30" Foreground="Black" FontWeight="DemiBold" Margin="0,20,0,40" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Пользователь" FontSize="30" Foreground="Black" FontWeight="DemiBold" Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+        <!--поле для вывода ошибок-->
+        <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" Margin="0,20,20,0" x:Name="errorInput" FontWeight="DemiBold" FontSize="24"/>
 
         <!--Логин-->
         <TextBox Grid.Row="1" Grid.Column="0" x:Name="Login" Height="50" Margin="150,30,0,0"
@@ -43,7 +62,24 @@
              Style="{StaticResource MaterialDesignOutlinedTextBox}" 
              materialDesign:HintAssist.Hint="Введите логин" 
              materialDesign:TextFieldAssist.CharacterCounterVisibility="Hidden"
-             MaxLength="100" TextWrapping="Wrap" Width="320" />
+             MaxLength="150" TextWrapping="Wrap" Width="320" />
+
+        <!--возврат на главную-->
+        <Grid  Grid.Row="0" Grid.Column="0" Visibility="Visible" x:Name="closeFrame" Margin="0,0,0,40">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- Верхняя часть экрана -->
+            <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Button Content="Домой" Margin="50, 4, 0, 0" Padding="-20, -3, 0, 0" 
+                Width="100" Command="{Binding ClosePageAddOrDeleteCarBrands}" Click="ClosePageAddOrDeleteAccount"  
+                Background="Gray" BorderBrush="Black"/>
+                <materialDesign:PackIcon Kind="Home" Margin="120, 10, 0, 0" Width="20" Height="20"/>
+            </Grid>
+
+        </Grid>
 
         <!--название организации-->
         <TextBox Grid.Row="1" Grid.Column="1" x:Name="nameOrganization" Height="50" Margin="0,30,150,0"
@@ -53,17 +89,17 @@
              Style="{StaticResource MaterialDesignOutlinedTextBox}" 
              materialDesign:HintAssist.Hint="Введите название организации" 
              materialDesign:TextFieldAssist.CharacterCounterVisibility="Hidden"
-             MaxLength="100" TextWrapping="Wrap" Width="320" />
+             MaxLength="50" TextWrapping="Wrap" Width="320" />
 
         <!--пароль-->
-        <TextBox Grid.Row="2" Grid.Column="0" x:Name="Password" Height="50" Margin="150,30,0,0"
+        <TextBox Grid.Row="3" Grid.Column="0" x:Name="Password" Height="50" Margin="150,30,0,0"
              VerticalAlignment="Center" HorizontalAlignment="Center"
              Text="{Binding InputLogin, UpdateSourceTrigger=PropertyChanged}"   
              materialDesign:TextFieldAssist.HasClearButton="True"
              Style="{StaticResource MaterialDesignOutlinedTextBox}" 
              materialDesign:HintAssist.Hint="Введите пароль" 
              materialDesign:TextFieldAssist.CharacterCounterVisibility="Hidden"
-             MaxLength="100" TextWrapping="Wrap" Width="320" />
+             MaxLength="300" TextWrapping="Wrap" Width="320" />
 
         <!--ОГРН-->
         <TextBox Grid.Row="2" Grid.Column="1" x:Name="OGRN" Height="50" Margin="0,30,150,0"
@@ -73,11 +109,14 @@
              Style="{StaticResource MaterialDesignOutlinedTextBox}" 
              materialDesign:HintAssist.Hint="Введите ОГРН" 
              materialDesign:TextFieldAssist.CharacterCounterVisibility="Hidden"
-             MaxLength="100" TextWrapping="Wrap" Width="320" />
+             MaxLength="13" TextWrapping="Wrap" Width="320" />
 
         <!--выбор роли-->
-        <ComboBox Grid.Column="0" Grid.Row="3"
-            Width="320" Margin="150,30,0,0"
+        <ComboBox Grid.Column="0" Grid.Row="2"
+            Width="320" Margin="150,30,0,0" 
+            x:Name="CbAccount"
+            ItemsSource="{Binding AccountComboBoxItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedItem="{Binding SelectedAccountPr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             materialDesign:HintAssist.Hint="Выберите роль" IsEditable="True"
             Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
 
@@ -89,7 +128,7 @@
              Style="{StaticResource MaterialDesignOutlinedTextBox}" 
              materialDesign:HintAssist.Hint="Введите ИНН" 
              materialDesign:TextFieldAssist.CharacterCounterVisibility="Hidden"
-             MaxLength="100" TextWrapping="Wrap" Width="320" />
+             MaxLength="12" TextWrapping="Wrap" Width="320" />
 
         <!--КПП-->
         <TextBox Grid.Row="4" Grid.Column="1" x:Name="KPP" Height="50" Margin="0,30,150,0"
@@ -99,19 +138,19 @@
              Style="{StaticResource MaterialDesignOutlinedTextBox}" 
              materialDesign:HintAssist.Hint="Введите КПП (Только Юр.Лицам)" 
              materialDesign:TextFieldAssist.CharacterCounterVisibility="Hidden"
-             MaxLength="100" TextWrapping="Wrap" Width="320" />
+             MaxLength="9" TextWrapping="Wrap" Width="320" />
 
-        <!--номер телефона-->
-        <TextBox Grid.Row="5" Grid.Column="1" x:Name="numberPhone" Height="50" Margin="0,30,150,0"
+        <!--Ogrnip-->
+        <TextBox Grid.Row="5" Grid.Column="1" x:Name="Ogrnip" Height="50" Margin="0,30,150,0"
              VerticalAlignment="Center" HorizontalAlignment="Center"
              Text="{Binding InputLogin, UpdateSourceTrigger=PropertyChanged}"   
              materialDesign:TextFieldAssist.HasClearButton="True"
              Style="{StaticResource MaterialDesignOutlinedTextBox}" 
-             materialDesign:HintAssist.Hint="Введите номер телефона" 
+             materialDesign:HintAssist.Hint="Введите ОГРНИП (только ИП)" 
              materialDesign:TextFieldAssist.CharacterCounterVisibility="Hidden"
-             MaxLength="100" TextWrapping="Wrap" Width="320" />
+             MaxLength="15" TextWrapping="Wrap" Width="320" />
 
-        <!--электронная почта-->
+        <!--электронная почта--><!--
         <TextBox Grid.Row="6" Grid.Column="1" x:Name="EMAIL" Height="50" Margin="0,30,150,0"
              VerticalAlignment="Center" HorizontalAlignment="Center"
              Text="{Binding InputLogin, UpdateSourceTrigger=PropertyChanged}"   
@@ -119,7 +158,7 @@
              Style="{StaticResource MaterialDesignOutlinedTextBox}" 
              materialDesign:HintAssist.Hint="Введите электронную почту" 
              materialDesign:TextFieldAssist.CharacterCounterVisibility="Hidden"
-             MaxLength="100" TextWrapping="Wrap" Width="320" />
+             MaxLength="100" TextWrapping="Wrap" Width="320" />-->
 
         <!--кнопки-->
         <Grid Grid.Row="7" Grid.ColumnSpan="2" Margin="0,40,0,0" HorizontalAlignment="Center">
@@ -129,8 +168,15 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Row="0" Grid.Column="0" Content="Отмена" Width="150" Height="35" Background="Gray" BorderBrush="Black"/>
-            <Button Grid.Row="0" Grid.Column="1" Content="Добавить" x:Name="RenameButtonBrand" Width="150" Height="35" Background="Gray" BorderBrush="Black" Margin="20,0,0,0"/>
+            <Button Grid.Row="0" Grid.Column="0" Content="Отмена" 
+                    Width="150" Height="35" Background="Gray" 
+                    BorderBrush="Black"
+                    Click="ClosePageAddOrDeleteAccount"/>
+            
+            <Button Grid.Row="0" Grid.Column="1" Content="Добавить" 
+                    Width="150" Height="35" 
+                    Background="Gray" BorderBrush="Black" Margin="20,0,0,0"
+                    x:Name="RenameButtonUser" Click="SaveData"/>
 
         </Grid>        
     </Grid>

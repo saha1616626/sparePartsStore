@@ -5,11 +5,16 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:sparePartsStore.View.ViewAdministrator.ViewSettingRole"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:ViewModel="clr-namespace:sparePartsStore.ViewModel"
       mc:Ignorable="d" 
       Title="" MinHeight="700" Height="Auto" MinWidth="1200" Width="Auto">
 
+    <Page.Resources>
+        <ViewModel:ListAccountViewModel x:Key="ListAccountViewModel"/>
+    </Page.Resources>
+
     <!--пользователи-->
-    <Grid Background="White" Margin="50,0,50,0" HorizontalAlignment="Stretch">
+    <Grid Background="White" Margin="50,0,50,0" DataContext="{StaticResource ListAccountViewModel}">
 
         <!--стили-->
         <Grid.Resources>
@@ -31,7 +36,9 @@
         </Grid.ColumnDefinitions>
         
         <!--Список узлов автомобиля-->
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="Пользователи" FontSize="30" Foreground="Black" FontWeight="DemiBold" HorizontalAlignment="Left" Margin="0,40,0,40" VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Пользователи" FontSize="30" 
+                   Foreground="Black" FontWeight="DemiBold" HorizontalAlignment="Left" 
+                   Margin="0,40,0,40" VerticalAlignment="Center"/>
 
         <!--кнопки-->
         <Grid Grid.Row="1">
@@ -55,9 +62,16 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Row="0" Grid.Column="0" Content="Добавить" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black"/>
-                <Button Grid.Row="0" Grid.Column="1" Content="Редктировать" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0"/>
-                <Button Grid.Row="0" Grid.Column="2" Content="Удалить" MinWidth="100" Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0"/>
+                <Button Grid.Row="0" Grid.Column="0" Content="Добавить" MinWidth="100" 
+                        Height="35" Background="Gray" BorderBrush="Black" Click="Btn_AddUser"/>
+                
+                <Button Grid.Row="0" Grid.Column="1" Content="Редктировать" MinWidth="100" 
+                        Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0"
+                        Click="Btn_EditUser" IsEnabled="{Binding IsWorkButtonEnable}"/>
+                
+                <Button Grid.Row="0" Grid.Column="2" Content="Удалить" MinWidth="100" Height="35" 
+                        Background="Gray" BorderBrush="Black" Margin="10,0,0,0"
+                        Click="Btn_OpenPopup" IsEnabled="{Binding IsWorkButtonEnable}"/>
 
             </Grid>
 
@@ -65,10 +79,11 @@
             <Grid Grid.Row="0" Grid.Column="1">
                 <TextBox x:Name="SearchParts" Height="50" Margin="0,0,0,0"
                         VerticalAlignment="Center"  HorizontalAlignment="Right"
-                        Text="{Binding InputLogin, UpdateSourceTrigger=PropertyChanged}"   
+                        Text="{Binding NameUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        TextChanged="TextBoxNameUser" 
                         materialDesign:TextFieldAssist.HasClearButton="True"
                         Style="{StaticResource MaterialDesignOutlinedTextBox}" 
-                        materialDesign:HintAssist.Hint="Поиск узла" 
+                        materialDesign:HintAssist.Hint="Поиск пользователя" 
                         materialDesign:TextFieldAssist.CharacterCounterVisibility="Hidden"
                         MaxLength="100"  MinWidth="400"/>
             </Grid>
@@ -77,24 +92,81 @@
 
         <!--таблица-->
         <Grid Grid.Row="2" Margin="0,40,0,0">
-
-            <DataGrid
-                HorizontalAlignment="Center"
-                AutoGenerateColumns="False"
-                Style="{StaticResource MaterialDesignDataGrid}"
-                ColumnHeaderStyle="{StaticResource columnTable}">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <DataGrid IsReadOnly="True"
+                    RowHeight="50" FontSize="10"
+                    AutoGenerateColumns="False"
+                    CellStyle="{StaticResource DataGridCellStyle}"
+                    ItemsSource="{Binding ListAccount}"
+                    SelectedItem="{Binding SelectedAccount}"
+                    Style="{StaticResource MaterialDesignDataGrid}"
+                    ColumnHeaderStyle="{StaticResource columnTableHeaderAutoParts}">
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Логин" Binding="{Binding }" Width="*"/>
-                    <DataGridTextColumn Header="Роль" Binding="{Binding }" Width="*"/>
-                    <DataGridTextColumn Header="Название организации" Binding="{Binding }" Width="*"/>
-                    <DataGridTextColumn Header="Электронная почта" Binding="{Binding }" Width="*"/>
-                    <DataGridTextColumn Header="Номер телефона" Binding="{Binding }" Width="*"/>
-                </DataGrid.Columns>
+                        <DataGridTextColumn Header="Логин" Binding="{Binding AccountLogin}" Width="*" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Роль" Binding="{Binding AccountRoleName}" Width="*" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Название организации" Binding="{Binding NameOrganization}" Width="*" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="ИНН" Binding="{Binding Inn}" Width="*" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="КПП" Binding="{Binding Kpp}" Width="*" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="ОГРН" Binding="{Binding Ogrn}" Width="*" IsReadOnly="True"/>
+                    </DataGrid.Columns>
                 
-            </DataGrid>
-            
+                </DataGrid>
+            </ScrollViewer>
         </Grid>
-        
+
+        <!--фон для Popup-->
+        <Border Grid.ColumnSpan="4" Grid.RowSpan="5" x:Name="DarkBackground" Background="#80000000" Visibility="Collapsed" MouseLeftButtonDown="DarkBackground_MouseDown" Panel.ZIndex="1" Margin="-500,-900,-900,-500"></Border>
+
+        <!-- размещение Popup относительно данного grid-->
+        <Grid x:Name="positionPopup" Grid.RowSpan="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <!--Popup-->
+
+        <Grid>
+            <Popup x:Name="DeletePopup" PlacementTarget="{Binding ElementName=positionPopup}" Placement="Center" Grid.ColumnSpan="3" Grid.RowSpan="3" HorizontalOffset="0" VerticalOffset="160" StaysOpen="False" Closed="MyPopup_Closed" AllowsTransparency="False" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Grid Background="Gray">
+                    <!--фон-->
+                    <Border Background="AliceBlue" Style="{StaticResource OutlineOfPopup}" >
+                        <Grid Width="400" Height="250">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Text="Удаление данных" Margin="0, 10, 0, 0" FontSize="30" FontWeight="Bold"/>
+
+                                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center" Height="130" Margin="10,20,10,0">
+                                    <TextBlock Text="Вы действительно хоти удалить?" FontSize="20" FontWeight="DemiBold" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{Binding NameOrganization}" TextWrapping="Wrap" x:Name="DeleteNameAutopart" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,30,0,0"  FontSize="20" FontWeight="DemiBold"/>
+                                </StackPanel>
+
+                                <Grid Grid.Row="2" Grid.Column="0" Margin="0,0,0,0" VerticalAlignment="Bottom">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Button Grid.Row="0" Grid.Column="0" Content="Отмена" Width="150" Height="35" Background="Gray" BorderBrush="Black" Click="closePopup"/>
+                                    <Button Grid.Row="0" Grid.Column="1" Content="Удалить" Width="150" Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0" Click="Btn_DeleteData"/>
+
+                                </Grid>
+
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Popup>
+        </Grid>
+
     </Grid>
 </Page>

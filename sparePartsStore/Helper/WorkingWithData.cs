@@ -247,6 +247,39 @@ namespace sparePartsStore.Helper
 
         #endregion
 
+        // пользователи
+        #region User
+
+        // Событие запуска страницы добавления запчасти из MainHeadViewModel
+        public static event EventHandler<EventAggregator> launchPageAddUser; // подписываемся в MainHeadViewModel
+        public static void LaunchPageAddUser() // вызываем в PageListUsers
+        {
+            launchPageAddUser?.Invoke(null, new EventAggregator());
+        }
+
+        // событие запуска страницы редактирования пользователя из MainHeadViewModel
+        public static event EventHandler<EventAggregator> launchPageEditUser; // подписываемся в MainHeadViewModel
+        public static void LaunchPageEditUser() // вызываем в PageListUsers
+        {
+            launchPageEditUser?.Invoke(null, new EventAggregator());
+        }
+
+        // событие изменение БД после добавления или редактирования пользователя
+        public static event EventHandler<EventAggregator> saveDataCreateOrEditUser; // подписываемся в MainHeadViewModel
+        public static void SaveDataCreateOrEditUser() // вызываем в PageWorkUser
+        {
+            saveDataCreateOrEditUser?.Invoke(null, new EventAggregator());
+        }
+
+        // событие на удаление пользователя
+        public static event EventHandler<EventAggregator> saveDataDeleteUsers; // подписываемся в MainHeadViewModel
+        public static void SaveDataDeleteUsers() // вызываем в PageListUsers
+        {
+            saveDataDeleteUsers?.Invoke(null, new EventAggregator());
+        }
+
+        #endregion
+
         // общие события 
         #region GeneralEvent
 
