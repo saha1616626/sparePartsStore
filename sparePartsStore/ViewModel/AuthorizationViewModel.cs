@@ -17,6 +17,7 @@ using sparePartsStore.Helper.Authorization;
 using Microsoft.VisualBasic.ApplicationServices;
 using System.IO;
 using System.Data;
+using Microsoft.Identity.Client.NativeInterop;
 
 namespace sparePartsStore.ViewModel
 {
@@ -268,6 +269,27 @@ namespace sparePartsStore.ViewModel
             }
 
             return id;
+        }
+
+        // метод выхода из аккаунта
+        public void LogOutYourAccount()
+        {
+            // очищаем JSON
+            AuthorizationEntrance authorizationEntrance = new AuthorizationEntrance(); // класс авторизации
+            authorizationEntrance.Entrance = false; // пользователь вышел из аккаунт
+
+            try
+            {
+                var jsonAuthorization = JsonConvert.SerializeObject(authorizationEntrance); //  перзапись данных в формате json
+                                                                                            // записываем обновленные данные в JSON
+                File.WriteAllText(path, jsonAuthorization);
+                // события перхода на главную страницу авторизованного пользователя
+                WorkingWithData.UserLogin();
+            }
+            catch (Exception ex)
+            {
+                Error = "Ошибка записи в json файла /n" + ex.Message;
+            }
         }
 
 

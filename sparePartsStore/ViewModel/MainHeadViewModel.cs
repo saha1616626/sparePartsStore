@@ -1571,17 +1571,43 @@ namespace sparePartsStore.ViewModel
 
         // переход на страницу "пользователи"
 
+        private RelayCommand _btn_User {  get; set; }
+        public RelayCommand Btn_User
+        {
+            get
+            {
+                return _btn_User ??
+                    (_btn_Knot = new RelayCommand(obj =>
+                    {
 
+
+
+                    }, (obj) => true));
+            }
+        }
 
         // перереход на страницу "настройки"
+        private RelayCommand _btn_Setting { get; set; }
+        public RelayCommand Btn_Setting
+        {
+            get
+            {
+                return _btn_Setting ??
+                    (_btn_Setting = new RelayCommand(obj =>
+                    {
 
+
+
+                    }, (obj) => true));
+            }
+        }
 
         #endregion
 
-        // методы PageMainHead
-        #region methodsPageMainHead
+            // методы PageMainHead
+            #region methodsPageMainHead
 
-        // закрыть последнюю страницу
+            // закрыть последнюю страницу
         private void CloseLastOnePage(object sender, EventAggregator e)
         {
 
