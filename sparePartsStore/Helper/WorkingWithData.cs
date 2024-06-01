@@ -280,6 +280,18 @@ namespace sparePartsStore.Helper
 
         #endregion
 
+        // аналоги
+        #region Analog
+
+        // Событие запуска страницы аналоги из MainHeadViewModel
+        public static event EventHandler<EventAggregator> launchPageAddAnalog; // подписываемся в MainHeadViewModel
+        public static void LaunchPageAddAnalog() // вызываем в PageListAutoparts
+        {
+            launchPageAddAnalog?.Invoke(null, new EventAggregator());
+        }
+
+        #endregion
+
         // общие события 
         #region GeneralEvent
 

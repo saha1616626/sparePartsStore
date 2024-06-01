@@ -1,9 +1,8 @@
-﻿using sparePartsStore.Model.DPO;
-using sparePartsStore.ViewModel;
+﻿using sparePartsStore.ViewModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace sparePartsStore.Model
+namespace sparePartsStore.Model.DPO
 {
     public class AutopartDPO : INotifyPropertyChanged
     {
@@ -109,7 +108,7 @@ namespace sparePartsStore.Model
         public decimal PriceSale
         {
             get { return _priceSale; }
-            set {  _priceSale = value; OnPropertyChanged(nameof(PriceSale)); }
+            set { _priceSale = value; OnPropertyChanged(nameof(PriceSale)); }
         }
 
         private int _availableityStock { get; set; }
@@ -146,81 +145,78 @@ namespace sparePartsStore.Model
         {
             AutopartDPO autopartDPO = new AutopartDPO();
 
-            // классы, из которых мы будет получать string данные для замены ID
-            ListCarBrandViewModel listCarBrandViewModel = new ListCarBrandViewModel();
-            ListCarModelViewModel listCarModelViewModel = new ListCarModelViewModel();
-            ListUnitViewModel listUnitViewModel = new ListUnitViewModel();
-            ListKnotViewModel listKnotViewModel = new ListKnotViewModel();
-            ListCountryViewModel listCountryViewModel = new ListCountryViewModel();
-            ListManufactureViewModel listManufactureViewModel = new ListManufactureViewModel();
-
-            string nameCarBrand = string.Empty;
-            string nameCarModel = string.Empty;
-            string nameUnit = string.Empty;
-            string nameKnot = string.Empty;
-            string nameCountry = string.Empty;
-            string nameManufactureBrand = string.Empty;
-            string nameOrganization = string.Empty;
-            
-            // заменяем id - модель и марка авто
-            CarModelDPO carModelDPO = listCarModelViewModel.ListCarModelDPO.FirstOrDefault(c => c.CarModelId == autopart.CarModelId);
-            if(carModelDPO != null)
-            { // получаем связанные данные, относиетльно модели всегда будет подбираться марка авто, а не наоборот, чтобы не было ошибки связывания
-                nameCarBrand = carModelDPO.CarBrandName;
-                nameCarModel = carModelDPO.NameCarModel;
-            }
-
-            // заменяем id - агрегат и узел авто
-            KnotDPO knotDPO = listKnotViewModel.ListKnotDPO.FirstOrDefault(c => c.KnotId == autopart.KnotId);
-            if(knotDPO != null)
-            {
-                nameKnot = knotDPO.NameKnot;
-                nameUnit = knotDPO.NameUnit;
-            }
-
-            // заменяем id - страна и поставщик
-            ManufactureDPO manufactureDPO = listManufactureViewModel.ListManufactureDPO.FirstOrDefault(c => c.ManufactureId == autopart.ManufactureId);
-            if(manufactureDPO != null)
-            {
-                nameManufactureBrand = manufactureDPO.NameManufacture;
-                nameCountry = manufactureDPO.NameCountry;
-            }
-
-            // получам название организации, которая поставляет запчасти
-            using (SparePartsStoreContext context = new SparePartsStoreContext())
-            {
-                Account account = context.Accounts.FirstOrDefault(a => a.AccountId == autopart.AccountId);
-                if (account != null)
-                {
-                    nameOrganization = account.NameOrganization;
-                }
-            }
-
-
-            if (nameCarBrand != string.Empty && nameCarModel != string.Empty && nameKnot != string.Empty && nameUnit != string.Empty && nameManufactureBrand != string.Empty && nameCountry != string.Empty)
-            {
             autopartDPO.AutopartId = autopart.AutopartId;
             autopartDPO.NumberAutopart = autopart.NumberAutopart;
-            autopartDPO.NameAutopart = autopart.NameAutopart;
 
-            autopartDPO.CarBrandName = nameCarBrand;
-            autopartDPO.NameCarModel = nameCarModel;
-            autopartDPO.NameUnit = nameUnit;
-            autopartDPO.NameKnot = nameKnot;
-            autopartDPO.NameCountry = nameCountry;
-            autopartDPO.NameManufacture = nameManufactureBrand;
+            using (SparePartsStoreContext context = new SparePartsStoreContext())
+            {
+                List<CarBrand> carBrands = context.CarBrands.ToList();
+                List<CarModel> carModels = context.CarModels.ToList();
+                List<Unit> units = context.Units.ToList();
+                List<Knot> knots = context.Knots.ToList();
+                List<Country> countries = context.Countries.ToList();
+                List<Manufacture> manufactures = context.Manufactures.ToList();
+                List<Account> accounts = context.Accounts.ToList();
 
-            autopartDPO.CarModelId = autopart.CarModelId;
-            autopartDPO.KnotId = autopart.KnotId;
-            autopart.ManufactureId = autopart.ManufactureId;
+                // заменяем марку и модель
+                CarModel carModel = carModels.FirstOrDefault(c => c.CarModelId == autopart.CarModelId);
+                if(carModel != null)
+                {
+                    autopartDPO.CarModelId = carModel.CarModelId;
+                    autopartDPO.NameCarModel = carModel.NameCarModel;
+
+                    CarBrand carBrand = carBrands.FirstOrDefault(c => c.CarBrandId == carModel.CarBrandId);
+                    if( carBrand != null)
+                    {
+                        autopartDPO.CarBrandId = carBrand.CarBrandId;
+                        autopartDPO.CarBrandName = carBrand.NameCarBrand;
+                    }
+                }
+
+                // заменяем агрегат и узел
+                Knot knot = knots.FirstOrDefault(k => k.KnotId == autopart.KnotId);
+                if(knot != null)
+                {
+                    autopartDPO.KnotId = knot.KnotId;
+                    autopartDPO.NameKnot = knot.NameKnot;
+
+                    Unit unit = units.FirstOrDefault(u => u.UnitId == knot.UnitId);
+                    if(unit != null)
+                    {
+                        autopartDPO.UnitId = unit.UnitId;
+                        autopartDPO.NameUnit = unit.NameUnit;
+                    }
+                }
+
+                // заменяем страну и производителя
+                Manufacture manufacture = manufactures.FirstOrDefault(m => m.ManufactureId == autopart.ManufactureId);
+                if(manufacture != null)
+                {
+                    autopartDPO.ManufactureId = manufacture.ManufactureId;
+                    autopartDPO.NameManufacture = manufacture.NameManufacture;
+
+                    Country country = countries.FirstOrDefault(c => c.CountryId == manufacture.CountryId);
+                    if(country != null)
+                    {
+                        autopartDPO.CountryId = country.CountryId;
+                        autopartDPO.NameCountry = country.NameCountry;
+                    }
+                }
+
+                // заменяем акаунт
+                Account account = accounts.FirstOrDefault(a => a.AccountId == autopart.AccountId);
+                if(account != null)
+                {
+                    autopartDPO.AccountId = account.AccountId;
+                    autopartDPO.NameOrganization = account.NameOrganization;
+                }
+
+            }
 
             autopartDPO.PriceSale = autopart.PriceSale;
             autopartDPO.AvailableityStock = autopart.AvailableityStock;
-            autopartDPO.AccountId = autopart.AccountId;
-            autopartDPO.NameOrganization = nameOrganization;
             autopartDPO.ModerationStatus = autopart.ModerationStatus;
-            }
-
+            
             return autopartDPO;
 
         }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using sparePartsStore.Model.DPO;
+using sparePartsStore.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +22,19 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorkingWithData
     /// </summary>
     public partial class PageListAnalogues : Page
     {
+        private readonly ListAnaloguesViewModel _listAnaloguesViewModel; // объект класса
         public PageListAnalogues()
         {
             InitializeComponent();
+
+            // получаем экз ListAutopartViewModel
+            _listAnaloguesViewModel = (ListAnaloguesViewModel)this.Resources["ListAnaloguesViewModel"];
+        }
+
+        // получаем данные запчасти, к котрой нужно подобрать аналог
+        public void DataReception(AutopartDPO autopartDPO)
+        {
+            _listAnaloguesViewModel.AutopartDPO = autopartDPO; // передаём данные для 
         }
     }
 }

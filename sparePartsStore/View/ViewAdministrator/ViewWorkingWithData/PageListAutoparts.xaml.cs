@@ -1,5 +1,4 @@
 ﻿using sparePartsStore.Helper;
-using sparePartsStore.Model;
 using sparePartsStore.Model.DPO;
 using sparePartsStore.ViewModel;
 using System;
@@ -36,8 +35,25 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorkingWithData
         // кнопка подбора аналогов
         private void Btn_AnalogAutoParts(object sender, RoutedEventArgs e)
         {
-
+            // вызваем событие в MainHeadViewModel для запуска страницы аналоги и передача выбранного объекта данных
+            WorkingWithData.LaunchPageAddAnalog();
         }
+
+        // событие передачи выбранных данных из таблицы запчасти
+        public event EventHandler<MyEventArgsObject> EventDataSelectedAutopartAnalogItem;
+        public virtual void TransmitSelectedDataAnalog(AutopartDPO value)
+        {
+            EventDataSelectedAutopartAnalogItem?.Invoke(this, new MyEventArgsObject { Value = value });
+        }
+
+        // метод для передачи из таблицы выбранных данных в собтыие
+        public void TransmitDataAnalog()
+        {
+            AutopartDPO autopartDPO = new AutopartDPO(); // хранение временных данных
+            autopartDPO = _listAutopartViewModel.TransmitionAutopart();
+            TransmitSelectedDataAnalog(autopartDPO); // передаём данные в событие
+        }
+
 
         // кнопка добавления запчасти
         private void Btn_AddAutoParts(object sender, RoutedEventArgs e)

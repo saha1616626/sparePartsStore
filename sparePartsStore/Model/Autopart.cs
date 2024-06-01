@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using sparePartsStore.Model.DPO;
 
 namespace sparePartsStore.Model;
 

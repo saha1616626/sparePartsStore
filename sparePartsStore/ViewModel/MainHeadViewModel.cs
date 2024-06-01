@@ -179,6 +179,10 @@ namespace sparePartsStore.ViewModel
             WorkingWithData.saveDataCreateOrEditUser += WorkDataUser;
             // подписываемся на событие удаления данных пользователя
             WorkingWithData.saveDataDeleteUsers += DeleteDataUser;
+
+
+            // подписываемся на событие запуска страницы аналоги
+            WorkingWithData.launchPageAddAnalog += LaunchPageAddAnalog;
         }
 
         // запуск страницы - поиск запчастей
@@ -1604,93 +1608,126 @@ namespace sparePartsStore.ViewModel
 
         #endregion
 
-            // методы PageMainHead
-            #region methodsPageMainHead
+        // страница - аналоги
+        #region Analog
 
-            // закрыть последнюю страницу
-        private void CloseLastOnePage(object sender, EventAggregator e)
+        // запуск страницы аналоги
+        // Страница аналогов
+        PageListAnalogues pageListAnalogues;
+        private void LaunchPageAddAnalog(object sender, EventAggregator e)
         {
+            // событие для очистка фреймов из памяти в PageMainHead
+            WorkingWithData.ClearMemoryAfterFrame();
+            pageListAnalogues = new PageListAnalogues();
+            MainFrame.NavigationService.Navigate(pageListAnalogues);
 
-            // закрываем страницу
-            MainFrame.NavigationService.GoBack();
-            // изменяем меню
+            // показываем, что было открыто основное меню перед его скрытием
+            typeMenu = true;
+            // скрываем шестерёнку и основное меню, чтобы нельзя было перемещаться между страницами
             selectedMenu();
 
-            // сборка мусора и освобождение неиспользуемых ресурсов
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-        }
-
-        // скрываем основное меню и открываем меню настроек
-        private void settingMenu()
-        {
-            IsBasicMenu = Visibility.Hidden; // выкл основное меню
-            IsSettingMenu = Visibility.Visible; // вкл меню настроек
-        }
-
-        // скрываем меню настроек и открываем основное меню
-        private void basicMenu()
-        {
-            IsSettingMenu = Visibility.Hidden; // выкл меню настроек
-            IsBasicMenu = Visibility.Visible; // вкл основное меню
-        }
-
-        // переменная, которая показывает, было скрыто меню или нет
-        private bool visibilityMenu = false; // меню скрыто
-
-        // переменная, которая показывает, было открыто меню настроек польлзователей или нет
-        private bool visibilitySetting = false; // меню скрыто
-
-        // метод для скрытия или отображения меню, иконок при редактировании данных
-        private void selectedMenu()
-        {
-            if (typeMenu) // если основное меню
+            // получаем данные для работы из события
+            // получаем выбранный данные для редактирования
+            pageListAutoparts.EventDataSelectedAutopartAnalogItem += (sender, args) =>
             {
-                if (visibilityMenu) // основное меню скрыто
-                {
-                    IsSettingMenu = Visibility.Hidden; // выкл меню настроек
-                    IsBasicMenu = Visibility.Visible; // вкл основное меню
+                AutopartDPO autopartDPO = (AutopartDPO)args.Value; // получаем выбранные данные
 
-                    IsMenu = Visibility.Visible; // включаем меню (любое)
-                    IsSettingVisible = Visibility.Visible; // включаем шестерёнку
-                    IsOutMenu = Visibility.Collapsed; // иконка переход на основное меню
-
-                    visibilityMenu = false; // меню не скрыто
-                }
-                else // основное меню не скрыто
-                {
-                    IsMenu = Visibility.Collapsed; // скрываем меню (любое)
-                    IsSettingVisible = Visibility.Collapsed; // скрываем шестерёнку
-
-                    visibilityMenu = true; // меню скрыто
-                }
-            }
-            else // если настройки
-            {
-                if (visibilitySetting) // открываем меню
-                {
-                    IsBasicMenu = Visibility.Hidden; // выкл основное меню
-                    IsSettingMenu = Visibility.Visible; // вкл меню настроек
-
-                    IsMenu = Visibility.Visible; // включаем меню (любое)
-                    
-                    IsOutMenu = Visibility.Visible; // иконка переход на основное меню
-                    IsSettingVisible = Visibility.Collapsed; // скрываем шестерёнку
-
-                    visibilitySetting = false; // меню было скрыто
-                }
-                else // закрываем меню
-                {
-                    IsMenu = Visibility.Collapsed; // выключаем меню (любое)
-                    // иконка переход на основное меню
-                    IsOutMenu = Visibility.Collapsed;
-
-                    visibilitySetting = true; // меню было открыто
-                }
-            }
+                // передаём данные для редактирования (отображаем)
+                //pageWorkDetail.DataReception(autopartDPO);
+            };
+            // вызываем событие для передачи данных
+            pageListAutoparts.TransmitDataAnalog(); ;
         }
 
         #endregion
+
+        // методы PageMainHead
+        #region methodsPageMainHead
+
+        // закрыть последнюю страницу
+        private void CloseLastOnePage(object sender, EventAggregator e)
+    {
+
+        // закрываем страницу
+        MainFrame.NavigationService.GoBack();
+        // изменяем меню
+        selectedMenu();
+
+        // сборка мусора и освобождение неиспользуемых ресурсов
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+    }
+
+    // скрываем основное меню и открываем меню настроек
+    private void settingMenu()
+    {
+        IsBasicMenu = Visibility.Hidden; // выкл основное меню
+        IsSettingMenu = Visibility.Visible; // вкл меню настроек
+    }
+
+    // скрываем меню настроек и открываем основное меню
+    private void basicMenu()
+    {
+        IsSettingMenu = Visibility.Hidden; // выкл меню настроек
+        IsBasicMenu = Visibility.Visible; // вкл основное меню
+    }
+
+    // переменная, которая показывает, было скрыто меню или нет
+    private bool visibilityMenu = false; // меню скрыто
+
+    // переменная, которая показывает, было открыто меню настроек польлзователей или нет
+    private bool visibilitySetting = false; // меню скрыто
+
+    // метод для скрытия или отображения меню, иконок при редактировании данных
+    private void selectedMenu()
+    {
+        if (typeMenu) // если основное меню
+        {
+            if (visibilityMenu) // основное меню скрыто
+            {
+                IsSettingMenu = Visibility.Hidden; // выкл меню настроек
+                IsBasicMenu = Visibility.Visible; // вкл основное меню
+
+                IsMenu = Visibility.Visible; // включаем меню (любое)
+                IsSettingVisible = Visibility.Visible; // включаем шестерёнку
+                IsOutMenu = Visibility.Collapsed; // иконка переход на основное меню
+
+                visibilityMenu = false; // меню не скрыто
+            }
+            else // основное меню не скрыто
+            {
+                IsMenu = Visibility.Collapsed; // скрываем меню (любое)
+                IsSettingVisible = Visibility.Collapsed; // скрываем шестерёнку
+
+                visibilityMenu = true; // меню скрыто
+            }
+        }
+        else // если настройки
+        {
+            if (visibilitySetting) // открываем меню
+            {
+                IsBasicMenu = Visibility.Hidden; // выкл основное меню
+                IsSettingMenu = Visibility.Visible; // вкл меню настроек
+
+                IsMenu = Visibility.Visible; // включаем меню (любое)
+                    
+                IsOutMenu = Visibility.Visible; // иконка переход на основное меню
+                IsSettingVisible = Visibility.Collapsed; // скрываем шестерёнку
+
+                visibilitySetting = false; // меню было скрыто
+            }
+            else // закрываем меню
+            {
+                IsMenu = Visibility.Collapsed; // выключаем меню (любое)
+                // иконка переход на основное меню
+                IsOutMenu = Visibility.Collapsed;
+
+                visibilitySetting = true; // меню было открыто
+            }
+        }
+    }
+
+    #endregion
 
 
         public event PropertyChangedEventHandler PropertyChanged;

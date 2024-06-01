@@ -42,7 +42,7 @@
         </Grid>
 
         <!--фон для Popup-->
-        <Border Grid.ColumnSpan="4" Grid.RowSpan="5" x:Name="DarkBackground" Background="#80000000" Visibility="Collapsed" MouseLeftButtonDown="DarkBackground_MouseDown" Panel.ZIndex="1" Margin="-500,-900,-900,-500"></Border>
+        <Border Grid.ColumnSpan="4" Grid.RowSpan="5" x:Name="DarkBackground" Background="#80000000" Visibility="Collapsed"  Panel.ZIndex="1" Margin="-500,-900,-900,-500"></Border>
 
         <!-- размещение Popup относительно данного grid-->
         <Grid x:Name="positionPopup" Grid.RowSpan="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
