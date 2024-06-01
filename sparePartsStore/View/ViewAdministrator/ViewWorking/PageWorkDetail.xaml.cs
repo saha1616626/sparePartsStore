@@ -77,7 +77,6 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
                     this.CbCountry.Text = autopartDPO.NameCountry;
                 }
 
-                _listAutopartViewModel.NameManufactureComboBoxItems = _listAutopartViewModel.GetManufactureOnComboBox();
                 Manufacture manufacture = manufactures.FirstOrDefault(m => m.ManufactureId == autopartDPO.ManufactureId);
                 if (manufacture != null)
                 {
@@ -94,7 +93,6 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
                 }
 
 
-                _listAutopartViewModel.NameCarModelComboBoxItems = _listAutopartViewModel.GetCarModelOnComboBox();
                 CarModel carModel = carModels.FirstOrDefault(c => c.CarModelId == autopartDPO.CarModelId);
                 if (carModel != null)
                 {
@@ -111,7 +109,6 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
                 }
                 
 
-                _listAutopartViewModel.NameKnotComboBoxItems = _listAutopartViewModel.GetKnotOnComboBox();
                 Knot knot = knots.FirstOrDefault(k => k.KnotId == autopartDPO.KnotId);
                 if(knot != null)
                 {
