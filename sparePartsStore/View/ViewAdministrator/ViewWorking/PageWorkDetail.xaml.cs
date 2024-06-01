@@ -79,9 +79,17 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
             this.CbModerationStatus.ItemsSource = _listAutopartViewModel.GetModerationStatusOnComboBox().ToList();
             this.CbModerationStatus.Text = autopartDPO.ModerationStatus;
 
-            NameAutopart.Text = autopartDPO.NameAutopart.ToString();
-            PriceSale.Text = autopartDPO.PriceSale.ToString();
-            AvailableityStock.Text = autopartDPO.AvailableityStock.ToString();
+            using(SparePartsStoreContext context = new SparePartsStoreContext())
+            {
+                List<Autopart> autoparts = context.Autoparts.ToList();
+                Autopart autopart = autoparts.FirstOrDefault(a => a.AutopartId == autopartDPO.AutopartId);
+                if (autopart != null)
+                {
+                    NameAutopart.Text = autopart.NameAutopart;
+                    PriceSale.Text = autopart.PriceSale.ToString();
+                    AvailableityStock.Text = autopart.AvailableityStock.ToString();
+                }
+            }
 
         }
 
@@ -132,75 +140,27 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
             EventArgsAutopart?.Invoke(this, new MyEventArgsObject { Value = value });
         }
 
-        // метод передачи данных из TextBox в MainHeadViewModel
-        //public void Transmit() // передаются данные для редакирования или добавления
-        //{
-
-        //    AutopartDPO autopartDPO = new AutopartDPO();
-
-        //    CarBrand carBrand = new CarBrand();
-        //    autopartDPO.CarBrandId = getAutopartDPOs.CarBrandId;
-        //    autopartDPO.CarBrandName = this.CbCarBrand.Text.Trim();
-
-        //    CarModel carModel = new CarModel();
-        //    autopartDPO.CarModelId = getAutopartDPOs.CarModelId;
-        //    autopartDPO.NameCarModel = this.CbCarModel.Text.Trim();
-
-        //    Unit unit = new Unit();
-        //    autopartDPO.UnitId = getAutopartDPOs.UnitId;
-        //    autopartDPO.NameUnit = this.CbUnit.Text.Trim();
-
-        //    Knot knot = new Knot();
-        //    autopartDPO.KnotId = getAutopartDPOs.KnotId;
-        //    autopartDPO.NameKnot = this.CbKnot.Text.Trim();
-
-        //    Country country = new Country();
-        //    autopartDPO.CountryId = getAutopartDPOs.CountryId;
-        //    autopartDPO.NameCountry = this.CbCountry.Text.Trim();
-
-        //    Manufacture manufacture = new Manufacture();
-        //    autopartDPO.ManufactureId = getAutopartDPOs.ManufactureId;
-        //    autopartDPO.NameManufacture = this.CbManufacture.Text.Trim();
-
-        //    string status = (string)CbModerationStatus.SelectedItem;
-
-        //    autopartDPO.AutopartId = getAutopartDPOs.AutopartId;
-
-        //    int resAvailableityStock;
-        //    int.TryParse(AvailableityStock.Text.Trim(), out resAvailableityStock);
-        //    if(resAvailableityStock != null)
-        //    {
-        //        autopartDPO.AvailableityStock = resAvailableityStock;
-        //    }
-
-        //    decimal resPriceSale;
-        //    decimal.TryParse(PriceSale.Text.Trim(), out resPriceSale);
-        //    if(resPriceSale != null)
-        //    {
-        //        autopartDPO.PriceSale = resPriceSale;
-        //    }
-
-        //    autopartDPO.NameAutopart = NameAutopart.Text.Trim();
-        //    autopartDPO.ModerationStatus = _listAutopartViewModel.SelectedModerationStatus;
-        //    autopartDPO.NumberAutopart = getAutopartDPOs.NumberAutopart;
-        //    autopartDPO.AccountId = getAutopartDPOs.AccountId;
-
-        //    TransmitSelectedData(autopartDPO);
-        //}
+        
 
         public void TransmitAdd() // передаются данные для редакирования или добавления
         {
             AutopartDPO autopartDPO = new AutopartDPO();
 
             CarBrand carBrand = new CarBrand();
-            carBrand = this.CbCarBrand.SelectedItem as CarBrand;
-            autopartDPO.CarBrandId = carBrand.CarBrandId;
-            autopartDPO.CarBrandName = this.CbCarBrand.Text.Trim();
+            carBrand = CbCarBrand.SelectedItem as CarBrand;
+            if(carBrand != null)
+            {
+                autopartDPO.CarBrandId = carBrand.CarBrandId;
+                autopartDPO.CarBrandName = this.CbCarBrand.Text.Trim();
+            }
 
             CarModel carModel = new CarModel();
             carModel = this.CbCarModel.SelectedItem as CarModel;
-            autopartDPO.CarModelId = carModel.CarModelId;
-            autopartDPO.NameCarModel = this.CbCarModel.Text.Trim();
+            if(carModel != null)
+            {
+                autopartDPO.CarModelId = carModel.CarModelId;
+                autopartDPO.NameCarModel = this.CbCarModel.Text.Trim();
+            }
 
             Unit unit = new Unit();
             unit = this.CbUnit.SelectedItem as Unit;
@@ -239,6 +199,127 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
             }
 
             TransmitSelectedData(autopartDPO);
+        }
+
+        // передаём данные на сохранение после редактирования
+        private AutopartDPO GetTheDataEdit()
+        {
+            AutopartDPO autopartDPO = new AutopartDPO();
+
+            CarBrand carBrand = (CarBrand)CbCarBrand.SelectedItem;
+            if(carBrand != null)
+            {
+                autopartDPO.CarBrandId = carBrand.CarBrandId;
+                autopartDPO.CarBrandName = carBrand.NameCarBrand;
+            }
+            CarModel carModel = (CarModel)CbCarModel.SelectedItem;
+            if(carModel != null)
+            {
+                autopartDPO.CarModelId = carModel.CarModelId;
+                autopartDPO.NameCarModel = carModel.NameCarModel;
+            }
+            Unit unit = (Unit)CbUnit.SelectedItem;
+            if (unit != null)
+            {
+                autopartDPO.UnitId = unit.UnitId;
+                autopartDPO.NameUnit = unit.NameUnit;
+            }
+            Knot knot = (Knot)CbKnot.SelectedItem;
+            if(knot != null)
+            {
+                autopartDPO.KnotId = knot.KnotId;
+                autopartDPO.NameKnot = knot.NameKnot;
+            }
+            Country country = (Country)CbCountry.SelectedItem;
+            if(country != null)
+            {
+                autopartDPO.CountryId = country.CountryId;
+                autopartDPO.NameCountry = country.NameCountry;
+            }
+            Manufacture manufacture = (Manufacture)CbManufacture.SelectedItem;
+            if(manufacture != null)
+            {
+                autopartDPO.ManufactureId = manufacture.ManufactureId;
+                autopartDPO.NameManufacture = manufacture.NameManufacture;
+            }
+            if(PriceSale.Text != null)
+            {
+                autopartDPO.PriceSale = decimal.Parse(PriceSale.Text);
+            }
+            if(AvailableityStock.Text != null)
+            {
+                autopartDPO.AvailableityStock = int.Parse(AvailableityStock.Text);
+            }
+            if(CbModerationStatus.Text != null)
+            {
+                autopartDPO.ModerationStatus = (string)CbModerationStatus.Text;
+            }
+
+            return autopartDPO;
+        }
+
+        // метод для получения введенных данных для добавления в таблицу
+        private AutopartDPO GetTheDataAdd()
+        {
+            AutopartDPO autopartDPO = new AutopartDPO();
+
+            CarBrand carBrand = (CarBrand)CbCarBrand.SelectedItem;
+            if (carBrand != null)
+            {
+                autopartDPO.CarBrandId = carBrand.CarBrandId;
+                autopartDPO.CarBrandName = carBrand.NameCarBrand;
+            }
+            CarModel carModel = (CarModel)CbCarModel.SelectedItem;
+            if (carModel != null)
+            {
+                autopartDPO.CarModelId = carModel.CarModelId;
+                autopartDPO.NameCarModel = carModel.NameCarModel;
+            }
+            Unit unit = (Unit)CbUnit.SelectedItem;
+            if (unit != null)
+            {
+                autopartDPO.UnitId = unit.UnitId;
+                autopartDPO.NameUnit = unit.NameUnit;
+            }
+            Knot knot = (Knot)CbKnot.SelectedItem;
+            if (knot != null)
+            {
+                autopartDPO.KnotId = knot.KnotId;
+                autopartDPO.NameKnot = knot.NameKnot;
+            }
+            Country country = (Country)CbCountry.SelectedItem;
+            if (country != null)
+            {
+                autopartDPO.CountryId = country.CountryId;
+                autopartDPO.NameCountry = country.NameCountry;
+            }
+            Manufacture manufacture = (Manufacture)CbManufacture.SelectedItem;
+            if (manufacture != null)
+            {
+                autopartDPO.ManufactureId = manufacture.ManufactureId;
+                autopartDPO.NameManufacture = manufacture.NameManufacture;
+            }
+            if (PriceSale.Text != null)
+            {
+                autopartDPO.PriceSale = decimal.Parse(PriceSale.Text);
+            }
+            if (AvailableityStock.Text != null)
+            {
+                autopartDPO.AvailableityStock = int.Parse(AvailableityStock.Text);
+            }
+            if (CbModerationStatus.Text != null)
+            {
+                autopartDPO.ModerationStatus = (string)CbModerationStatus.Text;
+            }
+
+            // получаем аккаунт, от которого происходит добавление данных
+            int userId = AuthorizationViewModel.weGetIdUser();
+            if (userId != null)
+            {
+                autopartDPO.AccountId = userId;
+            }
+
+            return autopartDPO;
         }
 
         // сохранение данных после редактирования или добавления данных в таблице
@@ -343,34 +424,25 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
             {
                 _listAutopartViewModel.NameAutopartInput = NameAutopart;
 
-                bool Checking = true; // по умолчанию не повторяется
+                bool Checking = true; // проверка на уникальность
 
-                if (RenameButtonAutopart.Content != "Редактировать") // если режим редактирования, то проверка на уникальность не выполняется
+                if (RenameButtonAutopart.Content != "Редактировать") // если добавление данных
                 {
-                    Checking = _listAutopartViewModel.CheckingForMatchDB(getAutopartDPOs);
+                    Checking = _listAutopartViewModel.CheckingAddPart(GetTheDataAdd());
                 }
                 else // если пользователь редактирует данные проверяем, что он не изменяет данные уже существующие в таблице
                 {
-                    bool CheckingItem = _listAutopartViewModel.CheckingForMatchEditDB(getAutopartDPOs);
+                    bool CheckingItem = _listAutopartViewModel.CheckingForMatchEditDB(GetTheDataEdit());
                     if (CheckingItem)
+                    {
+                        Checking = true;
+                    }
+                    else
                     {
                         errorInput.Text = "Данная запчасть уже есть в базе!";
                         BeginFadeAnimation(errorInput);
 
                         Checking = false;
-                    }
-                    else
-                    {
-                        if (_listAutopartViewModel.CheckingForMatchDB(getAutopartDPOs))
-                        {
-                            Checking = true;
-                        }
-                        else
-                        {
-                            errorInput.Text = "";
-                            Checking = false;
-                        }
-
                     }
                 }
 

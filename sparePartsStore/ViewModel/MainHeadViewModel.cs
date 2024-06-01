@@ -1314,7 +1314,7 @@ namespace sparePartsStore.ViewModel
                             autopart.ManufactureId = autopartUP.ManufactureId;
                             autopart.PriceSale = autopartUP.PriceSale;
                             autopart.AvailableityStock = autopartUP.AvailableityStock;
-                            autopart.AccountId = autopartUP.AccountId;
+                            autopart.AccountId = autopart.AccountId;
 
                             // проверяем под какой ролью вошёл пользователь, если поставщик, то статус заказа автоматически в обработке, а если администратор, то на его усмотрение
                             string role = authorizationViewModel.CheckingUserRole();

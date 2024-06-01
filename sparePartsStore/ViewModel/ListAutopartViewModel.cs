@@ -296,7 +296,7 @@ namespace sparePartsStore.ViewModel
         public TextBox NameAutopartInput { get; set; }
 
         // проверяем, есть ли совпадение данных перед добавлением
-        public bool CheckingForMatchDB(AutopartDPO autopartDPO)
+        public bool CheckingAddPart(AutopartDPO autopartDPO)
         {
             bool noCoincidence = true; // по умолчанию нет совпадения
 
@@ -327,7 +327,7 @@ namespace sparePartsStore.ViewModel
         public bool CheckingForMatchEditDB(AutopartDPO autopartDPO)
         {
 
-            bool noCoincidence = false; // по умолчанию совпадение не найдено
+            bool noCoincidence = true; // по умолчанию совпадение не найдено
 
             using (SparePartsStoreContext context = new SparePartsStoreContext())
             {
@@ -355,7 +355,7 @@ namespace sparePartsStore.ViewModel
 
                         if(a.NameAutopart.ToLower().Trim() == NameAutopartInput.Text.ToLower().Trim()) // если нашли совпадение в таблице
                         {
-                            noCoincidence = true;
+                            noCoincidence = false;
                         }
                     }
                 }
@@ -387,6 +387,8 @@ namespace sparePartsStore.ViewModel
 
         // список для фильтров таблицы
         public ObservableCollection<Autopart> ListSearch { get; set; } = new ObservableCollection<Autopart>();
+
+        // получаем выбранные данные в 
 
         // поиск запчастей
         public void HandlerTextBoxChanged(string nameAutopart)
