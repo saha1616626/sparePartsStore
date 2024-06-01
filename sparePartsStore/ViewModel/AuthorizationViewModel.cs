@@ -136,10 +136,10 @@ namespace sparePartsStore.ViewModel
                             // подключаем БД
                             using(SparePartsStoreContext dataContext = new SparePartsStoreContext())
                             {
-                                List<Account> accounts = dataContext.Accounts.ToList();
+                                List<Model.Account> accounts = dataContext.Accounts.ToList();
 
                                 // находим логин в БД, совпадающий с веденным пользователем (Идентификация)
-                                Account account = accounts.FirstOrDefault(a => a.AccountLogin == inputLogin);
+                                Model.Account account = accounts.FirstOrDefault(a => a.AccountLogin == inputLogin);
                                 // если данные нашли
                                 if (account != null)
                                 {
