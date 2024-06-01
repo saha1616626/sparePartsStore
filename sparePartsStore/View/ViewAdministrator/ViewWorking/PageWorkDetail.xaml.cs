@@ -41,9 +41,9 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
 
             // если авторизованный пользователь поставщик, то скрываем для него меню выбора статуса отображения запчасти
             string role = AuthorizationViewModel.CheckingUserRole();
-            if(role != null)
+            if (role != null)
             {
-                if(role == "Поставщик")
+                if (role == "Поставщик")
                 {
                     CbModerationStatus.Visibility = Visibility.Hidden;
                 }
@@ -56,32 +56,73 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
         // получаем данные из MainHeadViewModel для вывода на экран и последущего редактирования
         public void DataReception(AutopartDPO autopartDPO)
         {
-            getAutopartDPOs = autopartDPO; // сохраняем данные
-            // передаём данные в поля
-            this.CbCountry.ItemsSource = _listAutopartViewModel.GetCountryOnComboBox(); // получаем список для ComBox
-            this.CbCountry.Text = autopartDPO.NameCountry;
-
-            this.CbManufacture.ItemsSource = _listAutopartViewModel.GetManufactureOnComboBox().ToList();
-            this.CbManufacture.Text = autopartDPO.NameManufacture;
-
-            this.CbCarBrand.ItemsSource = _listAutopartViewModel.GetCarBrandOnComboBox().ToList();
-            this.CbCarBrand.Text = autopartDPO.CarBrandName;
-
-            this.CbCarModel.ItemsSource = _listAutopartViewModel.GetCarModelOnComboBox().ToList();
-            this.CbCarModel.Text = autopartDPO.NameCarModel;
-
-            this.CbUnit.ItemsSource = _listAutopartViewModel.GetUnitOnComboBox().ToList();
-            this.CbUnit.Text = autopartDPO.NameUnit;
-
-            this.CbKnot.ItemsSource = _listAutopartViewModel.GetKnotOnComboBox().ToList();
-            this.CbKnot.Text = autopartDPO.NameKnot;
-
-            this.CbModerationStatus.ItemsSource = _listAutopartViewModel.GetModerationStatusOnComboBox().ToList();
-            this.CbModerationStatus.Text = autopartDPO.ModerationStatus;
-
-            using(SparePartsStoreContext context = new SparePartsStoreContext())
+            using (SparePartsStoreContext context = new SparePartsStoreContext())
             {
+                List<CarBrand> carBrands = context.CarBrands.ToList();
+                List<CarModel> carModels = context.CarModels.ToList();
+                List<Unit> units = context.Units.ToList();
+                List<Knot> knots = context.Knots.ToList();
+                List<Country> countries = context.Countries.ToList();
+                List<Manufacture> manufactures = context.Manufactures.ToList();
+                List<Account> accounts = context.Accounts.ToList();
                 List<Autopart> autoparts = context.Autoparts.ToList();
+
+                getAutopartDPOs = autopartDPO; // сохраняем данные
+                                               // передаём данные в поля
+                _listAutopartViewModel.NameCountryComboBoxItems = _listAutopartViewModel.GetCountryOnComboBox(); // получаем список для ComBox
+                Country country = countries.FirstOrDefault(c => c.CountryId == autopartDPO.CountryId);
+                if (country != null)
+                {
+                    _listAutopartViewModel.SelectedCountry = country;
+                    this.CbCountry.Text = autopartDPO.NameCountry;
+                }
+
+                _listAutopartViewModel.NameManufactureComboBoxItems = _listAutopartViewModel.GetManufactureOnComboBox();
+                Manufacture manufacture = manufactures.FirstOrDefault(m => m.ManufactureId == autopartDPO.ManufactureId);
+                if (manufacture != null)
+                {
+                    _listAutopartViewModel.SelectedManufacture = manufacture;
+                    this.CbManufacture.Text = autopartDPO.NameManufacture;
+                }
+
+                _listAutopartViewModel.NameCarBrandComboBoxItems = _listAutopartViewModel.GetCarBrandOnComboBox();
+                CarBrand carBrand = carBrands.FirstOrDefault(c => c.CarBrandId == autopartDPO.CarBrandId);
+                if (carBrand != null)
+                {
+                    _listAutopartViewModel.SelectedCarBrand = carBrand;
+                    this.CbCarBrand.Text = autopartDPO.CarBrandName;
+                }
+
+
+                _listAutopartViewModel.NameCarModelComboBoxItems = _listAutopartViewModel.GetCarModelOnComboBox();
+                CarModel carModel = carModels.FirstOrDefault(c => c.CarModelId == autopartDPO.CarModelId);
+                if (carModel != null)
+                {
+                    _listAutopartViewModel.SelectedCarModel = carModel;
+                    this.CbCarModel.Text = autopartDPO.NameCarModel;
+                }
+
+                _listAutopartViewModel.NameUnitComboBoxItems = _listAutopartViewModel.GetUnitOnComboBox();
+                Unit unit = units.FirstOrDefault(u => u.UnitId == autopartDPO.UnitId);
+                if(unit != null)
+                {
+                    _listAutopartViewModel.SelectedUnit = unit;
+                    this.CbUnit.Text = autopartDPO.NameUnit;
+                }
+                
+
+                _listAutopartViewModel.NameKnotComboBoxItems = _listAutopartViewModel.GetKnotOnComboBox();
+                Knot knot = knots.FirstOrDefault(k => k.KnotId == autopartDPO.KnotId);
+                if(knot != null)
+                {
+                    _listAutopartViewModel.SelectedKnot = knot;
+                    this.CbKnot.Text = autopartDPO.NameKnot;
+                }
+                
+                _listAutopartViewModel.ModerationStatusComboBoxItems = _listAutopartViewModel.GetModerationStatusOnComboBox();
+                _listAutopartViewModel.SelectedModerationStatus = autopartDPO.ModerationStatus;
+                this.CbModerationStatus.Text = autopartDPO.ModerationStatus;
+
                 Autopart autopart = autoparts.FirstOrDefault(a => a.AutopartId == autopartDPO.AutopartId);
                 if (autopart != null)
                 {
@@ -98,7 +139,7 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
         {
             // начальные данные для ComBox                                         
             _listAutopartViewModel.NameCountryComboBoxItems = _listAutopartViewModel.GetCountryOnComboBox();
-            _listAutopartViewModel.NameManufactureComboBoxItems = _listAutopartViewModel.GetManufactureOnComboBox(); 
+            _listAutopartViewModel.NameManufactureComboBoxItems = _listAutopartViewModel.GetManufactureOnComboBox();
             _listAutopartViewModel.NameCarBrandComboBoxItems = _listAutopartViewModel.GetCarBrandOnComboBox();
             _listAutopartViewModel.NameCarModelComboBoxItems = _listAutopartViewModel.GetCarModelOnComboBox();
             _listAutopartViewModel.NameUnitComboBoxItems = _listAutopartViewModel.GetUnitOnComboBox();
@@ -140,56 +181,72 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
             EventArgsAutopart?.Invoke(this, new MyEventArgsObject { Value = value });
         }
 
-        
+
 
         public void TransmitAdd() // передаются данные для редакирования или добавления
         {
             AutopartDPO autopartDPO = new AutopartDPO();
 
-            CarBrand carBrand = new CarBrand();
-            carBrand = CbCarBrand.SelectedItem as CarBrand;
-            if(carBrand != null)
+            CarBrand carBrand = (CarBrand)CbCarBrand.SelectedItem;
+            if (carBrand != null)
             {
                 autopartDPO.CarBrandId = carBrand.CarBrandId;
-                autopartDPO.CarBrandName = this.CbCarBrand.Text.Trim();
+                autopartDPO.CarBrandName = carBrand.NameCarBrand;
             }
-
-            CarModel carModel = new CarModel();
-            carModel = this.CbCarModel.SelectedItem as CarModel;
-            if(carModel != null)
+            CarModel carModel = (CarModel)CbCarModel.SelectedItem;
+            if (carModel != null)
             {
                 autopartDPO.CarModelId = carModel.CarModelId;
-                autopartDPO.NameCarModel = this.CbCarModel.Text.Trim();
+                autopartDPO.NameCarModel = carModel.NameCarModel;
             }
-
-            Unit unit = new Unit();
-            unit = this.CbUnit.SelectedItem as Unit;
-            autopartDPO.UnitId = unit.UnitId;
-            autopartDPO.NameUnit = this.CbUnit.Text.Trim();
-
-            Knot knot = new Knot();
-            knot = this.CbKnot.SelectedItem as Knot;
-            autopartDPO.KnotId = knot.KnotId;
-            autopartDPO.NameKnot = this.CbKnot.Text.Trim();
-
-            Country country = new Country();
-            country = this.CbCountry.SelectedItem as Country;
-            autopartDPO.CountryId = country.CountryId;
-            autopartDPO.NameCountry = this.CbCountry.Text.Trim();
-
-            Manufacture manufacture = new Manufacture();
-            manufacture = this.CbManufacture.SelectedItem as Manufacture;
-            autopartDPO.ManufactureId = manufacture.ManufactureId;
-            autopartDPO.NameManufacture = this.CbManufacture.Text.Trim();
-
-            string status = (string)CbModerationStatus.SelectedItem;
-
-            autopartDPO.AutopartId = getAutopartDPOs.AutopartId;
-            autopartDPO.AvailableityStock = int.Parse(AvailableityStock.Text.Trim());
-            autopartDPO.PriceSale = decimal.Parse(PriceSale.Text.Trim());
-            autopartDPO.NameAutopart = NameAutopart.Text.Trim();
-            autopartDPO.ModerationStatus = _listAutopartViewModel.SelectedModerationStatus;
-            autopartDPO.NumberAutopart = getAutopartDPOs.NumberAutopart;
+            Unit unit = (Unit)CbUnit.SelectedItem;
+            if (unit != null)
+            {
+                autopartDPO.UnitId = unit.UnitId;
+                autopartDPO.NameUnit = unit.NameUnit;
+            }
+            Knot knot = (Knot)CbKnot.SelectedItem;
+            if (knot != null)
+            {
+                autopartDPO.KnotId = knot.KnotId;
+                autopartDPO.NameKnot = knot.NameKnot;
+            }
+            Country country = (Country)CbCountry.SelectedItem;
+            if (country != null)
+            {
+                autopartDPO.CountryId = country.CountryId;
+                autopartDPO.NameCountry = country.NameCountry;
+            }
+            Manufacture manufacture = (Manufacture)CbManufacture.SelectedItem;
+            if (manufacture != null)
+            {
+                autopartDPO.ManufactureId = manufacture.ManufactureId;
+                autopartDPO.NameManufacture = manufacture.NameManufacture;
+            }
+            if (PriceSale.Text != null)
+            {
+                autopartDPO.PriceSale = decimal.Parse(PriceSale.Text);
+            }
+            if (AvailableityStock.Text != null)
+            {
+                autopartDPO.AvailableityStock = int.Parse(AvailableityStock.Text);
+            }
+            if (CbModerationStatus.Text != null)
+            {
+                autopartDPO.ModerationStatus = (string)CbModerationStatus.Text;
+            }
+            if (getAutopartDPOs.AutopartId != null)
+            {
+                autopartDPO.AutopartId = getAutopartDPOs.AutopartId;
+            }
+            if (NameAutopart.Text != null)
+            {
+                autopartDPO.NameAutopart = NameAutopart.Text.Trim();
+            }
+            if (getAutopartDPOs.NumberAutopart != null)
+            {
+                autopartDPO.NumberAutopart = getAutopartDPOs.NumberAutopart;
+            }
 
             // получаем ID аккаунта, который добавляет запчасть
             int userId = AuthorizationViewModel.weGetIdUser();
@@ -207,13 +264,13 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
             AutopartDPO autopartDPO = new AutopartDPO();
 
             CarBrand carBrand = (CarBrand)CbCarBrand.SelectedItem;
-            if(carBrand != null)
+            if (carBrand != null)
             {
                 autopartDPO.CarBrandId = carBrand.CarBrandId;
                 autopartDPO.CarBrandName = carBrand.NameCarBrand;
             }
             CarModel carModel = (CarModel)CbCarModel.SelectedItem;
-            if(carModel != null)
+            if (carModel != null)
             {
                 autopartDPO.CarModelId = carModel.CarModelId;
                 autopartDPO.NameCarModel = carModel.NameCarModel;
@@ -225,32 +282,32 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
                 autopartDPO.NameUnit = unit.NameUnit;
             }
             Knot knot = (Knot)CbKnot.SelectedItem;
-            if(knot != null)
+            if (knot != null)
             {
                 autopartDPO.KnotId = knot.KnotId;
                 autopartDPO.NameKnot = knot.NameKnot;
             }
             Country country = (Country)CbCountry.SelectedItem;
-            if(country != null)
+            if (country != null)
             {
                 autopartDPO.CountryId = country.CountryId;
                 autopartDPO.NameCountry = country.NameCountry;
             }
             Manufacture manufacture = (Manufacture)CbManufacture.SelectedItem;
-            if(manufacture != null)
+            if (manufacture != null)
             {
                 autopartDPO.ManufactureId = manufacture.ManufactureId;
                 autopartDPO.NameManufacture = manufacture.NameManufacture;
             }
-            if(PriceSale.Text != null)
+            if (PriceSale.Text != null)
             {
                 autopartDPO.PriceSale = decimal.Parse(PriceSale.Text);
             }
-            if(AvailableityStock.Text != null)
+            if (AvailableityStock.Text != null)
             {
                 autopartDPO.AvailableityStock = int.Parse(AvailableityStock.Text);
             }
-            if(CbModerationStatus.Text != null)
+            if (CbModerationStatus.Text != null)
             {
                 autopartDPO.ModerationStatus = (string)CbModerationStatus.Text;
             }
