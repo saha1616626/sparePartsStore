@@ -130,9 +130,9 @@
                     <!--настройки аккаунта (выход из аккаунта)-->
                 </Grid.ColumnDefinitions>
 
-                <Button Content="Пользователи" Grid.Column="0" Style="{StaticResource BtnMenuHead}" Click="Btn_User" Command="{Binding Btn_User}"/>
+                <Button Content="Пользователи" Grid.Column="0" Style="{StaticResource BtnMenuHead}" Click="Btn_User" Command="{Binding Btn_User, Source={StaticResource MainHeadViewModel}}"/>
                 <!--<Button Content="Роли" Grid.Column="1" Style="{StaticResource BtnMenuHead}" Click="Btn_Role"/>-->
-                <Button Content="Настройки" Grid.Column="1" Style="{StaticResource BtnMenuHead}" Click="Btn_Setting" Command="{Binding Btn_Setting}"/>
+                <Button Content="Настройки" Grid.Column="1" Style="{StaticResource BtnMenuHead}" Click="Btn_Setting" Command="{Binding Btn_Setting, Source={StaticResource MainHeadViewModel}}"/>
 
             </Grid>
 

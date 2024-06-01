@@ -46,30 +46,19 @@ namespace sparePartsStore
             // проверяем, авторизовался пользователь или нет
             bool loginCheck = authorizationViewModel.IsCheckAccountUser();
 
-            if(loginCheck) // если пользователь авторизован
+            if (loginCheck) // если пользователь авторизован
             {
                 // получаем роль пользователя
                 authorizationViewModel = new AuthorizationViewModel();
 
                 string role = authorizationViewModel.CheckingUserRole();
 
-                if (role != null)
+                if (role != "")
                 {
-                    if (role == "Администратор")
-                    {
-                        ClearMemoryAfterFrame(); // очистка памяти (от фрейма)
-                                                 // запуск страницы администратора
-                        pageMainHead = new PageMainHead();
-                        mainFrame.Navigate(pageMainHead);
-                    }
-                    else if (role == "Постващик")
-                    {
-                        ClearMemoryAfterFrame(); // очистка памяти (от фрейма)
-                    }
-                    else if (role == "Магазин")
-                    {
-                        ClearMemoryAfterFrame(); // очистка памяти (от фрейма)
-                    }
+                    ClearMemoryAfterFrame(); // очистка памяти (от фрейма)
+                                             // запуск страницы администратора
+                    pageMainHead = new PageMainHead();
+                    mainFrame.Navigate(pageMainHead);
                 }
             }
             else // если пользователь не авторизован
@@ -92,23 +81,22 @@ namespace sparePartsStore
 
             string role = authorizationViewModel.CheckingUserRole();
 
-            if (role != null)
+            if (role != "")
             {
-                if (role == "Администратор")
+                if (role != "")
                 {
                     ClearMemoryAfterFrame(); // очистка памяти (от фрейма)
-                    // запуск страницы администратора
+                                             // запуск страницы администратора
                     pageMainHead = new PageMainHead();
                     mainFrame.Navigate(pageMainHead);
                 }
-                else if (role == "Постващик")
-                {
-                    ClearMemoryAfterFrame(); // очистка памяти (от фрейма)
-                }
-                else if (role == "Продавец")
-                {
-                    ClearMemoryAfterFrame(); // очистка памяти (от фрейма)
-                }
+            }
+            else
+            {
+                ClearMemoryAfterFrame(); // очистка памяти (от фрейма)
+                // запуск страницы авторизации
+                viewAuthorization = new ViewAuthorization();
+                mainFrame.NavigationService.Navigate(viewAuthorization);
             }
         }
 

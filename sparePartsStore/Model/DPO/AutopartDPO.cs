@@ -145,6 +145,7 @@ namespace sparePartsStore.Model.DPO
         {
             AutopartDPO autopartDPO = new AutopartDPO();
 
+            autopartDPO.NameAutopart = autopart.NameAutopart;
             autopartDPO.AutopartId = autopart.AutopartId;
             autopartDPO.NumberAutopart = autopart.NumberAutopart;
 

@@ -32,14 +32,6 @@ namespace sparePartsStore.View.ViewAdministrator.ViewMainPages
         {
             InitializeComponent();
 
-            // подписываемся на событие запуска страницы добавления марки авто
-            //WorkingWithData.launchPageAddCarBrand += Add_CarBrands;
-            // подписываемся на событие запуска страницы списка марок после закрытия страницы добавления
-            //WorkingWithData.closePageAddCarBrand += LaunchCarBrand;
-
-            // подписываемя на событие запуска страницы редактирования марки
-            //WorkingWithData.launchPageEditCarBrand += Edit_CarBrand;
-
             // ======== Update ======== 23/05/2024
             _mainHeadViewModel = (MainHeadViewModel)this.Resources["MainHeadViewModel"]; // получаем экз класса MainHeadViewModel основанный на контексте данных в xaml разметке
             _mainHeadViewModel.MainFrame = mainFrame; // Передаем через зависимости ссылку на фрейм
@@ -95,37 +87,10 @@ namespace sparePartsStore.View.ViewAdministrator.ViewMainPages
         // начальная страница при запуске экрана 
         private void startPage()
         {
-            // очистка фреймов памяти
-            //ClearMemoryAfterFrame();
-            // автоматичесое отображение страницы при входе в учетную запись адинистратора
-            //administratorFrame.Navigate(new Uri("/View/ViewSearchSpareParts.xaml", UriKind.Relative));
+            
 
             _mainHeadViewModel.startMainPage();
         }
-
-
-
-        // страница поиска запчастей
-        //private void Btn_SearchParts(object sender, RoutedEventArgs e)
-        //{
-        //    //startPage();
-        //    //_mainHeadViewModel.PageListSearchPartsBtn();
-        //}
-
-
-
-        // марка
-        //private void Btn_carBrand(object sender, RoutedEventArgs e)
-        //{
-        //    //// открываем основное меню
-        //    //basicMenu();
-        //    //// очистка фреймов памяти
-        //    //ClearMemoryAfterFrame();
-        //    //// автоматичесое отображение страницы при входе в учетную запись адинистратора
-        //    //administratorFrame.Navigate(new Uri("/View/ViewAdministrator/ViewWorkingWithData/PageListCarBrands.xaml", UriKind.Relative));
-
-        //    _mainHeadViewModel.PageListCarBrandsBtn();
-        //}
 
         // модель
         private void Btn_carModel(object sender, RoutedEventArgs e)

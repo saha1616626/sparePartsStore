@@ -1584,13 +1584,17 @@ namespace sparePartsStore.ViewModel
                     (_btn_Knot = new RelayCommand(obj =>
                     {
 
-
+                        WorkingWithData.ClearMemoryAfterFrame();
+                        pageSettings = new PageSettings();
+                        MainFrame.NavigationService.Navigate(pageSettings);
 
                     }, (obj) => true));
             }
         }
 
         // перереход на страницу "настройки"
+        PageSettings pageSettings;
+
         private RelayCommand _btn_Setting { get; set; }
         public RelayCommand Btn_Setting
         {
@@ -1599,8 +1603,9 @@ namespace sparePartsStore.ViewModel
                 return _btn_Setting ??
                     (_btn_Setting = new RelayCommand(obj =>
                     {
-
-
+                        WorkingWithData.ClearMemoryAfterFrame();
+                        pageSettings = new PageSettings();
+                        MainFrame.NavigationService.Navigate(pageSettings);
 
                     }, (obj) => true));
             }

@@ -277,6 +277,7 @@ namespace sparePartsStore.ViewModel
             // очищаем JSON
             AuthorizationEntrance authorizationEntrance = new AuthorizationEntrance(); // класс авторизации
             authorizationEntrance.Entrance = false; // пользователь вышел из аккаунт
+            authorizationEntrance.UserRole = "";
 
             try
             {
