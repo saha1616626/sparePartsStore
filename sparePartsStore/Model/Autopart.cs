@@ -39,51 +39,18 @@ public partial class Autopart
     {
         Autopart autopart = new Autopart();
 
-        int knotId = 0;
-        int carModelId = 0;
-        int manufactureId = 0;
+        autopart.AutopartId = autopartDPO.AutopartId;
+        autopart.NumberAutopart = autopartDPO.NumberAutopart;
+        autopart.NameAutopart = autopartDPO.NameAutopart;
+        autopart.KnotId = autopartDPO.KnotId;
+        autopart.CarModelId = autopartDPO.CarModelId;
+        autopart.ManufactureId = autopartDPO.ManufactureId;
+        autopart.PriceSale = autopartDPO.PriceSale;
+        autopart.AvailableityStock = autopartDPO.AvailableityStock;
+        autopart.AccountId = autopartDPO.AccountId;
+        autopart.ModerationStatus = autopartDPO.ModerationStatus;
 
-        // получаем объект из БД для замены NameAutopart на int AutopartId
-        using (SparePartsStoreContext context = new SparePartsStoreContext())
-        {
-            List<Knot> knots = context.Knots.ToList();
-            List<CarModel> carModels = context.CarModels.ToList();
-            List<Manufacture> manufactures = context.Manufactures.ToList();
-
-            Knot knot = knots.FirstOrDefault(k => k.KnotId == autopartDPO.KnotId);
-            if (knot != null)
-            {
-                knotId = knot.KnotId; // присваиваем полученные ID
-            }
-
-            CarModel carModel = carModels.FirstOrDefault(c => c.CarModelId == autopartDPO.CarModelId);
-            if (carModel != null)
-            {
-                carModelId = carModel.CarModelId;
-            }
-
-            Manufacture manufacture = manufactures.FirstOrDefault(m => m.ManufactureId == autopartDPO.ManufactureId);
-            if(manufacture != null)
-            {
-                manufactureId = manufacture.ManufactureId;
-            }
-
-            if(knotId != 0 && carModelId != 0 && manufactureId != 0)
-            {
-                autopart.AutopartId = autopartDPO.AutopartId;
-                autopart.NumberAutopart = autopartDPO.NumberAutopart;
-                autopart.NameAutopart = autopartDPO.NameAutopart;
-                autopart.KnotId = knotId;
-                autopart.CarModelId = carModelId;
-                autopart.ManufactureId = manufactureId;
-                autopart.PriceSale = autopartDPO.PriceSale;
-                autopart.AvailableityStock = autopartDPO.AvailableityStock;
-                autopart.AccountId = autopartDPO.AccountId;
-            }
-
-            return autopart;
-        }
-
+        return autopart;
     }
 
 }
