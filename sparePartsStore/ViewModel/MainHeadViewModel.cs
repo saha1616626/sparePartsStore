@@ -97,9 +97,6 @@ namespace sparePartsStore.ViewModel
 
         public MainHeadViewModel()
         {
-            // событие на закрытие страницы
-            WorkingWithData.closePage += CloseLastOnePage;
-
 
             // подписываемя на событие запуска страницы добавления марки авто
             WorkingWithData.launchPageAddCarBrand += LaunchPageAddCarBrand;
@@ -183,6 +180,24 @@ namespace sparePartsStore.ViewModel
 
             // подписываемся на событие запуска страницы аналоги
             WorkingWithData.launchPageAddAnalog += LaunchPageAddAnalog;
+
+
+            // подписываемся на событие запуска страницы марка авто
+            WorkingWithData.closePageCarBrand += ClosePageCarBrand;
+            // подписываемся на событие запуска страницы модели авто
+            WorkingWithData.closePageCarModel += ClosePageCarModel;
+            // подписываемся на событие запуска страницы агрегат
+            WorkingWithData.closePageUnit += ClosePageUnit;
+            // подписываемся на событие запуска страницы узел
+            WorkingWithData.closePageKnot += ClosePageKnot;
+            // подписываемся на событие запуска страницы страна
+            WorkingWithData.closePageCountry += ClosePageCountry;
+            // подписываемся на событие запуска страницы производитель
+            WorkingWithData.closePageManufacture += ClosePageManufacture;
+            // подписываемся на событие запуска страницы пользователь
+            WorkingWithData.closePageUser += ClosePageUser;
+            // подписываемся на событие запуска страницы автозапчасть
+            WorkingWithData.closePageAutopart += closePageAutopart;
         }
 
         // запуск страницы - поиск запчастей
@@ -1649,19 +1664,126 @@ namespace sparePartsStore.ViewModel
         // методы PageMainHead
         #region methodsPageMainHead
 
-        // закрыть последнюю страницу
-        private void CloseLastOnePage(object sender, EventAggregator e)
-    {
+        // переход на страницу марка авто
+        private void ClosePageCarBrand(object sender, EventAggregator e)
+        {
+            WorkingWithData.ClearMemoryAfterFrame();
+            pageListCarBrands = new PageListCarBrands();
+            MainFrame.NavigationService.Navigate(pageListCarBrands);
 
-        // закрываем страницу
-        MainFrame.NavigationService.GoBack();
-        // изменяем меню
-        selectedMenu();
+            // изменяем меню
+            selectedMenu();
 
-        // сборка мусора и освобождение неиспользуемых ресурсов
-        GC.Collect();
-        GC.WaitForPendingFinalizers();
-    }
+            // сборка мусора и освобождение неиспользуемых ресурсов
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        }
+
+        // переход на страницу модель авто
+        private void ClosePageCarModel(object sender, EventAggregator e)
+        {
+            WorkingWithData.ClearMemoryAfterFrame();
+            pageListCarModel = new PageListCarModels();
+            MainFrame.NavigationService.Navigate(pageListCarModel);
+
+            // изменяем меню
+            selectedMenu();
+
+            // сборка мусора и освобождение неиспользуемых ресурсов
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        }
+
+        // переход на страницу агрегат
+        private void ClosePageUnit(object sender, EventAggregator e)
+        {
+            WorkingWithData.ClearMemoryAfterFrame();
+            pageListUnit = new PageListUnit();
+            MainFrame.NavigationService.Navigate(pageListUnit);
+
+            // изменяем меню
+            selectedMenu();
+
+            // сборка мусора и освобождение неиспользуемых ресурсов
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        }
+
+        // переход на страницу узел
+        private void ClosePageKnot(object sender, EventAggregator e)
+        {
+            WorkingWithData.ClearMemoryAfterFrame();
+            pageListKnot = new PageListKnot();
+            MainFrame.NavigationService.Navigate(pageListKnot);
+
+            // изменяем меню
+            selectedMenu();
+
+            // сборка мусора и освобождение неиспользуемых ресурсов
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        }
+
+        // переход на страницу страна
+        private void ClosePageCountry(object sender, EventAggregator e)
+        {
+            WorkingWithData.ClearMemoryAfterFrame();
+            pageListCountry = new PageListCountry();
+            MainFrame.NavigationService.Navigate(pageListCountry);
+
+            // изменяем меню
+            selectedMenu();
+
+            // сборка мусора и освобождение неиспользуемых ресурсов
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        }
+
+        // переход на страницу произоводитель
+        private void ClosePageManufacture(object sender, EventAggregator e)
+        {
+            WorkingWithData.ClearMemoryAfterFrame();
+            pageListManufacture = new PageListManufacture();
+            MainFrame.NavigationService.Navigate(pageListManufacture);
+
+            // изменяем меню
+            selectedMenu();
+
+            // сборка мусора и освобождение неиспользуемых ресурсов
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        }
+
+        // переход на страницу пользователь
+        private void ClosePageUser(object sender, EventAggregator e)
+        {
+            WorkingWithData.ClearMemoryAfterFrame();
+            pageListUsers = new PageListUsers();
+            MainFrame.NavigationService.Navigate(pageListUsers);
+
+            // изменяем меню
+            selectedMenu();
+
+            // сборка мусора и освобождение неиспользуемых ресурсов
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        }
+
+        // переход на страницу запчасти
+        private void closePageAutopart(object sender, EventAggregator e)
+        {
+            WorkingWithData.ClearMemoryAfterFrame();
+            pageListAutoparts = new PageListAutoparts();
+            MainFrame.NavigationService.Navigate(pageListAutoparts);
+
+            // изменяем меню
+            selectedMenu();
+
+            // сборка мусора и освобождение неиспользуемых ресурсов
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        }
+
 
     // скрываем основное меню и открываем меню настроек
     private void settingMenu()

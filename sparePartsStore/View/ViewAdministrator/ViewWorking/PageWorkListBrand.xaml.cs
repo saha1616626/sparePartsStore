@@ -45,7 +45,7 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
         private void ClosePageAddOrDeleteCarBrands(object sender, EventArgs e)
         {
             // вызываем события для закрытия страницы
-            WorkingWithData.ClosePage();
+            WorkingWithData.ClosePageCarBrand();
         }
 
         // сохраняем данные после изменениня или добавления данных в БД

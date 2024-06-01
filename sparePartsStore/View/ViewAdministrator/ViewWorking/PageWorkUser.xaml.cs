@@ -199,7 +199,7 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
         private void ClosePageAddOrDeleteAccount(object sender, RoutedEventArgs e)
         {
             // вызываем события для закрытия страницы
-            WorkingWithData.ClosePage();
+            WorkingWithData.ClosePageUser();
         }
 
         // анимация уведомления

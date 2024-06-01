@@ -1,4 +1,5 @@
-﻿using System;
+﻿using sparePartsStore.View.ViewAdministrator.ViewWorkingWithData;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -283,24 +284,74 @@ namespace sparePartsStore.Helper
         // аналоги
         #region Analog
 
-        // Событие запуска страницы аналоги из MainHeadViewModel
+        // запуск страницы аналоги
         public static event EventHandler<EventAggregator> launchPageAddAnalog; // подписываемся в MainHeadViewModel
-        public static void LaunchPageAddAnalog() // вызываем в PageListAutoparts
+        public static void LaunchPageAddAnalog() // вызываем в PageListAnalog
         {
             launchPageAddAnalog?.Invoke(null, new EventAggregator());
         }
+
+        // закрыть страницу бренд 
+        public static event EventHandler<EventAggregator> closePageCarBrand; // подписываемся в MainHeadViewModel
+        public static void ClosePageCarBrand() // вызываем в PageListCarBrand
+        {
+            closePageCarBrand?.Invoke(null, new EventAggregator());
+        }
+
+        // закрыть страницу мдоель
+        public static event EventHandler<EventAggregator> closePageCarModel; // подписываемся в MainHeadViewModel
+        public static void ClosePageCarModel() // вызываем в PageListarModel
+        {
+            closePageCarModel?.Invoke(null, new EventAggregator());
+        }
+
+        // закрыть страницу агрегат
+        public static event EventHandler<EventAggregator> closePageUnit; // подписываемся в MainHeadViewModel
+        public static void ClosePageUnit() // вызываем в PageListarUnit
+        {
+            closePageUnit?.Invoke(null, new EventAggregator());
+        }
+
+        // закрыть страницу узел
+        public static event EventHandler<EventAggregator> closePageKnot; // подписываемся в MainHeadViewModel
+        public static void ClosePageKnot() // вызываем в PageListarKnot
+        {
+            closePageKnot?.Invoke(null, new EventAggregator());
+        }
+
+        // закрыть страницу страна
+        public static event EventHandler<EventAggregator> closePageCountry; // подписываемся в MainHeadViewModel
+        public static void ClosePageCountry() // вызываем в PageListarCountry
+        {
+            closePageCountry?.Invoke(null, new EventAggregator());
+        }
+
+        // закрыть страницу проивзодителя
+        public static event EventHandler<EventAggregator> closePageManufacture; // подписываемся в MainHeadViewModel
+        public static void ClosePageManufacture() // вызываем в PageListarManufacture
+        {
+            closePageManufacture?.Invoke(null, new EventAggregator());
+        }
+
+        // закрыть страницу пользовательл
+        public static event EventHandler<EventAggregator> closePageUser; // подписываемся в MainHeadViewModel
+        public static void ClosePageUser() // вызываем в PageListarUser
+        {
+            closePageUser?.Invoke(null, new EventAggregator());
+        }
+
+        // закрыть страницу запчасти
+        public static event EventHandler<EventAggregator> closePageAutopart; // подписываемся в MainHeadViewModel
+        public static void ClosePageAutopart() // вызываем в PageListarAutopart
+        {
+            closePageAutopart?.Invoke(null, new EventAggregator());
+        }
+
 
         #endregion
 
         // общие события 
         #region GeneralEvent
-
-        // событие выхода из страницы на предидущую страницу 
-        public static event EventHandler<EventAggregator> closePage; // подписываемся MainHeadViewModel
-        public static void ClosePage() // вызываем событие в PageWorkListBrand
-        {
-            closePage?.Invoke(null, new EventAggregator());
-        }
 
 
         // событие на очистку данных страницы PageMainHead

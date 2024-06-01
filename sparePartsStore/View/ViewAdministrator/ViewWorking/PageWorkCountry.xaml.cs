@@ -139,7 +139,7 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
         private void ClosePageAddOrDeleteCountry(object sender, RoutedEventArgs e)
         {
             // вызываем события для закрытия страницы
-            WorkingWithData.ClosePage();
+            WorkingWithData.ClosePageCountry();
         }
 
         // анимация уведомления

@@ -139,7 +139,7 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
         private void ClosePageAddOrDeleteCarModel(object sender, RoutedEventArgs e)
         {
             // вызываем события для закрытия страницы
-            WorkingWithData.ClosePage();
+            WorkingWithData.ClosePageUnit();
         }
 
         // анимация уведомления

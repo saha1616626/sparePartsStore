@@ -158,7 +158,7 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
         private void ClosePageAddOrDeleteKnot(object sender, RoutedEventArgs e)
         {
             // вызываем события для закрытия страницы
-            WorkingWithData.ClosePage();
+            WorkingWithData.ClosePageKnot();
         }
 
         // анимация уведомления
