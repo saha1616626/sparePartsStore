@@ -453,5 +453,5 @@ namespace sparePartsStore.ViewModel
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-    }
+    
 }

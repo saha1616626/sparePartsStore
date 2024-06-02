@@ -42,9 +42,9 @@ namespace sparePartsStore.ViewModel
             authorizationViewModel = new AuthorizationViewModel();
 
             string role = authorizationViewModel.CheckingUserRole();
-            if(role != null)
+            if (role != null)
             {
-                if(role == "Поставщик")
+                if (role == "Поставщик")
                 {
                     checkProvider = true;
                     IsSettingVisible = Visibility.Collapsed; // скрываем шестерёнку
@@ -364,7 +364,7 @@ namespace sparePartsStore.ViewModel
             // вызываем событие для передачи данных
             pageListCarBrands.TransmitData();
         }
-
+    
         // редактируем или добавляем данные в таблицу
         private void WorkDataBrand(object sender, EventAggregator e)
         {

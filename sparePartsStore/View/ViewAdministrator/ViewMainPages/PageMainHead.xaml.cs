@@ -50,7 +50,7 @@ namespace sparePartsStore.View.ViewAdministrator.ViewMainPages
             {
                 List<Account> accounts = context.Accounts.ToList();
                 Account account = accounts.FirstOrDefault(a => a.AccountId == idUser);
-                if(account != null)
+                if (account != null)
                 {
                     string role = authorizationViewModel.CheckingUserRole();
                     if (role != null)
@@ -122,7 +122,7 @@ namespace sparePartsStore.View.ViewAdministrator.ViewMainPages
         // начальная страница при запуске экрана 
         private void startPage()
         {
-            
+
 
             _mainHeadViewModel.startMainPage();
         }
@@ -310,7 +310,7 @@ namespace sparePartsStore.View.ViewAdministrator.ViewMainPages
         //        });
         //    });
         //}
-
+    
         // запуск страницы списка марок. после выхода из добавления или редактирования.
         public void LaunchCarBrand(object sender, EventAggregator e)
         {
@@ -320,7 +320,7 @@ namespace sparePartsStore.View.ViewAdministrator.ViewMainPages
             //_btnSetting.Visibility = Visibility.Visible; // включаем кнопку настроек
             // автоматичесое отображение страницы при входе в учетную запись адинистратора
             //administratorFrame.Navigate(new Uri("/View/ViewAdministrator/ViewWorkingWithData/PageListCarBrands.xaml", UriKind.Relative));
-        }
+        } 
         #endregion
-    }
+    } 
 }
