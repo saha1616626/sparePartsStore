@@ -125,12 +125,14 @@ namespace sparePartsStore.ViewModel
         }
 
         // поле поиска
-        private string Search {  get; set; }
+        private string Search { get; set; }
 
         // фильруем данные при вводе в текствое поле
         public void HandlerTextBoxChanged(string nameAutoParts)
         {
             Search = nameAutoParts; // передали измененный текст
+
+            SearchFilter();
         }
 
         #endregion
@@ -155,31 +157,40 @@ namespace sparePartsStore.ViewModel
             // новая коллекция
             List<AutopartDPO> autopartDPOs = new List<AutopartDPO>();
             // записываем основную коллекцию
-            foreach(AutopartDPO item in ListAutopartDPO)
+            foreach (AutopartDPO item in ListAutopartDPO)
             {
                 autopartDPOs.Add(item);
             }
 
-            if(SelectedCarBrand != null)
+            if (SelectedCarBrand != null)
             {
                 autopartDPOs = autopartDPOs.Where(a => a.CarBrandId == SelectedCarBrand.CarBrandId).ToList();
             }
-            if(SelectedCarModel != null)
+            if (SelectedCarModel != null)
             {
                 autopartDPOs = autopartDPOs.Where(a => a.CarModelId == SelectedCarModel.CarModelId).ToList();
             }
-            if(SelectedUnit != null)
+            if (SelectedUnit != null)
             {
                 autopartDPOs = autopartDPOs.Where(a => a.UnitId == SelectedUnit.UnitId).ToList();
             }
-            if(SelectedKnot != null)
+            if (SelectedKnot != null)
             {
                 autopartDPOs = autopartDPOs.Where(a => a.KnotId == SelectedKnot.KnotId).ToList();
             }
-            if(Search != null)
+            if (Search != null)
             {
-                autopartDPOs = autopartDPOs.Where(a => a.NameAutopart == conta).ToList();
+                autopartDPOs = autopartDPOs.Where(a => a.NameAutopart.ToLower().Contains(Search.ToLower())).ToList();
             }
+
+            // очищаем список
+            ListAutopartDPO.Clear();
+            // записываем основную коллекцию
+            foreach (AutopartDPO item in autopartDPOs)
+            {
+                ListAutopartDPO.Add(item);
+            }
+
         }
 
         #endregion
@@ -195,7 +206,7 @@ namespace sparePartsStore.ViewModel
             {
                 _selectedCarBrand = value;
                 OnPropertyChanged(nameof(SelectedCarBrand));
-                //EditCarModel();
+                EditCarModel();
             }
         }
 
@@ -208,6 +219,63 @@ namespace sparePartsStore.ViewModel
             {
                 _nameCarBrandComboBoxItems = value;
                 OnPropertyChanged(nameof(NameCarBrandComboBoxItems));
+            }
+        }
+
+        public ObservableCollection<CarBrand> GetCarBrandOnComboBox()
+        {
+            // список, котроый будет в себе хранить значения comBox
+            using (SparePartsStoreContext context = new SparePartsStoreContext())
+            {
+                List<CarBrand> carBrands = context.CarBrands.ToList(); // получили список марок из БД
+                ObservableCollection<CarBrand> carBrandList = new ObservableCollection<CarBrand>(); // список для ComBox
+                // записываем массив carBrandList
+                foreach (CarBrand carBrandtem in carBrands)
+                {
+                    // добавляем данные в список
+                    carBrandList.Add(carBrandtem);
+                }
+                // возвращаем массив обратно
+                return carBrandList;
+            }
+        }
+
+        public bool editCarModel = false; // true - если мы изминили список моделей авто в тот момент, когда SelectedCarModel == null
+
+        // изменяем список моделей авто, в зависимости от марки авто
+        private void EditCarModel()
+        {
+            // передаём список моделей авто, которые соответствуют данной марки авто
+            using (SparePartsStoreContext context = new SparePartsStoreContext())
+            {
+                List<CarModel> carModels = context.CarModels.ToList();
+
+                // выводим модели, которые соответствуют данной марки авто
+                if (SelectedCarModel == null) // если данные у модели авто не выбранны в ComboBox
+                {
+                    if (SelectedCarBrand != null) // если марка выбрана корректно
+                    {
+                        // фильтруем данные списка
+                        SearchFilter();
+
+                        // изменяем список моделей
+
+                        ObservableCollection<CarModel> carModel = new ObservableCollection<CarModel>(carModels.Where(c => c.CarBrandId == SelectedCarBrand.CarBrandId).ToList());
+                        _nameCarModelComboBoxItems = carModel; // присваиваем новые значения списка ComboBox
+                        OnPropertyChanged(nameof(NameCarModelComboBoxItems)); // оповещаем список моделей авто об изменении данных
+                        editCarModel = true;
+                    }
+                }
+
+                if (editCarModel == true)
+                {
+                    if (SelectedCarBrand != null) // если марка выбрана корректно
+                    {
+                        ObservableCollection<CarModel> carModel = new ObservableCollection<CarModel>(carModels.Where(c => c.CarBrandId == SelectedCarBrand.CarBrandId).ToList());
+                        _nameCarModelComboBoxItems = carModel; // присваиваем новые значения списка ComboBox
+                        OnPropertyChanged(nameof(NameCarModelComboBoxItems)); // оповещаем список моделей авто об изменении данных
+                    }
+                }
             }
         }
 
@@ -240,6 +308,25 @@ namespace sparePartsStore.ViewModel
             }
         }
 
+        public ObservableCollection<CarModel> GetCarModelOnComboBox()
+        {
+            // список, котроый будет в себе хранить значения comBox
+            using (SparePartsStoreContext context = new SparePartsStoreContext())
+            {
+                List<CarModel> carModels = context.CarModels.ToList(); // получили список моделей из БД
+                ObservableCollection<CarModel> carModelList = new ObservableCollection<CarModel>(); // список для ComBox
+                // записываем массив carModelList
+                foreach (CarModel сarModeltem in carModels)
+                {
+                    // добавляем данные в список
+                    carModelList.Add(сarModeltem);
+                }
+                // возвращаем массив обратно
+                return carModelList;
+            }
+        } 
+
+
         #endregion
 
         #region Unit
@@ -265,6 +352,25 @@ namespace sparePartsStore.ViewModel
             {
                 _nameUnitComboBoxItems = value;
                 OnPropertyChanged(nameof(NameUnitComboBoxItems));
+            }
+        }
+
+        // получаем данные для ComBox Unit
+        public ObservableCollection<Unit> GetUnitOnComboBox()
+        {
+            // список, котроый будет в себе хранить значения comBox
+            using (SparePartsStoreContext context = new SparePartsStoreContext())
+            {
+                List<Unit> units = context.Units.ToList(); // получили список агрегатов из БД
+                ObservableCollection<Unit> unitList = new ObservableCollection<Unit>(); // список для ComBox
+                // записываем массив unitList
+                foreach (Unit unitItem in units)
+                {
+                    // добавляем данные в список
+                    unitList.Add(unitItem);
+                }
+                // возвращаем массив обратно
+                return unitList;
             }
         }
 
@@ -295,10 +401,32 @@ namespace sparePartsStore.ViewModel
                 _nameKnotComboBoxItems = value;
                 OnPropertyChanged(nameof(NameKnotComboBoxItems));
 
+            }
+
+        }
+
+        // получаем данные для ComBox Knot
+        public ObservableCollection<Knot> GetKnotOnComboBox()
+        {
+            // список, котроый будет в себе хранить значения comBox
+            using (SparePartsStoreContext context = new SparePartsStoreContext())
+            {
+                List<Knot> knots = context.Knots.ToList(); // получили список узлов из БД
+                ObservableCollection<Knot> knotList = new ObservableCollection<Knot>(); // список для ComBox
+                // записываем массив knotList
+                foreach (Knot knotItem in knots)
+                {
+                    // добавляем данные в список
+                    knotList.Add(knotItem);
+                }
+                // возвращаем массив обратно
+                return knotList;
+            }
+        }
 
         #endregion
 
-                #endregion
+        #endregion
 
 
         public event PropertyChangedEventHandler PropertyChanged;

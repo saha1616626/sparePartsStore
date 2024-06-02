@@ -1,4 +1,5 @@
-﻿using sparePartsStore.ViewModel;
+﻿using sparePartsStore.Helper;
+using sparePartsStore.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,6 +48,12 @@ namespace sparePartsStore.View
 
                 _listSearchSpareParts.HandlerTextBoxChanged(nameAutoParts);
             }
+        }
+
+        // вызываем событие перезапуска страницы
+        private void Reloading(object sender, EventArgs e)
+        {
+            WorkingWithData.ReloadingSearch();
         }
     }
 }

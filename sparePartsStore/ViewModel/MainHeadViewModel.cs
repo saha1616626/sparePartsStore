@@ -263,6 +263,9 @@ namespace sparePartsStore.ViewModel
             WorkingWithData.closePageUser += ClosePageUser;
             // подписываемся на событие запуска страницы автозапчасть
             WorkingWithData.closePageAutopart += closePageAutopart;
+
+            // ПЕРЕЗАГРУЗКА СТРАНИЦЫ ПОИСКА ЗАПЧАСТЕЙ
+            WorkingWithData.reloadingSearch += ReloadingSearch;
         }
 
         // запуск страницы - поиск запчастей
@@ -1972,6 +1975,21 @@ namespace sparePartsStore.ViewModel
                 }
             } 
     }
+
+        // перезагрузка страницы поиска запчастей
+        private void ReloadingSearch(Object sender, EventAggregator e)
+        {
+            WorkingWithData.ClearMemoryAfterFrame();
+            listSearchSpareParts = new ListSearchSpareParts();
+            MainFrame.NavigationService.Navigate(listSearchSpareParts);
+
+            // изменяем меню
+            selectedMenu();
+
+            // сборка мусора и освобождение неиспользуемых ресурсов
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        }
 
     #endregion
 

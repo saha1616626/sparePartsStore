@@ -375,6 +375,13 @@ namespace sparePartsStore.Helper
             userLogin?.Invoke(null, new EventAggregator());
         }
 
+        // презагрузка страницы - поиск запчасти
+        public static event EventHandler<EventAggregator> reloadingSearch; // подписываемся в ListSearchSpareParts
+        public static void ReloadingSearch() // вызываем в MainHeadViewModel
+        {
+            reloadingSearch?.Invoke(null, new EventAggregator());
+        }
+
         #endregion        
     }
 }
