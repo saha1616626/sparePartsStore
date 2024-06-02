@@ -23,21 +23,19 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorkingWithData
     public partial class PageListAnalogues : Page
     {
         private readonly ListAnaloguesViewModel _listAnaloguesViewModel; // объект класса
-        public PageListAnalogues()
+        public PageListAnalogues(AutopartDPO autopartDPO)
         {
             InitializeComponent();
-
-            // получаем экз ListAutopartViewModel
             _listAnaloguesViewModel = (ListAnaloguesViewModel)this.Resources["ListAnaloguesViewModel"];
-            
+            _listAnaloguesViewModel.InitializeAsync(autopartDPO); // ассинхронная передача
         }
 
         // получаем данные запчасти, к котрой нужно подобрать аналог
         public void DataReception(AutopartDPO autopartDPO)
         {
-            _listAnaloguesViewModel.AutopartDPO = autopartDPO; // передаём данные для 
+            
 
-            nameAutoParts.Text = autopartDPO.NumberAutopart;
+            //nameAutoParts.Text = string.Parse(autopartDPO.NumberAutopart);
 
         }
     }

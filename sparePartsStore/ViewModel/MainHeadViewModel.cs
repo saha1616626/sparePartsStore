@@ -1704,11 +1704,6 @@ namespace sparePartsStore.ViewModel
         PageListAnalogues pageListAnalogues;
         private void LaunchPageAddAnalog(object sender, EventAggregator e)
         {
-            // событие для очистка фреймов из памяти в PageMainHead
-            WorkingWithData.ClearMemoryAfterFrame();
-            pageListAnalogues = new PageListAnalogues();
-            MainFrame.NavigationService.Navigate(pageListAnalogues);
-
             // показываем, что было открыто основное меню перед его скрытием
             typeMenu = true;
             // скрываем шестерёнку и основное меню, чтобы нельзя было перемещаться между страницами
@@ -1719,6 +1714,11 @@ namespace sparePartsStore.ViewModel
             pageListAutoparts.EventDataSelectedAutopartAnalogItem += (sender, args) =>
             {
                 AutopartDPO autopartDPO = (AutopartDPO)args.Value; // получаем выбранные данные
+
+                // событие для очистка фреймов из памяти в PageMainHead
+                WorkingWithData.ClearMemoryAfterFrame();
+                pageListAnalogues = new PageListAnalogues(autopartDPO);
+                MainFrame.NavigationService.Navigate(pageListAnalogues);
 
                 //передаём данные для редактирования(отображаем)
                 pageListAnalogues.DataReception(autopartDPO);
