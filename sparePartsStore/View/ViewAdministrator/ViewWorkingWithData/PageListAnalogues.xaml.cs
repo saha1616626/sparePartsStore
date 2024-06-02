@@ -1,4 +1,5 @@
-﻿using sparePartsStore.Model.DPO;
+﻿using sparePartsStore.Helper;
+using sparePartsStore.Model.DPO;
 using sparePartsStore.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -30,13 +31,12 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorkingWithData
             _listAnaloguesViewModel.InitializeAsync(autopartDPO); // ассинхронная передача
         }
 
-        // получаем данные запчасти, к котрой нужно подобрать аналог
-        public void DataReception(AutopartDPO autopartDPO)
+
+        // кнопка выхода на главную страницу
+        private void ClosePageAddOrDeleteAutopart(object sender, RoutedEventArgs e)
         {
-            
-
-            //nameAutoParts.Text = string.Parse(autopartDPO.NumberAutopart);
-
+            // вызываем события для закрытия страницы
+            WorkingWithData.ClosePageAutopart();
         }
     }
 }

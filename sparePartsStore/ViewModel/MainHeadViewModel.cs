@@ -1719,9 +1719,6 @@ namespace sparePartsStore.ViewModel
                 WorkingWithData.ClearMemoryAfterFrame();
                 pageListAnalogues = new PageListAnalogues(autopartDPO);
                 MainFrame.NavigationService.Navigate(pageListAnalogues);
-
-                //передаём данные для редактирования(отображаем)
-                pageListAnalogues.DataReception(autopartDPO);
             };
             // вызываем событие для передачи данных
             pageListAutoparts.TransmitDataAnalog();

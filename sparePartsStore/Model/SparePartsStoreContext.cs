@@ -190,6 +190,8 @@ public partial class SparePartsStoreContext : DbContext
                 .HasNoKey()
                 .ToTable("partInterchangeability");
 
+            //entity.HasKey(e => e.PartInterchangeabilityId).HasName("PK_partInterchangeability");
+
             entity.Property(e => e.AutoPartId).HasColumnName("autoPartId");
             entity.Property(e => e.InterchangeableDetailId).HasColumnName("interchangeableDetailId");
             entity.Property(e => e.PartInterchangeabilityId)
