@@ -283,25 +283,25 @@ namespace sparePartsStore.ViewModel
                         //OnPropertyChanged(nameof(NameCarModelComboBoxItems)); // оповещаем список моделей авто об изменении данных
                         //editCarModel = true;
                     }
-                }
 
-                if (editCarModel == true)
-                {
-                    if (SelectedCarBrand != null) // если марка выбрана корректно
+
+                    if (editCarModel == true)
                     {
-                        ObservableCollection<CarModel> carModel = new ObservableCollection<CarModel>(carModels.Where(c => c.CarBrandId == SelectedCarBrand.CarBrandId).ToList());
-                        _nameCarModelComboBoxItems = carModel; // присваиваем новые значения списка ComboBox
-                        OnPropertyChanged(nameof(NameCarModelComboBoxItems)); // оповещаем список моделей авто об изменении данных
+                        if (SelectedCarBrand != null) // если марка выбрана корректно
+                        {
+                            ObservableCollection<CarModel> carModel = new ObservableCollection<CarModel>(carModels.Where(c => c.CarBrandId == SelectedCarBrand.CarBrandId).ToList());
+                            _nameCarModelComboBoxItems = carModel; // присваиваем новые значения списка ComboBox
+                            OnPropertyChanged(nameof(NameCarModelComboBoxItems)); // оповещаем список моделей авто об изменении данных
+                        }
                     }
                 }
             }
-        }
 
         #endregion
 
-        #region CarModel
+            #region CarModel
 
-        // выбранная модель авто
+            // выбранная модель авто
         private CarModel _selectedCarModel;
         public CarModel SelectedCarModel
         {
