@@ -516,7 +516,7 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorking
                     }
                     else
                     {
-                        errorInput.Text = "Данный производитель уже есть в базе!";
+                        errorInput.Text = "Данная запчасть уже есть в базе!";
                         BeginFadeAnimation(errorInput);
                     }
                 }

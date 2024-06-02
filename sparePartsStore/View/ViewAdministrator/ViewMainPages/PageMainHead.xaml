@@ -52,7 +52,7 @@
                         </Grid.ColumnDefinitions>
                         
                         <!--название роли-->
-                        <TextBlock Grid.Column="0" Text="Администратор" FontSize="24" VerticalAlignment="Center" FontWeight="Regular"/>
+                        <TextBlock Grid.Column="0" Text="" x:Name="nameRole" FontSize="24" VerticalAlignment="Center" FontWeight="Regular"/>
                         <!--названик компании или ИП-->
                         <TextBlock Grid.Column="1" Text="" FontSize="24"  VerticalAlignment="Center" FontWeight="Regular" Margin="0,0,0,0"/>
                     </Grid>
@@ -132,6 +132,37 @@
 
                 <Button Content="Пользователи" Grid.Column="0" Style="{StaticResource BtnMenuHead}" Click="Btn_User" Command="{Binding Btn_User, Source={StaticResource MainHeadViewModel}}"/>
                 <!--<Button Content="Роли" Grid.Column="1" Style="{StaticResource BtnMenuHead}" Click="Btn_Role"/>-->
+                <Button Content="Настройки" Grid.Column="1" Style="{StaticResource BtnMenuHead}" Click="Btn_Setting" Command="{Binding Btn_Setting, Source={StaticResource MainHeadViewModel}}"/>
+
+            </Grid>
+            
+            <!--меню для поставщика-->
+            <Grid x:Name="_providerMenu" Visibility="{Binding IsProviderMenu, Mode=TwoWay, Source={StaticResource MainHeadViewModel}}">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <!--настройки аккаунта (выход из аккаунта)-->
+                </Grid.ColumnDefinitions>
+
+                <Button Content="Поиск запчастей" Grid.Column="0" Style="{StaticResource BtnMenuHead}" Command="{Binding Btn_SearchParts, Source={StaticResource MainHeadViewModel}}"/>
+                <Button Content="Запчасть" Grid.Column="1" Style="{StaticResource BtnMenuHead}" Click="Btn_Details" Command="{Binding Btn_Details, Source={StaticResource MainHeadViewModel}}"/>
+                <Button Content="Настройки" Grid.Column="2" Style="{StaticResource BtnMenuHead}" Click="Btn_Setting" Command="{Binding Btn_Setting, Source={StaticResource MainHeadViewModel}}"/>
+
+            </Grid>
+
+            <!--меню для магазина-->
+            <Grid x:Name="_storeMenu" Visibility="{Binding IsStoreMenu, Mode=TwoWay, Source={StaticResource MainHeadViewModel}}">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <!--настройки аккаунта (выход из аккаунта)-->
+                </Grid.ColumnDefinitions>
+
+                <Button Content="Поиск запчастей" Grid.Column="0" Style="{StaticResource BtnMenuHead}" Command="{Binding Btn_SearchParts, Source={StaticResource MainHeadViewModel}}"/>
+               
                 <Button Content="Настройки" Grid.Column="1" Style="{StaticResource BtnMenuHead}" Click="Btn_Setting" Command="{Binding Btn_Setting, Source={StaticResource MainHeadViewModel}}"/>
 
             </Grid>

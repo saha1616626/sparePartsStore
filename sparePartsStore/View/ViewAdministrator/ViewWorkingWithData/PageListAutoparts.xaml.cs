@@ -24,12 +24,30 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorkingWithData
     public partial class PageListAutoparts : Page
     {
         private readonly ListAutopartViewModel _listAutopartViewModel; // объект класса
+
+        // класс для работы с авторизацией пользователя
+        private AuthorizationViewModel authorizationViewModel;
+
         public PageListAutoparts()
         {
             InitializeComponent();
 
             // получаем экз ListAutopartViewModel
             _listAutopartViewModel = (ListAutopartViewModel)this.Resources["ListAutopartViewModel"];
+
+            // скрываем кнопки удалить и аналоги, если вошел поставщик
+            // получаем роль пользователя
+            authorizationViewModel = new AuthorizationViewModel();
+
+            string role = authorizationViewModel.CheckingUserRole();
+            if(role != null )
+            {
+                if(role == "Поставщик")
+                {
+                    Analog.Visibility = Visibility.Collapsed;
+                    Delete.Visibility = Visibility.Collapsed;
+                }
+            }
         }
 
         // кнопка подбора аналогов

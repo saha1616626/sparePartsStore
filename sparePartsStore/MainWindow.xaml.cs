@@ -80,6 +80,7 @@ namespace sparePartsStore
             authorizationViewModel = new AuthorizationViewModel();
 
             string role = authorizationViewModel.CheckingUserRole();
+            
 
             if (role != "")
             {

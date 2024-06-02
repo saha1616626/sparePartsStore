@@ -43,7 +43,7 @@
                    Margin="0,40,0,40" VerticalAlignment="Center"/>
 
         <!--кнопка аналогов-->
-        <Button Grid.Row="1" Grid.Column="0" Content="Подбор аналогов" MinWidth="330" Height="35" IsEnabled="{Binding IsWorkButtonEnable}"
+        <Button Grid.Row="1" Grid.Column="0" Content="Подбор аналогов" MinWidth="330" Height="35" x:Name="Analog" IsEnabled="{Binding IsWorkButtonEnable}"
                 Background="Gray" BorderBrush="Black" HorizontalAlignment="Right" Click="Btn_AnalogAutoParts"/>
 
         <!--основные кнопки-->
@@ -67,7 +67,7 @@
                         Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0" Command="{Binding AutoParts}"
                         Click="Btn_EditAutoParts" IsEnabled="{Binding IsWorkButtonEnable}"/>
 
-                <Button Grid.Column="2" Content="Удалить" MinWidth="130" Click="Btn_OpenPopup"
+                <Button Grid.Column="2" Content="Удалить" MinWidth="130" Click="Btn_OpenPopup" x:Name="Delete"
                         Height="35" Background="Gray" BorderBrush="Black" Margin="10,0,0,0" 
                         Command="{Binding DeleteAutoParts}" IsEnabled="{Binding IsWorkButtonEnable}"/>
 

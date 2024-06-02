@@ -52,7 +52,7 @@
         <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="Деталь" FontSize="30" Foreground="Black" FontWeight="DemiBold" Margin="0, 20,0,40" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
         <!--поле для вывода ошибок-->
-        <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" Margin="0,50,20,0" x:Name="errorInput" FontWeight="DemiBold" FontSize="24"/>
+        <TextBlock Grid.Column="1" Grid.Row="0" HorizontalAlignment="Right" Margin="0,30,20,0" x:Name="errorInput" FontWeight="DemiBold" FontSize="24"/>
 
         <!--возврат на главную-->
         <Grid  Grid.Row="0" Grid.Column="0" Visibility="Visible" x:Name="closeFrame" Margin="0,0,0,40">
@@ -70,7 +70,7 @@
         </Grid>
 
         <!--выбор марки авто-->
-        <ComboBox Grid.Column="0" Grid.Row="1"
+        <ComboBox Grid.Column="0" Grid.Row="1" IsReadOnly="True"
             Width="320" Margin="0,20,0,0" x:Name="CbCarBrand" DisplayMemberPath="NameCarBrand"
             SelectedItem="{Binding SelectedCarBrand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             ItemsSource="{Binding NameCarBrandComboBoxItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -84,7 +84,7 @@
           Background="Gray" BorderBrush="Black" />
 
         <!--выбор модели авто-->
-        <ComboBox Grid.Column="0" Grid.Row="2"
+        <ComboBox Grid.Column="0" Grid.Row="2" IsReadOnly="True"
             Width="320" Margin="0,20,0,0" x:Name="CbCarModel" DisplayMemberPath="NameCarModel"
             SelectedItem="{Binding SelectedCarModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             ItemsSource="{Binding NameCarModelComboBoxItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -92,7 +92,7 @@
             Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
 
         <!--выбор агрегат-->
-        <ComboBox Grid.Column="0" Grid.Row="3"
+        <ComboBox Grid.Column="0" Grid.Row="3" IsReadOnly="True"
             Width="320" Margin="0,20,0,0" x:Name="CbUnit" DisplayMemberPath="NameUnit"
             SelectedItem="{Binding SelectedUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             ItemsSource="{Binding NameUnitComboBoxItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -106,7 +106,7 @@
           Background="Gray" BorderBrush="Black" />
 
         <!--выбор узла-->
-        <ComboBox Grid.Column="0" Grid.Row="4"
+        <ComboBox Grid.Column="0" Grid.Row="4" IsReadOnly="True"
             Width="320" Margin="0,20,0,0" x:Name="CbKnot"
             ItemsSource="{Binding NameKnotComboBoxItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             SelectedItem="{Binding SelectedKnot, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
@@ -115,7 +115,7 @@
             Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
 
         <!--выберите страна-->
-        <ComboBox Grid.Column="0" Grid.Row="5" x:Name="CbCountry" 
+        <ComboBox Grid.Column="0" Grid.Row="5" x:Name="CbCountry"  IsReadOnly="True"
             ItemsSource="{Binding NameCountryComboBoxItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             SelectedItem="{Binding SelectedCountry, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
             DisplayMemberPath="NameCountry"
@@ -131,7 +131,7 @@
           Background="Gray" BorderBrush="Black" />
         
         <!--выберите производителя-->
-        <ComboBox Grid.Column="0" Grid.Row="6" x:Name="CbManufacture" 
+        <ComboBox Grid.Column="0" Grid.Row="6" x:Name="CbManufacture"  IsReadOnly="True"
             ItemsSource="{Binding NameManufactureComboBoxItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             SelectedItem="{Binding SelectedManufacture, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
             DisplayMemberPath="NameManufacture"
@@ -151,7 +151,7 @@
         <!--статус отображения-->
         <ComboBox Grid.Column="1" Grid.Row="4" x:Name="CbModerationStatus" ItemsSource="{Binding ModerationStatusComboBoxItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             SelectedItem="{Binding SelectedModerationStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            Width="320" Margin="0,20,0,0"
+            Width="320" Margin="0,20,0,0" IsReadOnly="True"
             materialDesign:HintAssist.Hint="Выберите статус отображения" IsEditable="True"
             Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
 

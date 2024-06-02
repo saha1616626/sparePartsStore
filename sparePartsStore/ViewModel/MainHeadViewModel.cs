@@ -28,6 +28,53 @@ namespace sparePartsStore.ViewModel
     public class MainHeadViewModel : INotifyPropertyChanged // класс для переключения страниц в меню администратора
     {
 
+        AuthorizationViewModel authorizationViewModel = new AuthorizationViewModel(); // работа с авторизацией
+
+        // переменные, котоыре отвечают за вход на страницу под нужным пользователем
+        bool checkProvider = false;
+        bool checkAdmin = false;
+        bool checkStore = false;
+
+        // проверка роли пользователя
+        private void CheckRole()
+        {
+            // получаем роль пользователя
+            authorizationViewModel = new AuthorizationViewModel();
+
+            string role = authorizationViewModel.CheckingUserRole();
+            if(role != null)
+            {
+                if(role == "Поставщик")
+                {
+                    checkProvider = true;
+                    IsSettingVisible = Visibility.Collapsed; // скрываем шестерёнку
+                    IsOutMenu = Visibility.Collapsed; // выход на главную
+                    IsBasicMenu = Visibility.Hidden; // выкл меню main
+                    IsSettingMenu = Visibility.Hidden; // выкл меню настроек
+
+                    // запускаем основеное меню
+                    IsProviderMenu = Visibility.Visible;
+                }
+
+                if (role == "Администратор")
+                {
+                    checkAdmin = true;
+                }
+
+                if (role == "Магазин")
+                {
+                    checkStore = true;
+                    IsSettingVisible = Visibility.Collapsed; // скрываем шестерёнку
+                    IsOutMenu = Visibility.Collapsed; // выход на главную
+                    IsBasicMenu = Visibility.Hidden; // выкл меню main
+                    IsSettingMenu = Visibility.Hidden; // выкл меню настроек
+
+                    // запускаем основеное меню
+                    IsStoreMenu = Visibility.Visible;
+                }
+            }
+        }
+
         // свойство для запуска фреймов страниц
         private Frame _mainFrame;
         public Frame MainFrame
@@ -40,7 +87,6 @@ namespace sparePartsStore.ViewModel
             }
         }
 
-        AuthorizationViewModel authorizationViewModel = new AuthorizationViewModel(); // работа с авторизацией
 
         // переменная, которая хранит состояние меню. true - значит было открыто основное меню. false - значит настройка пользователей.
         private bool typeMenu = true; // по умолчанию было открыто основное меню
@@ -93,10 +139,29 @@ namespace sparePartsStore.ViewModel
             set { _isSettingMenu = value; OnPropertyChanged(nameof(IsSettingMenu)); }
         }
 
+        // свойство для отображения меню поставщика
+        private Visibility _isProviderMenu = Visibility.Collapsed;
+        public Visibility IsProviderMenu
+        {
+            get { return _isProviderMenu; }
+            set { _isProviderMenu = value; OnPropertyChanged(nameof(IsProviderMenu)); }
+        }
+
+        // свойство для отображения меню магазина
+        private Visibility _isStoreMenu = Visibility.Collapsed;
+        public Visibility IsStoreMenu
+        {
+            get { return _isStoreMenu; }
+            set { _isStoreMenu = value; OnPropertyChanged(nameof(IsStoreMenu)); }
+        }
+
         #endregion
 
         public MainHeadViewModel()
         {
+
+            // открываем нужное меню
+            CheckRole();
 
             // подписываемя на событие запуска страницы добавления марки авто
             WorkingWithData.launchPageAddCarBrand += LaunchPageAddCarBrand;
@@ -1808,50 +1873,104 @@ namespace sparePartsStore.ViewModel
     // метод для скрытия или отображения меню, иконок при редактировании данных
     private void selectedMenu()
     {
-        if (typeMenu) // если основное меню
-        {
-            if (visibilityMenu) // основное меню скрыто
+            // проверка под каким пользователем вошли
+            if (checkAdmin)
             {
-                IsSettingMenu = Visibility.Hidden; // выкл меню настроек
-                IsBasicMenu = Visibility.Visible; // вкл основное меню
+                if (typeMenu) // если основное меню
+                {
+                    if (visibilityMenu) // основное меню скрыто
+                    {
+                        IsSettingMenu = Visibility.Hidden; // выкл меню настроек
+                        IsBasicMenu = Visibility.Visible; // вкл основное меню
 
-                IsMenu = Visibility.Visible; // включаем меню (любое)
-                IsSettingVisible = Visibility.Visible; // включаем шестерёнку
-                IsOutMenu = Visibility.Collapsed; // иконка переход на основное меню
+                        IsMenu = Visibility.Visible; // включаем меню (любое)
+                        IsSettingVisible = Visibility.Visible; // включаем шестерёнку
+                        IsOutMenu = Visibility.Collapsed; // иконка переход на основное меню
 
-                visibilityMenu = false; // меню не скрыто
+                        visibilityMenu = false; // меню не скрыто
+                    }
+                    else // основное меню не скрыто
+                    {
+                        IsMenu = Visibility.Collapsed; // скрываем меню (любое)
+                        IsSettingVisible = Visibility.Collapsed; // скрываем шестерёнку
+
+                        visibilityMenu = true; // меню скрыто
+                    }
+                }
+                else // если настройки
+                {
+                    if (visibilitySetting) // открываем меню
+                    {
+                        IsBasicMenu = Visibility.Hidden; // выкл основное меню
+                        IsSettingMenu = Visibility.Visible; // вкл меню настроек
+
+                        IsMenu = Visibility.Visible; // включаем меню (любое)
+
+                        IsOutMenu = Visibility.Visible; // иконка переход на основное меню
+                        IsSettingVisible = Visibility.Collapsed; // скрываем шестерёнку
+
+                        visibilitySetting = false; // меню было скрыто
+                    }
+                    else // закрываем меню
+                    {
+                        IsMenu = Visibility.Collapsed; // выключаем меню (любое)
+                                                       // иконка переход на основное меню
+                        IsOutMenu = Visibility.Collapsed;
+
+                        visibilitySetting = true; // меню было открыто
+                    }
+                }
             }
-            else // основное меню не скрыто
+
+            if (checkProvider)
             {
-                IsMenu = Visibility.Collapsed; // скрываем меню (любое)
-                IsSettingVisible = Visibility.Collapsed; // скрываем шестерёнку
+                if(typeMenu)
+                {
+                    if (visibilityMenu) // основное меню скрыто
+                    {
+                        IsMenu = Visibility.Visible; // включаем меню (любое)
+                        IsProviderMenu = Visibility.Visible;
 
-                visibilityMenu = true; // меню скрыто
+                        visibilityMenu = false; // меню не скрыто
+                    }
+                    else // основное меню не скрыто
+                    {
+                        IsMenu = Visibility.Visible; // включаем меню (любое)
+                        IsMenu = Visibility.Collapsed; // скрываем меню (любое)
+                        IsSettingVisible = Visibility.Collapsed; // скрываем шестерёнку
+
+                        visibilityMenu = true; // меню скрыто
+                    }
+                }
+                else
+                {
+
+                }
             }
-        }
-        else // если настройки
-        {
-            if (visibilitySetting) // открываем меню
+
+            if (checkStore)
             {
-                IsBasicMenu = Visibility.Hidden; // выкл основное меню
-                IsSettingMenu = Visibility.Visible; // вкл меню настроек
+                if (typeMenu)
+                {
+                    if (visibilityMenu) // основное меню скрыто
+                    {
+                        IsStoreMenu = Visibility.Visible;
 
-                IsMenu = Visibility.Visible; // включаем меню (любое)
-                    
-                IsOutMenu = Visibility.Visible; // иконка переход на основное меню
-                IsSettingVisible = Visibility.Collapsed; // скрываем шестерёнку
+                        visibilityMenu = false; // меню не скрыто
+                    }
+                    else // основное меню не скрыто
+                    {
+                        IsMenu = Visibility.Collapsed; // скрываем меню (любое)
+                        IsSettingVisible = Visibility.Collapsed; // скрываем шестерёнку
 
-                visibilitySetting = false; // меню было скрыто
-            }
-            else // закрываем меню
-            {
-                IsMenu = Visibility.Collapsed; // выключаем меню (любое)
-                // иконка переход на основное меню
-                IsOutMenu = Visibility.Collapsed;
+                        visibilityMenu = true; // меню скрыто
+                    }
+                }
+                else
+                {
 
-                visibilitySetting = true; // меню было открыто
-            }
-        }
+                }
+            } 
     }
 
     #endregion

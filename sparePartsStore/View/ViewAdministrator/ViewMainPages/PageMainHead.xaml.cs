@@ -1,4 +1,5 @@
 ﻿using sparePartsStore.Helper;
+using sparePartsStore.Model;
 using sparePartsStore.View.ViewAdministrator.ViewWorking;
 using sparePartsStore.ViewModel;
 using System;
@@ -12,6 +13,7 @@ using System.Windows.Automation;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
@@ -28,6 +30,8 @@ namespace sparePartsStore.View.ViewAdministrator.ViewMainPages
     public partial class PageMainHead : Page
     {
         private readonly MainHeadViewModel _mainHeadViewModel;
+
+        AuthorizationViewModel authorizationViewModel;
         public PageMainHead()
         {
             InitializeComponent();
@@ -37,6 +41,37 @@ namespace sparePartsStore.View.ViewAdministrator.ViewMainPages
             _mainHeadViewModel.MainFrame = mainFrame; // Передаем через зависимости ссылку на фрейм
 
             WorkingWithData.clearMemoryAfterFrame += ClearMemoryAfterFrame; // очистка ресурсов
+
+            // получаем роль пользователя
+            authorizationViewModel = new AuthorizationViewModel();
+            int idUser = authorizationViewModel.weGetIdUser();
+
+            using (SparePartsStoreContext context = new SparePartsStoreContext())
+            {
+                List<Account> accounts = context.Accounts.ToList();
+                Account account = accounts.FirstOrDefault(a => a.AccountId == idUser);
+                if(account != null)
+                {
+                    string role = authorizationViewModel.CheckingUserRole();
+                    if (role != null)
+                    {
+                        if (role == "Поставщик")
+                        {
+                            nameRole.Text = "Поставщик " + account.NameOrganization;
+                        }
+
+                        if (role == "Администратор")
+                        {
+                            nameRole.Text = "Администратор";
+                        }
+
+                        if (role == "Магазин")
+                        {
+                            nameRole.Text = "Магазин " + account.NameOrganization;
+                        }
+                    }
+                }
+            }
         }
 
         // после загрузки текущей страницы запускается фрейм
@@ -72,17 +107,17 @@ namespace sparePartsStore.View.ViewAdministrator.ViewMainPages
             GC.WaitForPendingFinalizers();
         }
 
-        // анимация включена
-        public void AnimationOn(Button nameButton)
-        {
-            nameButton.Background = Brushes.Wheat;
-        }
-        // анимация выключена
-        public void AnimationOff(Button nameButton)
-        {
-            nameButton.ClearValue(Button.ForegroundProperty);
-            nameButton.ClearValue(Button.BackgroundProperty);
-        }
+        //// анимация включена
+        //public void AnimationOn(Button nameButton)
+        //{
+        //    nameButton.Background = Brushes.Wheat;
+        //}
+        //// анимация выключена
+        //public void AnimationOff(Button nameButton)
+        //{
+        //    nameButton.ClearValue(Button.ForegroundProperty);
+        //    nameButton.ClearValue(Button.BackgroundProperty);
+        //}
 
         // начальная страница при запуске экрана 
         private void startPage()
