@@ -1724,7 +1724,7 @@ namespace sparePartsStore.ViewModel
                 //pageWorkDetail.DataReception(autopartDPO);
             };
             // вызываем событие для передачи данных
-            pageListAutoparts.TransmitDataAnalog(); ;
+            pageListAutoparts.TransmitDataAnalog();
         }
 
         #endregion
