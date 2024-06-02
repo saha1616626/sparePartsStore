@@ -22,18 +22,26 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         
         <!--назавние страницы-->
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="Поиск запчастей" FontSize="30" Foreground="Black" FontWeight="DemiBold" Margin="0,40,0,40" VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Поиск запчастей" FontSize="30" Foreground="Black" FontWeight="DemiBold" Margin="0,40,0,20" VerticalAlignment="Center"/>
 
+        <!--кнопки-->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="1" Margin="0,0,0,20">
+            <Button Grid.Column="0" Content="Сброс" MinWidth="150" Height="50" Background="Gray" BorderBrush="Black"/>
+
+            <Button Grid.Column="1" Content="Аналоги" MinWidth="150" Height="50" Background="Gray" BorderBrush="Black" Margin="10,0,0,0"/>
+        </StackPanel>
+        
         <!--таблица + фильтр-->
-        <Grid Grid.Row="1" Grid.Column="0" Margin="0, 0, 0, 0" HorizontalAlignment="Center" MinWidth="1100">
+        <Grid Grid.Row="2" Grid.Column="0" Margin="0, 0, 0, 0" HorizontalAlignment="Center" MinWidth="1100">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -44,21 +52,15 @@
             <Grid Grid.Row="0">
                 <!--размещение кнопок-->
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Column="0" Content="Сброс" MinWidth="100" Height="50" Background="Gray" BorderBrush="Black"/>
-
-                <Button Grid.Column="1" Content="Аналоги" MinWidth="100" Height="50" Background="Gray" BorderBrush="Black" Margin="10,0,0,0"/>
-
-                <TextBox Grid.Column="2" x:Name="SearchParts" Height="50" Margin="10,0,0,0"
-                         VerticalAlignment="Center" 
+                <TextBox Grid.Column="0" x:Name="SearchParts" Height="50" Margin="0,0,0,0"
+                         VerticalAlignment="Center"  HorizontalAlignment="Left"
                          Text="{Binding InputLogin, UpdateSourceTrigger=PropertyChanged}"   
                          materialDesign:TextFieldAssist.HasClearButton="True"
                          Style="{StaticResource MaterialDesignOutlinedTextBox}" 
@@ -66,23 +68,23 @@
                          materialDesign:TextFieldAssist.CharacterCounterVisibility="Hidden"
                          MaxLength="100" TextWrapping="Wrap" MinWidth="300" />
 
-                <ComboBox Grid.Column="3"
-                         MinWidth="120" Margin="10,0,0,0"
+                <ComboBox Grid.Column="1"
+                         Width="190" Margin="10,0,0,0"
                          materialDesign:HintAssist.Hint="Марка" IsEditable="True"
                          Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
                 
-                <ComboBox Grid.Column="4"
-                         MinWidth="120" Margin="10,0,0,0"
+                <ComboBox Grid.Column="2"
+                         Width="190" Margin="10,0,0,0"
                          materialDesign:HintAssist.Hint="Модель" IsEditable="True"
                          Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
                 
-                <ComboBox Grid.Column="5"
-                         MinWidth="120" Margin="10,0,0,0"
+                <ComboBox Grid.Column="3"
+                         Width="190" Margin="10,0,0,0"
                          materialDesign:HintAssist.Hint="Агрегат" IsEditable="True"
                          Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
                 
-                <ComboBox Grid.Column="6"
-                         MinWidth="120" Margin="10,0,0,0"
+                <ComboBox Grid.Column="4"
+                         Width="190" Margin="10,0,0,0"
                          materialDesign:HintAssist.Hint="Узел" IsEditable="True"
                          Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
 
@@ -90,32 +92,38 @@
             
             <!--таблица-->
             <Grid Grid.Row="1" Margin="0,40,0,0">
-                <DataGrid
-                    Style="{StaticResource MaterialDesignDataGrid}"
-                    ColumnHeaderStyle="{StaticResource columnTable}"
-                    AutoGenerateColumns="False"
-                    ItemsSource="{Binding}" 
-                    SelectedValuePath="{Binding}" >
+              
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <DataGrid IsReadOnly="True"
+                        RowHeight="50" FontSize="10"
+                        AutoGenerateColumns="False"
+                        CellStyle="{StaticResource DataGridCellStyle}"
+                        ItemsSource="{Binding ListAutopartDPO}"
+                        SelectedItem="{Binding SelectedAutopart}"
+                        Style="{StaticResource MaterialDesignDataGrid}"
+                        ColumnHeaderStyle="{StaticResource columnTableHeaderAutoParts}">
 
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Номер" Binding="{Binding numberParts}" Width="80"/>
 
-                        <DataGridTextColumn Header="Название" Binding="{Binding nameParts}" MinWidth="240"/>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Номер" Binding="{Binding NumberAutopart}" Width="*" IsReadOnly="True"/>
 
-                        <DataGridTextColumn Header="Агрегат" Binding="{Binding nameParts}" MinWidth="120"/>
+                            <DataGridTextColumn Header="Название" Binding="{Binding NameAutopart}" Width="*" IsReadOnly="True"/>
 
-                        <DataGridTextColumn Header="Узел" Binding="{Binding nameParts}" MinWidth="120"/>
+                            <DataGridTextColumn Header="Агрегат" Binding="{Binding NameUnit}" Width="*" IsReadOnly="True"/>
 
-                        <DataGridTextColumn Header="     Марка  автомобиля" Binding="{Binding nameParts}" MinWidth="40"/>
+                            <DataGridTextColumn Header="Узел" Binding="{Binding NameKnot}"  Width="*" IsReadOnly="True"/>
 
-                        <DataGridTextColumn Header="Модель автомобиля" Binding="{Binding nameParts}" MinWidth="190"/>
+                            <DataGridTextColumn Header="Марка" Binding="{Binding CarBrandName}"  Width="*" IsReadOnly="True"/>
 
-                        <DataGridTextColumn Header="Цена" Binding="{Binding nameParts}" MinWidth="76"/>
+                            <DataGridTextColumn Header="Модель" Binding="{Binding NameCarModel}" Width="*" IsReadOnly="True"/>
 
-                        <DataGridTextColumn Header="Доступно  на складе" Binding="{Binding nameParts}" Width="80"/>
-                    </DataGrid.Columns>
+                            <DataGridTextColumn Header="Цена" Binding="{Binding PriceSale}"  Width="*" IsReadOnly="True"/>
 
-                </DataGrid>
+                            <DataGridTextColumn Header="Доступно         на складе" Binding="{Binding AvailableityStock}"  Width="70" IsReadOnly="True"/>
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+                </ScrollViewer>
             </Grid>
 
         </Grid>
