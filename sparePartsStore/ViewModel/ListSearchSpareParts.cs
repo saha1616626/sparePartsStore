@@ -137,8 +137,6 @@ namespace sparePartsStore.ViewModel
 
         #endregion
 
-
-
         // свойства COMBOBOX
 
         #region Property
@@ -259,11 +257,31 @@ namespace sparePartsStore.ViewModel
                         SearchFilter();
 
                         // изменяем список моделей
+                        using (SparePartsStoreContext context = SparePartsStoreContext())
+                        {
+                            List<CarModel> carModels = context.CarModels.ToList();
 
-                        ObservableCollection<CarModel> carModel = new ObservableCollection<CarModel>(carModels.Where(c => c.CarBrandId == SelectedCarBrand.CarBrandId).ToList());
-                        _nameCarModelComboBoxItems = carModel; // присваиваем новые значения списка ComboBox
-                        OnPropertyChanged(nameof(NameCarModelComboBoxItems)); // оповещаем список моделей авто об изменении данных
-                        editCarModel = true;
+                            // список моделей
+                            List < CarModel >
+
+                            foreach (var item in ListAutopartDPO)
+                            {
+                                carModels = carModels.Where(c => c.CarModelId == item.CarModelId).ToList;
+                            }
+                            if (carModels != null)
+                            {
+                                ObservableCollection<CarModel> carModel = new ObservableCollection<CarModel>(carModels);
+                            }
+                            NameCarModelComboBoxItems = carModel;
+                            OnPropertyChanged(nameof(NameCarModelComboBoxItems)); // оповещаем список моделей авто об изменении данных
+                            editCarModel = true;
+                        }
+
+
+                        //ObservableCollection<CarModel> carModel = new ObservableCollection<CarModel>(carModels.Where(c => c.CarBrandId == SelectedCarBrand.CarBrandId).ToList());
+                        //_nameCarModelComboBoxItems = carModel; // присваиваем новые значения списка ComboBox
+                        //OnPropertyChanged(nameof(NameCarModelComboBoxItems)); // оповещаем список моделей авто об изменении данных
+                        //editCarModel = true;
                     }
                 }
 
@@ -324,7 +342,8 @@ namespace sparePartsStore.ViewModel
                 // возвращаем массив обратно
                 return carModelList;
             }
-        } 
+
+        }
 
 
         #endregion
@@ -363,7 +382,7 @@ namespace sparePartsStore.ViewModel
             {
                 List<Unit> units = context.Units.ToList(); // получили список агрегатов из БД
                 ObservableCollection<Unit> unitList = new ObservableCollection<Unit>(); // список для ComBox
-                // записываем массив unitList
+                                                                                        // записываем массив unitList
                 foreach (Unit unitItem in units)
                 {
                     // добавляем данные в список
@@ -413,7 +432,7 @@ namespace sparePartsStore.ViewModel
             {
                 List<Knot> knots = context.Knots.ToList(); // получили список узлов из БД
                 ObservableCollection<Knot> knotList = new ObservableCollection<Knot>(); // список для ComBox
-                // записываем массив knotList
+                                                                                        // записываем массив knotList
                 foreach (Knot knotItem in knots)
                 {
                     // добавляем данные в список
