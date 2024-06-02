@@ -1980,15 +1980,8 @@ namespace sparePartsStore.ViewModel
         private void ReloadingSearch(Object sender, EventAggregator e)
         {
             WorkingWithData.ClearMemoryAfterFrame();
-            listSearchSpareParts = new ListSearchSpareParts();
-            MainFrame.NavigationService.Navigate(listSearchSpareParts);
-
-            // изменяем меню
-            selectedMenu();
-
-            // сборка мусора и освобождение неиспользуемых ресурсов
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
+            ViewSearchSpareParts viewSearchSpareParts = new ViewSearchSpareParts();
+            MainFrame.Navigate(viewSearchSpareParts);
         }
 
     #endregion

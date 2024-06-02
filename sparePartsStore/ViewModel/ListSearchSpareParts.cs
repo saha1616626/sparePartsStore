@@ -22,6 +22,12 @@ namespace sparePartsStore.ViewModel
 
             //вывод данных в таблицу
             ListAutopartDPO = LoadAutopartBD();
+
+            // подгрузка данных в выпадающий список
+            NameCarBrandComboBoxItems = GetCarBrandOnComboBox();
+            NameCarModelComboBoxItems = GetCarModelOnComboBox();
+            NameUnitComboBoxItems = GetUnitOnComboBox();
+            NameKnotComboBoxItems = GetKnotOnComboBox();
         }
 
         // работа со списком
@@ -257,31 +263,19 @@ namespace sparePartsStore.ViewModel
                         SearchFilter();
 
                         // изменяем список моделей
-                        using (SparePartsStoreContext context = SparePartsStoreContext())
+
+                        foreach (var item in ListAutopartDPO)
                         {
-                            List<CarModel> carModels = context.CarModels.ToList();
-
-                            // список моделей
-                            List < CarModel >
-
-                            foreach (var item in ListAutopartDPO)
-                            {
-                                carModels = carModels.Where(c => c.CarModelId == item.CarModelId).ToList;
-                            }
-                            if (carModels != null)
-                            {
-                                ObservableCollection<CarModel> carModel = new ObservableCollection<CarModel>(carModels);
-                            }
+                            carModels = carModels.Where(c => c.CarModelId == item.CarModelId).ToList();
+                        }
+                        if (carModels != null)
+                        {
+                            ObservableCollection<CarModel> carModel = new ObservableCollection<CarModel>(carModels);
                             NameCarModelComboBoxItems = carModel;
                             OnPropertyChanged(nameof(NameCarModelComboBoxItems)); // оповещаем список моделей авто об изменении данных
                             editCarModel = true;
                         }
-
-
-                        //ObservableCollection<CarModel> carModel = new ObservableCollection<CarModel>(carModels.Where(c => c.CarBrandId == SelectedCarBrand.CarBrandId).ToList());
-                        //_nameCarModelComboBoxItems = carModel; // присваиваем новые значения списка ComboBox
-                        //OnPropertyChanged(nameof(NameCarModelComboBoxItems)); // оповещаем список моделей авто об изменении данных
-                        //editCarModel = true;
+                        
                     }
 
 
@@ -289,19 +283,35 @@ namespace sparePartsStore.ViewModel
                     {
                         if (SelectedCarBrand != null) // если марка выбрана корректно
                         {
-                            ObservableCollection<CarModel> carModel = new ObservableCollection<CarModel>(carModels.Where(c => c.CarBrandId == SelectedCarBrand.CarBrandId).ToList());
-                            _nameCarModelComboBoxItems = carModel; // присваиваем новые значения списка ComboBox
-                            OnPropertyChanged(nameof(NameCarModelComboBoxItems)); // оповещаем список моделей авто об изменении данных
+                            // фильтруем данные списка
+                            SearchFilter();
+
+                            // изменяем список моделей
+
+                            foreach (var item in ListAutopartDPO)
+                            {
+                                carModels = carModels.Where(c => c.CarModelId == item.CarModelId).ToList();
+                            }
+                            if (carModels != null)
+                            {
+                                ObservableCollection<CarModel> carModel = new ObservableCollection<CarModel>(carModels);
+                                NameCarModelComboBoxItems = carModel;
+                                OnPropertyChanged(nameof(NameCarModelComboBoxItems)); // оповещаем список моделей авто об изменении данных
+                                editCarModel = true;
+                            }
                         }
                     }
                 }
             }
+        }
+
+
 
         #endregion
 
-            #region CarModel
+        #region CarModel
 
-            // выбранная модель авто
+        // выбранная модель авто
         private CarModel _selectedCarModel;
         public CarModel SelectedCarModel
         {
@@ -310,7 +320,7 @@ namespace sparePartsStore.ViewModel
             {
                 _selectedCarModel = value;
                 OnPropertyChanged(nameof(SelectedCarModel));
-                //EditCarBrand();
+                EditCarBrand();
             }
         }
 
@@ -345,6 +355,64 @@ namespace sparePartsStore.ViewModel
 
         }
 
+        public bool editCarBrand = false; // true - если мы изминили список марок авто в тот момент, когда SelectedCarBrand == null
+
+        // изменяем список марок авто, в зависимости моделей авто
+        private void EditCarBrand()
+        {
+            // предаём список марок, которые соответствуют данной модели
+            using (SparePartsStoreContext context = new SparePartsStoreContext())
+            {
+                List<CarBrand> carBrands = context.CarBrands.ToList();
+
+                // выводим марки, которые соответствуют выбранной модели авто
+                if (SelectedCarBrand == null) // если агригат пустой
+                {
+                    if (SelectedCarModel != null) // если модель выбрана корректно
+                    {
+                        // фильтруем данные списка
+                        SearchFilter();
+
+                        // изменяем список моделей
+
+                        foreach (var item in ListAutopartDPO)
+                        {
+                            carBrands = carBrands.Where(c => c.CarBrandId == item.CarBrandId).ToList();
+                        }
+                        if (carBrands != null)
+                        {
+                            ObservableCollection<CarBrand> carBrandNew = new ObservableCollection<CarBrand>(carBrands);
+                            NameCarBrandComboBoxItems = carBrandNew;
+                            OnPropertyChanged(nameof(NameCarBrandComboBoxItems)); // оповещаем список моделей авто об изменении данных
+                        }
+
+                        editCarBrand = true;
+                    }
+                }
+
+                if (editCarBrand == true)
+                {
+                    if (SelectedCarModel != null) // если марка выбрана корректно
+                    {
+                        // фильтруем данные списка
+                        SearchFilter();
+
+                        // изменяем список моделей
+
+                        foreach (var item in ListAutopartDPO)
+                        {
+                            carBrands = carBrands.Where(c => c.CarBrandId == item.CarBrandId).ToList();
+                        }
+                        if (carBrands != null)
+                        {
+                            ObservableCollection<CarBrand> carBrandNew = new ObservableCollection<CarBrand>(carBrands);
+                            NameCarBrandComboBoxItems = carBrandNew;
+                            OnPropertyChanged(nameof(NameCarBrandComboBoxItems)); // оповещаем список моделей авто об изменении данных
+                        }
+                    }
+                }
+            }
+        }
 
         #endregion
 
@@ -358,7 +426,7 @@ namespace sparePartsStore.ViewModel
             {
                 _selectedUnit = value;
                 OnPropertyChanged(nameof(SelectedUnit));
-                //EditKnot(); // изменяем список узлов
+                EditKnot(); // изменяем список узлов
             }
         }
 
@@ -393,6 +461,65 @@ namespace sparePartsStore.ViewModel
             }
         }
 
+        public bool editKnot = false; // true - если мы изминили список узлов в тот момент, когда SelectedKnot == null
+
+        // изменяем список узлов, относительно выбранного агрегата
+        private void EditKnot()
+        {
+            // передаём список узлов, которые соответствуют данному агрегату
+            using (SparePartsStoreContext context = new SparePartsStoreContext())
+            {
+                List<Knot> knots = context.Knots.ToList();
+
+                // выводим узлы, которые соответствуют выбранному агрегату
+                if (SelectedKnot == null) // если узел пустой
+                {
+                    if (SelectedUnit != null) // если выбранный агрегат не пустой
+                    {
+                        // фильтруем данные списка
+                        SearchFilter();
+
+                        // изменяем список моделей
+
+                        foreach (var item in ListAutopartDPO)
+                        {
+                            knots = knots.Where(c => c.KnotId == item.KnotId).ToList();
+                        }
+                        if (knots != null)
+                        {
+                            ObservableCollection<Knot> knotNew = new ObservableCollection<Knot>(knots);
+                            NameKnotComboBoxItems = knotNew;
+                            OnPropertyChanged(nameof(NameKnotComboBoxItems)); // оповещаем список моделей авто об изменении данных
+                        }
+
+                        editKnot = true; // если отредактировали узел, то теперь из узла нельзя получить агрегат, для этого необходимо сделать сборос
+                    }
+                }
+
+                if (editKnot == true)
+                {
+                    if (SelectedUnit != null) // если выбранный агрегат не пустой
+                    {
+                        // фильтруем данные списка
+                        SearchFilter();
+
+                        // изменяем список моделей
+
+                        foreach (var item in ListAutopartDPO)
+                        {
+                            knots = knots.Where(c => c.KnotId == item.KnotId).ToList();
+                        }
+                        if (knots != null)
+                        {
+                            ObservableCollection<Knot> knotNew = new ObservableCollection<Knot>(knots);
+                            NameKnotComboBoxItems = knotNew;
+                            OnPropertyChanged(nameof(NameKnotComboBoxItems)); // оповещаем список моделей авто об изменении данных
+                        }
+                    }
+                }
+            }
+        }
+
         #endregion
 
         #region Knot
@@ -406,7 +533,7 @@ namespace sparePartsStore.ViewModel
             {
                 _selectedKnot = value;
                 OnPropertyChanged(nameof(SelectedKnot));
-                //EditUnit(); // изменяем список агрегатов
+                EditUnit(); // изменяем список агрегатов
             }
         }
 
@@ -443,6 +570,65 @@ namespace sparePartsStore.ViewModel
             }
         }
 
+        public bool editUnit = false; // true - если мы изминили список агрегатов в тот момент, когда SelectedUnit == null
+
+        // изменяем список агрегатов, в зависимости от узла
+        private void EditUnit()
+        {
+            // передаём список агрегатов, которые соответствуют данному узлу
+            using (SparePartsStoreContext context = new SparePartsStoreContext())
+            {
+                List<Unit> units = context.Units.ToList();
+
+                // выводим агрегаты, которые соответствуют выбранному узлу
+                if (SelectedUnit == null) // если агрегат пустой
+                {
+                    if (SelectedKnot != null)
+                    {
+                        // фильтруем данные списка
+                        SearchFilter();
+
+                        // изменяем список моделей
+
+                        foreach (var item in ListAutopartDPO)
+                        {
+                            units = units.Where(c => c.UnitId == item.UnitId).ToList();
+                        }
+                        if (units != null)
+                        {
+                            ObservableCollection<Unit> unitNew = new ObservableCollection<Unit>(units);
+                            NameUnitComboBoxItems = unitNew;
+                            OnPropertyChanged(nameof(NameUnitComboBoxItems)); // оповещаем список моделей авто об изменении данных
+                        }
+
+                        editUnit = true;
+                    }
+                }
+
+                if (editUnit == true)
+                {
+                    if (SelectedKnot != null)
+                    {
+                        // фильтруем данные списка
+                        SearchFilter();
+
+                        // изменяем список моделей
+
+                        foreach (var item in ListAutopartDPO)
+                        {
+                            units = units.Where(c => c.UnitId == item.UnitId).ToList();
+                        }
+                        if (units != null)
+                        {
+                            ObservableCollection<Unit> unitNew = new ObservableCollection<Unit>(units);
+                            NameUnitComboBoxItems = unitNew;
+                            OnPropertyChanged(nameof(NameUnitComboBoxItems)); // оповещаем список моделей авто об изменении данных
+                        }
+                    }
+                }
+            }
+        }
+
         #endregion
 
         #endregion
@@ -453,5 +639,6 @@ namespace sparePartsStore.ViewModel
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-    
+
+    }
 }

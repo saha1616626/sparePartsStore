@@ -29,6 +29,9 @@ namespace sparePartsStore.View
 
             // получаем экз ListSearchSpareParts
             _listSearchSpareParts = (ListSearchSpareParts)this.Resources["ListSearchSpareParts"];
+
+            
+
         }
 
         private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
