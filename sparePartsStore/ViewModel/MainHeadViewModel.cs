@@ -1720,8 +1720,8 @@ namespace sparePartsStore.ViewModel
             {
                 AutopartDPO autopartDPO = (AutopartDPO)args.Value; // получаем выбранные данные
 
-                // передаём данные для редактирования (отображаем)
-                //pageWorkDetail.DataReception(autopartDPO);
+                //передаём данные для редактирования(отображаем)
+                pageListAnalogues.DataReception(autopartDPO);
             };
             // вызываем событие для передачи данных
             pageListAutoparts.TransmitDataAnalog();

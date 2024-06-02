@@ -75,8 +75,8 @@ namespace sparePartsStore.ViewModel
                     if (autopartBD != null)
                     {
                         // копируем данные в список из БД (с фильтрацией по модели авто и узлу)
-                        //autoparts = new ObservableCollection<Autopart>(autopartBD.Where(a => a.ModerationStatus == "Отображается" && AutopartDPO.CarModelId == a.CarModelId && AutopartDPO.KnotId == a.KnotId));
-                        
+                        autoparts = new ObservableCollection<Autopart>(autopartBD.Where(a => a.ModerationStatus == "Отображается" && AutopartDPO.CarModelId == a.CarModelId && AutopartDPO.KnotId == a.KnotId));
+
                     }
                 }
                 return autoparts;

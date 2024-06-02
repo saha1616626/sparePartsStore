@@ -29,12 +29,16 @@ namespace sparePartsStore.View.ViewAdministrator.ViewWorkingWithData
 
             // получаем экз ListAutopartViewModel
             _listAnaloguesViewModel = (ListAnaloguesViewModel)this.Resources["ListAnaloguesViewModel"];
+            
         }
 
         // получаем данные запчасти, к котрой нужно подобрать аналог
         public void DataReception(AutopartDPO autopartDPO)
         {
             _listAnaloguesViewModel.AutopartDPO = autopartDPO; // передаём данные для 
+
+            nameAutoParts.Text = autopartDPO.NumberAutopart;
+
         }
     }
 }

@@ -40,7 +40,7 @@
         <!--заголовок-->
         <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
             <TextBlock Text="Список аналогов для: " FontSize="30" Foreground="Black" FontWeight="DemiBold" Margin="0,40,0,40" VerticalAlignment="Center"/>
-            <TextBlock Text="Какая-то запчасть" FontSize="30" Foreground="Black" FontWeight="DemiBold" Margin="0,40,0,40" VerticalAlignment="Center"/>
+            <TextBox Text="" x:Name="nameAutoParts" FontSize="30" Foreground="Black" FontWeight="DemiBold" Margin="0,40,0,40" VerticalAlignment="Center"/>
         </StackPanel>
         
         <!--таблица с подобранными аналогами-->
